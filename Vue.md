@@ -48,12 +48,37 @@ Cette commande lance `vue-tsc` puis génère le build Vite dans `dist/`.
 npm run preview
 ```
 
+## Lancer l'application desktop Electron
+
+```powershell
+npm run electron:dev
+```
+
+Cette commande compile le process Electron, lance Vite en local, puis ouvre l'application dans une fenêtre desktop.
+
+## Tester l'application desktop packagée localement
+
+```powershell
+npm run electron:preview
+```
+
+Cette commande génère le build web, compile Electron, puis ouvre la version desktop sur les fichiers de production.
+
+## Générer un installeur Windows
+
+```powershell
+npm run package:win
+```
+
+Le résultat est généré dans `release/`.
+
 ## Déboguer
 
 - Ouvrir l'application dans Chrome ou Edge avec les DevTools.
 - Installer Vue Devtools dans le navigateur pour inspecter les composants.
 - Surveiller la console navigateur pour les erreurs de chargement de fichiers, de parsing LRC ou de lecture audio.
 - Utiliser `npm run typecheck` quand une erreur Vue ou TypeScript n'est pas claire.
+- Utiliser `npm run typecheck:electron` pour vérifier uniquement le code Electron.
 
 ## Structure initiale
 
@@ -70,4 +95,7 @@ src/
     GeneratorView.vue
   App.vue
   main.ts
+electron/
+  main.ts
+  preload.ts
 ```
