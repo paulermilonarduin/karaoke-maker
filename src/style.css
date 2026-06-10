@@ -187,6 +187,56 @@ p {
   background: #fbf8f1;
 }
 
+.sync-panel {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #d8d2c3;
+  border-radius: 8px;
+  background: #fbf8f1;
+}
+
+.sync-panel__time {
+  color: #1f2726;
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.sync-panel__line {
+  min-height: 54px;
+  color: #323a37;
+  font-size: 1.05rem;
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.2fr) repeat(2, minmax(96px, 0.8fr));
+  gap: 8px;
+}
+
+.button {
+  min-height: 42px;
+  border: 1px solid #c9beaa;
+  border-radius: 6px;
+  background: #fffdf7;
+  color: #28312f;
+  font-weight: 800;
+}
+
+.button--primary {
+  border-color: #1f2726;
+  background: #1f2726;
+  color: #fffaf0;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 .lyrics-display {
   display: grid;
   min-height: 420px;
@@ -252,5 +302,9 @@ p {
 
   .lyrics-display {
     min-height: 320px;
+  }
+
+  .action-row {
+    grid-template-columns: 1fr;
   }
 }
