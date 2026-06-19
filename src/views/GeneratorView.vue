@@ -31,6 +31,17 @@ const nextDraftLine = computed(() => project.value.draftLines[nextDraftLineIndex
 const canExport = computed(() => syncedLines.value.length > 0)
 
 const activeLine = computed(() => findActiveLine(syncedLines.value, currentTime.value))
+const previousLine = computed<LyricLine | undefined>(() => {
+  const line = activeLine.value
+
+  if (!line) {
+    return undefined
+  }
+
+  const index = syncedLines.value.findIndex((candidate) => candidate.id === line.id)
+
+  return syncedLines.value[index - 1]
+})
 const nextLine = computed<LyricLine | undefined>(() => {
   const line = activeLine.value
 
@@ -171,6 +182,10 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <LyricsDisplay :active-line="activeLine" :next-line="nextLine" />
+    <LyricsDisplay
+      :active-line="activeLine"
+      :previous-line="previousLine"
+      :next-line="nextLine"
+    />
   </section>
 </template>
