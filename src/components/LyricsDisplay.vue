@@ -14,7 +14,7 @@ defineProps<{
       {{ activeLine ? formatTimestamp(activeLine.start) : '00:00.000' }}
     </p>
     <p class="lyrics-display__current">
-      {{ activeLine?.text || 'Chargez un MP3 et un fichier LRC pour démarrer.' }}
+      {{ activeLine?.text || 'Chargez un MP3 et des paroles brutes pour démarrer.' }}
     </p>
     <p class="lyrics-display__next">
       {{ nextLine?.text || 'La prochaine ligne apparaîtra ici.' }}

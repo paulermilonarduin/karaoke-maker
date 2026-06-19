@@ -12,11 +12,18 @@ export type LyricLine = {
   tokens?: LyricToken[]
 }
 
+export type DraftLyricLine = {
+  id: string
+  text: string
+  start?: number
+}
+
 export type KaraokeProject = {
   title: string
   audioFileName?: string
   lyricsFileName?: string
   lines: LyricLine[]
+  draftLines: DraftLyricLine[]
 }
 
 const lrcLinePattern = /^\[(\d{1,2}):(\d{2})(?:[.:](\d{1,3}))?\](.*)$/
@@ -52,6 +59,36 @@ export function parseLrc(content: string): LyricLine[] {
   }))
 }
 
+export function parsePlainLyrics(content: string): DraftLyricLine[] {
+  return content
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((text, index) => ({
+      id: `${index}:${text}`,
+      text,
+    }))
+}
+
+export function buildSyncedLines(draftLines: DraftLyricLine[]): LyricLine[] {
+  const syncedLines = draftLines
+    .filter((line): line is DraftLyricLine & { start: number } => line.start !== undefined)
+    .map((line) => ({
+      id: line.id,
+      start: line.start,
+      text: line.text,
+    }))
+
+  return syncedLines.map((line, index) => ({
+    ...line,
+    end: syncedLines[index + 1]?.start,
+  }))
+}
+
+export function serializeLrc(lines: LyricLine[]): string {
+  return lines.map((line) => `[${formatLrcTimestamp(line.start)}]${line.text}`).join('\n')
+}
+
 export function findActiveLine(lines: LyricLine[], currentTime: number): LyricLine | undefined {
   return lines.find((line, index) => {
     const nextLine = lines[index + 1]
@@ -59,6 +96,17 @@ export function findActiveLine(lines: LyricLine[], currentTime: number): LyricLi
 
     return currentTime >= line.start && currentTime < end
   })
+}
+
+function formatLrcTimestamp(timeInSeconds: number): string {
+  const safeTime = Math.max(0, timeInSeconds)
+  const minutes = Math.floor(safeTime / 60)
+  const seconds = Math.floor(safeTime % 60)
+  const centiseconds = Math.floor((safeTime % 1) * 100)
+
+  return `${minutes.toString().padStart(2, '0')}:${seconds
+    .toString()
+    .padStart(2, '0')}.${centiseconds.toString().padStart(2, '0')}`
 }
 
 export function formatTimestamp(timeInSeconds: number): string {

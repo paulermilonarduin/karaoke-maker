@@ -73,6 +73,22 @@ Cette stack permet de rester simple pour le POC tout en utilisant directement le
 
 Nuxt n'est pas nécessaire au démarrage : le POC n'a pas besoin de rendu serveur ni de backend intégré.
 
+## Application desktop
+
+Le projet peut aussi être lancé comme application desktop avec Electron.
+
+Cette cible permet de distribuer Karaoke Maker comme une application Windows tout en conservant la même interface Vue/Vite. Elle sera utile si le projet doit gérer plus confortablement des fichiers locaux, un catalogue sur le poste utilisateur ou un export de fichiers karaoke.
+
+Commandes principales :
+
+```powershell
+npm run electron:dev
+npm run electron:preview
+npm run package:win
+```
+
+Les détails de lancement et de debug sont disponibles dans `Vue.md`.
+
 ## Édition audio
 
 La partie génération pourra utiliser `wavesurfer.js` pour afficher la forme d'onde du MP3, naviguer précisément dans la musique et placer des marqueurs temporels.
