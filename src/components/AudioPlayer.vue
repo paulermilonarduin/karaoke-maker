@@ -7,6 +7,7 @@ defineProps<{
 
 const emit = defineEmits<{
   timeupdate: [time: number]
+  durationchange: [duration: number]
 }>()
 
 const audioElement = ref<HTMLAudioElement>()
@@ -15,6 +16,14 @@ let animationFrameId: number | undefined
 function emitCurrentTime() {
   if (audioElement.value) {
     emit('timeupdate', audioElement.value.currentTime)
+  }
+}
+
+function emitMetadata() {
+  emitCurrentTime()
+
+  if (audioElement.value && Number.isFinite(audioElement.value.duration)) {
+    emit('durationchange', audioElement.value.duration)
   }
 }
 
@@ -48,7 +57,7 @@ onBeforeUnmount(stopLoop)
     class="audio-player"
     controls
     :src="audioUrl"
-    @loadedmetadata="emitCurrentTime"
+    @loadedmetadata="emitMetadata"
     @pause="stopLoop"
     @play="startLoop"
     @seeked="emitCurrentTime"

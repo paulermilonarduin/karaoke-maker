@@ -7,6 +7,7 @@ import { findActiveLine, parseLrc, type LyricLine } from '../domain/lyrics'
 
 const selectedTrack = ref<CatalogTrack>(catalogTracks[0])
 const currentTime = ref(0)
+const audioDuration = ref<number>()
 const lyrics = computed(() => parseLrc(selectedTrack.value.lyricsContent))
 const activeLine = computed(() => findActiveLine(lyrics.value, currentTime.value))
 const previousLine = computed<LyricLine | undefined>(() => {
@@ -35,6 +36,7 @@ const nextLine = computed<LyricLine | undefined>(() => {
 function selectTrack(track: CatalogTrack) {
   selectedTrack.value = track
   currentTime.value = 0
+  audioDuration.value = undefined
 }
 </script>
 
@@ -72,8 +74,11 @@ function selectTrack(track: CatalogTrack) {
           :key="selectedTrack.id"
           :audio-url="selectedTrack.audioUrl"
           @timeupdate="currentTime = $event"
+          @durationchange="audioDuration = $event"
         />
         <LyricsDisplay
+          :current-time="currentTime"
+          :fallback-end-time="audioDuration"
           :active-line="activeLine"
           :previous-line="previousLine"
           :next-line="nextLine"

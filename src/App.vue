@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import KaraokeLogo from './components/KaraokeLogo.vue'
 import CatalogView from './views/CatalogView.vue'
 import GeneratorView from './views/GeneratorView.vue'
 
@@ -13,9 +14,11 @@ const currentView = computed(() => (activeView.value === 'generator' ? Generator
 <template>
   <main class="app-shell">
     <header class="app-header">
-      <div>
-        <p class="eyebrow">Karaoke Maker</p>
-        <h1>Créer et jouer des karaokés synchronisés</h1>
+      <div class="app-brand">
+        <h1 class="app-brand__title">
+          <KaraokeLogo size="large" :progress="65" />
+        </h1>
+        <p class="app-tagline">Créer et jouer des karaokés synchronisés</p>
       </div>
 
       <nav class="view-switcher" aria-label="Navigation principale">

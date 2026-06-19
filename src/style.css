@@ -54,11 +54,49 @@ p {
   margin-bottom: 28px;
 }
 
-.app-header h1 {
-  max-width: 720px;
-  color: #1f2726;
-  font-size: clamp(2rem, 6vw, 4.75rem);
+.app-brand {
+  min-width: 0;
+}
+
+.app-brand__title {
+  line-height: 0;
+}
+
+.karaoke-logo {
+  display: inline-block;
+  padding: 0.16em 0.4em 0.2em 0.32em;
+  border-radius: 8px;
+  color: #fffaf0;
+  background: #101413;
+  font-weight: 950;
+  letter-spacing: -0.07em;
   line-height: 0.98;
+  transform: skewX(var(--logo-tilt, -5deg));
+  transform-origin: left center;
+  white-space: nowrap;
+}
+
+.karaoke-logo--small {
+  font-size: clamp(0.9rem, 2vw, 1.35rem);
+}
+
+.karaoke-logo--medium {
+  font-size: clamp(1.5rem, 4vw, 2.75rem);
+}
+
+.karaoke-logo--large {
+  font-size: clamp(2rem, 6vw, 4.75rem);
+}
+
+.karaoke-logo .text-highlight {
+  padding-right: 0.12em;
+}
+
+.app-tagline {
+  margin-top: 10px;
+  color: #59605b;
+  font-size: clamp(0.82rem, 1.5vw, 1rem);
+  font-weight: 700;
 }
 
 .eyebrow {
@@ -280,6 +318,40 @@ p {
   font-weight: 900;
   line-height: 1.05;
   transform: translateY(-50%);
+}
+
+.text-highlight {
+  --highlight-progress: 0%;
+  --highlight-color: #7bd2bd;
+  --highlight-rest-color: #fffaf0;
+  --highlight-glow-inner: rgba(123, 210, 189, 0.62);
+  --highlight-glow-outer: rgba(123, 210, 189, 0.18);
+
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--highlight-color) 0%,
+    var(--highlight-color) var(--highlight-progress),
+    var(--highlight-rest-color) var(--highlight-progress),
+    var(--highlight-rest-color) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-highlight::after {
+  position: absolute;
+  inset: 0;
+  color: var(--highlight-color);
+  content: attr(data-text);
+  clip-path: inset(-18px calc(100% - var(--highlight-progress)) -18px 0);
+  pointer-events: none;
+  text-shadow:
+    0 0 4px var(--highlight-glow-inner),
+    0 0 10px var(--highlight-glow-outer);
+  -webkit-text-fill-color: var(--highlight-color);
 }
 
 .lyrics-display__previous,

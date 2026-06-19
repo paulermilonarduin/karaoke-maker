@@ -21,6 +21,7 @@ const project = ref<KaraokeProject>({
 
 const audioUrl = ref<string>()
 const currentTime = ref(0)
+const audioDuration = ref<number>()
 
 const syncedLines = computed(() => buildSyncedLines(project.value.draftLines))
 const syncedCount = computed(() => syncedLines.value.length)
@@ -60,6 +61,7 @@ function onAudioFile(file: File) {
   }
 
   audioUrl.value = URL.createObjectURL(file)
+  audioDuration.value = undefined
   project.value.audioFileName = file.name
   project.value.title = file.name.replace(/\.[^.]+$/, '')
 }
@@ -146,7 +148,11 @@ onBeforeUnmount(() => {
         />
       </div>
 
-      <AudioPlayer :audio-url="audioUrl" @timeupdate="currentTime = $event" />
+      <AudioPlayer
+        :audio-url="audioUrl"
+        @timeupdate="currentTime = $event"
+        @durationchange="audioDuration = $event"
+      />
 
       <div class="sync-panel">
         <div>
@@ -183,6 +189,8 @@ onBeforeUnmount(() => {
     </div>
 
     <LyricsDisplay
+      :current-time="currentTime"
+      :fallback-end-time="audioDuration"
       :active-line="activeLine"
       :previous-line="previousLine"
       :next-line="nextLine"

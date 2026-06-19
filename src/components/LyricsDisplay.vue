@@ -4,6 +4,8 @@ import type { LyricLine } from '../domain/lyrics'
 import { formatTimestamp } from '../domain/lyrics'
 
 const props = defineProps<{
+  currentTime: number
+  fallbackEndTime?: number
   activeLine?: LyricLine
   previousLine?: LyricLine
   nextLine?: LyricLine
@@ -19,6 +21,19 @@ type DisplayLine = {
 const displayElement = ref<HTMLElement>()
 const lineElements = ref<HTMLElement[]>([])
 let resizeObserver: ResizeObserver | undefined
+
+const activeLineProgress = computed(() => {
+  const line = props.activeLine
+  const end = line?.end ?? props.fallbackEndTime
+
+  if (!line || end === undefined || end <= line.start) {
+    return 0
+  }
+
+  const progress = (props.currentTime - line.start) / (end - line.start)
+
+  return Math.min(1, Math.max(0, progress))
+})
 
 const visibleLines = computed<DisplayLine[]>(() => {
   const lines: DisplayLine[] = []
@@ -103,7 +118,18 @@ onBeforeUnmount(() => {
         class="lyrics-display__line"
         :class="`lyrics-display__${line.position}`"
       >
-        {{ line.text }}
+        <span
+          class="lyrics-display__text"
+          :class="{ 'text-highlight': line.position === 'current' }"
+          :data-text="line.position === 'current' ? line.text : undefined"
+          :style="
+            line.position === 'current'
+              ? { '--highlight-progress': `${activeLineProgress * 100}%` }
+              : undefined
+          "
+        >
+          {{ line.text }}
+        </span>
       </p>
     </div>
   </section>
