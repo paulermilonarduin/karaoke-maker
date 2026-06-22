@@ -70,6 +70,10 @@ function onKeyDown(event: KeyboardEvent) {
 
   emit('update', actionId, shortcut)
   stopCapture()
+
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur()
+  }
 }
 
 onMounted(() => window.addEventListener('keydown', onKeyDown, true))

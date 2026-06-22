@@ -122,7 +122,7 @@ export function shortcutFromKeyboardEvent(
     return undefined
   }
 
-  const useProducedCharacter = event.key.length === 1
+  const useProducedCharacter = event.key.length === 1 && event.code !== 'Space'
   const producedKey = /^[a-z]$/i.test(event.key) ? event.key.toLowerCase() : event.key
   const shiftIsModifier = /^[a-z]$/i.test(event.key) && event.shiftKey
 
@@ -162,6 +162,16 @@ function isShortcutBinding(value: unknown): value is ShortcutBinding {
   return hasCode !== hasKey && optionalBooleansAreValid
 }
 
+function normalizeShortcutBinding(binding: ShortcutBinding): ShortcutBinding {
+  if (binding.key !== ' ') {
+    return binding
+  }
+
+  const { key: _key, ...modifiers } = binding
+
+  return { ...modifiers, code: 'Space' }
+}
+
 function loadCustomShortcuts(): Partial<Record<GeneratorActionId, ShortcutBinding>> {
   if (typeof window === 'undefined') {
     return {}
@@ -189,7 +199,11 @@ function loadCustomShortcuts(): Partial<Record<GeneratorActionId, ShortcutBindin
       const storedBinding = parsed.bindings?.[action.id]
 
       if (isShortcutBinding(storedBinding)) {
-        customShortcuts[action.id] = storedBinding
+        const normalizedBinding = normalizeShortcutBinding(storedBinding)
+
+        if (!shortcutsEqual(normalizedBinding, action.shortcut)) {
+          customShortcuts[action.id] = normalizedBinding
+        }
       }
     })
 

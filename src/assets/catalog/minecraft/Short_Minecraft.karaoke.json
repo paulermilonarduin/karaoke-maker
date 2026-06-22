@@ -1,0 +1,1506 @@
+{
+  "schemaVersion": 1,
+  "title": "Short_Minecraft",
+  "audio": {
+    "fileName": "Short_Minecraft.mp3",
+    "durationMs": 96012
+  },
+  "lines": [
+    {
+      "id": "line:0",
+      "text": "Le serveur Minecraft c'est une bonne idée",
+      "startMs": 20081,
+      "endMs": 22588,
+      "segments": [
+        {
+          "id": "line:0:segment:0",
+          "text": "Le ",
+          "startMs": 20081,
+          "endMs": 20282
+        },
+        {
+          "id": "line:0:segment:1",
+          "text": "serveur ",
+          "startMs": 20282,
+          "endMs": 20832
+        },
+        {
+          "id": "line:0:segment:2",
+          "text": "Minecraft ",
+          "startMs": 20832,
+          "endMs": 21210
+        },
+        {
+          "id": "line:0:segment:3",
+          "text": "c'est ",
+          "startMs": 21210,
+          "endMs": 21328
+        },
+        {
+          "id": "line:0:segment:4",
+          "text": "une ",
+          "startMs": 21328,
+          "endMs": 21556
+        },
+        {
+          "id": "line:0:segment:5",
+          "text": "bonne ",
+          "startMs": 21556,
+          "endMs": 21862
+        },
+        {
+          "id": "line:0:segment:6",
+          "text": "idée",
+          "startMs": 21862,
+          "endMs": 22588
+        }
+      ]
+    },
+    {
+      "id": "line:1",
+      "text": "Mais bon moi je crois que j'aurais mieux fait",
+      "startMs": 22588,
+      "endMs": 25438,
+      "segments": [
+        {
+          "id": "line:1:segment:0",
+          "text": "Mais ",
+          "startMs": 22588,
+          "endMs": 22847
+        },
+        {
+          "id": "line:1:segment:1",
+          "text": "bon ",
+          "startMs": 22847,
+          "endMs": 23165
+        },
+        {
+          "id": "line:1:segment:2",
+          "text": "moi ",
+          "startMs": 23165,
+          "endMs": 23390
+        },
+        {
+          "id": "line:1:segment:3",
+          "text": "je ",
+          "startMs": 23390,
+          "endMs": 23547
+        },
+        {
+          "id": "line:1:segment:4",
+          "text": "crois ",
+          "startMs": 23547,
+          "endMs": 23846
+        },
+        {
+          "id": "line:1:segment:5",
+          "text": "que ",
+          "startMs": 23846,
+          "endMs": 24104
+        },
+        {
+          "id": "line:1:segment:6",
+          "text": "j'aurais ",
+          "startMs": 24104,
+          "endMs": 24381
+        },
+        {
+          "id": "line:1:segment:7",
+          "text": "mieux ",
+          "startMs": 24381,
+          "endMs": 24562
+        },
+        {
+          "id": "line:1:segment:8",
+          "text": "fait",
+          "startMs": 24562,
+          "endMs": 25438
+        }
+      ]
+    },
+    {
+      "id": "line:2",
+      "text": "Sans arbres moches qui donnent pas de graines",
+      "startMs": 25438,
+      "endMs": 27780,
+      "segments": [
+        {
+          "id": "line:2:segment:0",
+          "text": "Sans ",
+          "startMs": 25438,
+          "endMs": 25674
+        },
+        {
+          "id": "line:2:segment:1",
+          "text": "arbres ",
+          "startMs": 25674,
+          "endMs": 26132
+        },
+        {
+          "id": "line:2:segment:2",
+          "text": "moches ",
+          "startMs": 26132,
+          "endMs": 26507
+        },
+        {
+          "id": "line:2:segment:3",
+          "text": "qui ",
+          "startMs": 26507,
+          "endMs": 26955
+        },
+        {
+          "id": "line:2:segment:4",
+          "text": "donnent ",
+          "startMs": 26955,
+          "endMs": 27277
+        },
+        {
+          "id": "line:2:segment:5",
+          "text": "pas ",
+          "startMs": 27277,
+          "endMs": 27319
+        },
+        {
+          "id": "line:2:segment:6",
+          "text": "de ",
+          "startMs": 27319,
+          "endMs": 27371
+        },
+        {
+          "id": "line:2:segment:7",
+          "text": "graines",
+          "startMs": 27371,
+          "endMs": 27780
+        }
+      ]
+    },
+    {
+      "id": "line:3",
+      "text": "Mais la nouvelle version et tous ses golems",
+      "startMs": 27780,
+      "endMs": 30582,
+      "segments": [
+        {
+          "id": "line:3:segment:0",
+          "text": "Mais ",
+          "startMs": 27780,
+          "endMs": 27923
+        },
+        {
+          "id": "line:3:segment:1",
+          "text": "la ",
+          "startMs": 27923,
+          "endMs": 28077
+        },
+        {
+          "id": "line:3:segment:2",
+          "text": "nouvelle ",
+          "startMs": 28077,
+          "endMs": 28516
+        },
+        {
+          "id": "line:3:segment:3",
+          "text": "version ",
+          "startMs": 28516,
+          "endMs": 29077
+        },
+        {
+          "id": "line:3:segment:4",
+          "text": "et ",
+          "startMs": 29077,
+          "endMs": 29260
+        },
+        {
+          "id": "line:3:segment:5",
+          "text": "tous ",
+          "startMs": 29260,
+          "endMs": 29432
+        },
+        {
+          "id": "line:3:segment:6",
+          "text": "ses ",
+          "startMs": 29432,
+          "endMs": 29869
+        },
+        {
+          "id": "line:3:segment:7",
+          "text": "golems",
+          "startMs": 29869,
+          "endMs": 30582
+        }
+      ]
+    },
+    {
+      "id": "line:4",
+      "text": "Geoffrey n'aurait pas volé la montagne",
+      "startMs": 30582,
+      "endMs": 33433,
+      "segments": [
+        {
+          "id": "line:4:segment:0",
+          "text": "Geoffrey ",
+          "startMs": 30592,
+          "endMs": 30900
+        },
+        {
+          "id": "line:4:segment:1",
+          "text": "n'aurait ",
+          "startMs": 30900,
+          "endMs": 31319
+        },
+        {
+          "id": "line:4:segment:2",
+          "text": "pas ",
+          "startMs": 31319,
+          "endMs": 31542
+        },
+        {
+          "id": "line:4:segment:3",
+          "text": "volé ",
+          "startMs": 31542,
+          "endMs": 32086
+        },
+        {
+          "id": "line:4:segment:4",
+          "text": "la ",
+          "startMs": 32086,
+          "endMs": 32255
+        },
+        {
+          "id": "line:4:segment:5",
+          "text": "montagne",
+          "startMs": 32255,
+          "endMs": 33433
+        }
+      ]
+    },
+    {
+      "id": "line:5",
+      "text": "Et mis tant de villageois au bagne",
+      "startMs": 33433,
+      "endMs": 35842,
+      "segments": [
+        {
+          "id": "line:5:segment:0",
+          "text": "Et ",
+          "startMs": 33433,
+          "endMs": 33540
+        },
+        {
+          "id": "line:5:segment:1",
+          "text": "mis ",
+          "startMs": 33540,
+          "endMs": 33660
+        },
+        {
+          "id": "line:5:segment:2",
+          "text": "tant ",
+          "startMs": 33660,
+          "endMs": 33928
+        },
+        {
+          "id": "line:5:segment:3",
+          "text": "de ",
+          "startMs": 33928,
+          "endMs": 34198
+        },
+        {
+          "id": "line:5:segment:4",
+          "text": "villageois ",
+          "startMs": 34198,
+          "endMs": 34834
+        },
+        {
+          "id": "line:5:segment:5",
+          "text": "au ",
+          "startMs": 34834,
+          "endMs": 35140
+        },
+        {
+          "id": "line:5:segment:6",
+          "text": "bagne",
+          "startMs": 35140,
+          "endMs": 35842
+        }
+      ]
+    },
+    {
+      "id": "line:6",
+      "text": "Les blocs d'émeraude montent jusqu'au plafond",
+      "startMs": 35842,
+      "endMs": 38692,
+      "segments": [
+        {
+          "id": "line:6:segment:0",
+          "text": "Les ",
+          "startMs": 35842,
+          "endMs": 35975
+        },
+        {
+          "id": "line:6:segment:1",
+          "text": "blocs ",
+          "startMs": 35975,
+          "endMs": 36382
+        },
+        {
+          "id": "line:6:segment:2",
+          "text": "d'émeraude ",
+          "startMs": 36382,
+          "endMs": 37065
+        },
+        {
+          "id": "line:6:segment:3",
+          "text": "montent ",
+          "startMs": 37065,
+          "endMs": 37331
+        },
+        {
+          "id": "line:6:segment:4",
+          "text": "jusqu'au ",
+          "startMs": 37331,
+          "endMs": 37819
+        },
+        {
+          "id": "line:6:segment:5",
+          "text": "plafond",
+          "startMs": 37819,
+          "endMs": 38692
+        }
+      ]
+    },
+    {
+      "id": "line:7",
+      "text": "Mais ses habitants n'ont pas de maison",
+      "startMs": 38692,
+      "endMs": 41380,
+      "segments": [
+        {
+          "id": "line:7:segment:0",
+          "text": "Mais ",
+          "startMs": 38692,
+          "endMs": 38855
+        },
+        {
+          "id": "line:7:segment:1",
+          "text": "ses ",
+          "startMs": 38855,
+          "endMs": 39102
+        },
+        {
+          "id": "line:7:segment:2",
+          "text": "habitants ",
+          "startMs": 39102,
+          "endMs": 39756
+        },
+        {
+          "id": "line:7:segment:3",
+          "text": "n'ont ",
+          "startMs": 39756,
+          "endMs": 39965
+        },
+        {
+          "id": "line:7:segment:4",
+          "text": "pas ",
+          "startMs": 39965,
+          "endMs": 40241
+        },
+        {
+          "id": "line:7:segment:5",
+          "text": "de ",
+          "startMs": 40241,
+          "endMs": 40388
+        },
+        {
+          "id": "line:7:segment:6",
+          "text": "maison",
+          "startMs": 40388,
+          "endMs": 41380
+        }
+      ]
+    },
+    {
+      "id": "line:8",
+      "text": "Il tue et mutile pour un peu de fer",
+      "startMs": 41380,
+      "endMs": 44011,
+      "segments": [
+        {
+          "id": "line:8:segment:0",
+          "text": "Il ",
+          "startMs": 41380,
+          "endMs": 41514
+        },
+        {
+          "id": "line:8:segment:1",
+          "text": "tue ",
+          "startMs": 41514,
+          "endMs": 41665
+        },
+        {
+          "id": "line:8:segment:2",
+          "text": "et ",
+          "startMs": 41665,
+          "endMs": 41833
+        },
+        {
+          "id": "line:8:segment:3",
+          "text": "mutile ",
+          "startMs": 41833,
+          "endMs": 42389
+        },
+        {
+          "id": "line:8:segment:4",
+          "text": "pour ",
+          "startMs": 42389,
+          "endMs": 42624
+        },
+        {
+          "id": "line:8:segment:5",
+          "text": "un ",
+          "startMs": 42624,
+          "endMs": 42819
+        },
+        {
+          "id": "line:8:segment:6",
+          "text": "peu ",
+          "startMs": 42819,
+          "endMs": 43069
+        },
+        {
+          "id": "line:8:segment:7",
+          "text": "de ",
+          "startMs": 43069,
+          "endMs": 43147
+        },
+        {
+          "id": "line:8:segment:8",
+          "text": "fer",
+          "startMs": 43147,
+          "endMs": 44011
+        }
+      ]
+    },
+    {
+      "id": "line:9",
+      "text": "Pour trouver de l'or va jusqu'en enfer",
+      "startMs": 44011,
+      "endMs": 46500,
+      "segments": [
+        {
+          "id": "line:9:segment:0",
+          "text": "Pour ",
+          "startMs": 44011,
+          "endMs": 44081
+        },
+        {
+          "id": "line:9:segment:1",
+          "text": "trouver ",
+          "startMs": 44081,
+          "endMs": 44288
+        },
+        {
+          "id": "line:9:segment:2",
+          "text": "de ",
+          "startMs": 44288,
+          "endMs": 44489
+        },
+        {
+          "id": "line:9:segment:3",
+          "text": "l'or ",
+          "startMs": 44489,
+          "endMs": 44896
+        },
+        {
+          "id": "line:9:segment:4",
+          "text": "va ",
+          "startMs": 44896,
+          "endMs": 45116
+        },
+        {
+          "id": "line:9:segment:5",
+          "text": "jusqu'en ",
+          "startMs": 45116,
+          "endMs": 45537
+        },
+        {
+          "id": "line:9:segment:6",
+          "text": "enfer",
+          "startMs": 45537,
+          "endMs": 46500
+        }
+      ]
+    },
+    {
+      "id": "line:10",
+      "text": "Marie n'aurait pas fait une maison volante",
+      "startMs": 46500,
+      "endMs": 49164,
+      "segments": [
+        {
+          "id": "line:10:segment:0",
+          "text": "Marie ",
+          "startMs": 46500,
+          "endMs": 46743
+        },
+        {
+          "id": "line:10:segment:1",
+          "text": "n'aurait ",
+          "startMs": 46743,
+          "endMs": 46974
+        },
+        {
+          "id": "line:10:segment:2",
+          "text": "pas ",
+          "startMs": 46974,
+          "endMs": 47212
+        },
+        {
+          "id": "line:10:segment:3",
+          "text": "fait ",
+          "startMs": 47212,
+          "endMs": 47667
+        },
+        {
+          "id": "line:10:segment:4",
+          "text": "une ",
+          "startMs": 47667,
+          "endMs": 47903
+        },
+        {
+          "id": "line:10:segment:5",
+          "text": "maison ",
+          "startMs": 47903,
+          "endMs": 48367
+        },
+        {
+          "id": "line:10:segment:6",
+          "text": "volante",
+          "startMs": 48367,
+          "endMs": 49164
+        }
+      ]
+    },
+    {
+      "id": "line:11",
+      "text": "Projetant sur l'village une ombre géante",
+      "startMs": 49164,
+      "endMs": 52114,
+      "segments": [
+        {
+          "id": "line:11:segment:0",
+          "text": "Projetant ",
+          "startMs": 49164,
+          "endMs": 49609
+        },
+        {
+          "id": "line:11:segment:1",
+          "text": "sur ",
+          "startMs": 49609,
+          "endMs": 49912
+        },
+        {
+          "id": "line:11:segment:2",
+          "text": "l'village ",
+          "startMs": 49912,
+          "endMs": 50254
+        },
+        {
+          "id": "line:11:segment:3",
+          "text": "une ",
+          "startMs": 50254,
+          "endMs": 50588
+        },
+        {
+          "id": "line:11:segment:4",
+          "text": "ombre ",
+          "startMs": 50588,
+          "endMs": 50939
+        },
+        {
+          "id": "line:11:segment:5",
+          "text": "géante",
+          "startMs": 50939,
+          "endMs": 52114
+        }
+      ]
+    },
+    {
+      "id": "line:12",
+      "text": "De son île elle ne tomberait jamais",
+      "startMs": 52114,
+      "endMs": 54334,
+      "segments": [
+        {
+          "id": "line:12:segment:0",
+          "text": "De ",
+          "startMs": 52114,
+          "endMs": 52357
+        },
+        {
+          "id": "line:12:segment:1",
+          "text": "son ",
+          "startMs": 52357,
+          "endMs": 52631
+        },
+        {
+          "id": "line:12:segment:2",
+          "text": "île ",
+          "startMs": 52631,
+          "endMs": 53011
+        },
+        {
+          "id": "line:12:segment:3",
+          "text": "elle ",
+          "startMs": 53011,
+          "endMs": 53113
+        },
+        {
+          "id": "line:12:segment:4",
+          "text": "ne ",
+          "startMs": 53113,
+          "endMs": 53222
+        },
+        {
+          "id": "line:12:segment:5",
+          "text": "tomberait ",
+          "startMs": 53222,
+          "endMs": 53635
+        },
+        {
+          "id": "line:12:segment:6",
+          "text": "jamais",
+          "startMs": 53635,
+          "endMs": 54334
+        }
+      ]
+    },
+    {
+      "id": "line:13",
+      "text": "N'oublierait pas de rendre les livres empruntés",
+      "startMs": 54334,
+      "endMs": 57016,
+      "segments": [
+        {
+          "id": "line:13:segment:0",
+          "text": "N'oublierait ",
+          "startMs": 54334,
+          "endMs": 54630
+        },
+        {
+          "id": "line:13:segment:1",
+          "text": "pas ",
+          "startMs": 54630,
+          "endMs": 54905
+        },
+        {
+          "id": "line:13:segment:2",
+          "text": "de ",
+          "startMs": 54905,
+          "endMs": 55088
+        },
+        {
+          "id": "line:13:segment:3",
+          "text": "rendre ",
+          "startMs": 55088,
+          "endMs": 55626
+        },
+        {
+          "id": "line:13:segment:4",
+          "text": "les ",
+          "startMs": 55626,
+          "endMs": 55868
+        },
+        {
+          "id": "line:13:segment:5",
+          "text": "livres ",
+          "startMs": 55868,
+          "endMs": 56182
+        },
+        {
+          "id": "line:13:segment:6",
+          "text": "empruntés",
+          "startMs": 56182,
+          "endMs": 57016
+        }
+      ]
+    },
+    {
+      "id": "line:14",
+      "text": "Au mois grâce à elle ya du bon ragoût",
+      "startMs": 57016,
+      "endMs": 59563,
+      "segments": [
+        {
+          "id": "line:14:segment:0",
+          "text": "Au ",
+          "startMs": 57016,
+          "endMs": 57174
+        },
+        {
+          "id": "line:14:segment:1",
+          "text": "mois ",
+          "startMs": 57174,
+          "endMs": 57521
+        },
+        {
+          "id": "line:14:segment:2",
+          "text": "grâce ",
+          "startMs": 57521,
+          "endMs": 57730
+        },
+        {
+          "id": "line:14:segment:3",
+          "text": "à ",
+          "startMs": 57730,
+          "endMs": 57895
+        },
+        {
+          "id": "line:14:segment:4",
+          "text": "elle ",
+          "startMs": 57895,
+          "endMs": 58258
+        },
+        {
+          "id": "line:14:segment:5",
+          "text": "ya ",
+          "startMs": 58258,
+          "endMs": 58629
+        },
+        {
+          "id": "line:14:segment:6",
+          "text": "du ",
+          "startMs": 58629,
+          "endMs": 58808
+        },
+        {
+          "id": "line:14:segment:7",
+          "text": "bon ",
+          "startMs": 58808,
+          "endMs": 59005
+        },
+        {
+          "id": "line:14:segment:8",
+          "text": "ragoût",
+          "startMs": 59005,
+          "endMs": 59563
+        }
+      ]
+    },
+    {
+      "id": "line:15",
+      "text": "Mais c'est normal c'est la seule femme qui joue",
+      "startMs": 59563,
+      "endMs": 62386,
+      "segments": [
+        {
+          "id": "line:15:segment:0",
+          "text": "Mais ",
+          "startMs": 59563,
+          "endMs": 59801
+        },
+        {
+          "id": "line:15:segment:1",
+          "text": "c'est ",
+          "startMs": 59801,
+          "endMs": 60071
+        },
+        {
+          "id": "line:15:segment:2",
+          "text": "normal ",
+          "startMs": 60071,
+          "endMs": 60913
+        },
+        {
+          "id": "line:15:segment:3",
+          "text": "c'est ",
+          "startMs": 60913,
+          "endMs": 61033
+        },
+        {
+          "id": "line:15:segment:4",
+          "text": "la ",
+          "startMs": 61033,
+          "endMs": 61196
+        },
+        {
+          "id": "line:15:segment:5",
+          "text": "seule ",
+          "startMs": 61196,
+          "endMs": 61389
+        },
+        {
+          "id": "line:15:segment:6",
+          "text": "femme ",
+          "startMs": 61389,
+          "endMs": 61735
+        },
+        {
+          "id": "line:15:segment:7",
+          "text": "qui ",
+          "startMs": 61735,
+          "endMs": 62037
+        },
+        {
+          "id": "line:15:segment:8",
+          "text": "joue",
+          "startMs": 62037,
+          "endMs": 62386
+        }
+      ]
+    },
+    {
+      "id": "line:16",
+      "text": "Une maison dans le ciel c'est pas médiéval",
+      "startMs": 62386,
+      "endMs": 64850,
+      "segments": [
+        {
+          "id": "line:16:segment:0",
+          "text": "Une ",
+          "startMs": 62386,
+          "endMs": 62543
+        },
+        {
+          "id": "line:16:segment:1",
+          "text": "maison ",
+          "startMs": 62543,
+          "endMs": 62977
+        },
+        {
+          "id": "line:16:segment:2",
+          "text": "dans ",
+          "startMs": 62977,
+          "endMs": 63179
+        },
+        {
+          "id": "line:16:segment:3",
+          "text": "le ",
+          "startMs": 63179,
+          "endMs": 63460
+        },
+        {
+          "id": "line:16:segment:4",
+          "text": "ciel ",
+          "startMs": 63460,
+          "endMs": 63708
+        },
+        {
+          "id": "line:16:segment:5",
+          "text": "c'est ",
+          "startMs": 63708,
+          "endMs": 63900
+        },
+        {
+          "id": "line:16:segment:6",
+          "text": "pas ",
+          "startMs": 63900,
+          "endMs": 64069
+        },
+        {
+          "id": "line:16:segment:7",
+          "text": "médiéval",
+          "startMs": 64069,
+          "endMs": 64850
+        }
+      ]
+    },
+    {
+      "id": "line:17",
+      "text": "Et un site industriel c'est pas médiéval",
+      "startMs": 64850,
+      "endMs": 67431,
+      "segments": [
+        {
+          "id": "line:17:segment:0",
+          "text": "Et ",
+          "startMs": 64850,
+          "endMs": 64976
+        },
+        {
+          "id": "line:17:segment:1",
+          "text": "un ",
+          "startMs": 64976,
+          "endMs": 65168
+        },
+        {
+          "id": "line:17:segment:2",
+          "text": "site ",
+          "startMs": 65168,
+          "endMs": 65438
+        },
+        {
+          "id": "line:17:segment:3",
+          "text": "industriel ",
+          "startMs": 65438,
+          "endMs": 66143
+        },
+        {
+          "id": "line:17:segment:4",
+          "text": "c'est ",
+          "startMs": 66143,
+          "endMs": 66370
+        },
+        {
+          "id": "line:17:segment:5",
+          "text": "pas ",
+          "startMs": 66370,
+          "endMs": 66564
+        },
+        {
+          "id": "line:17:segment:6",
+          "text": "médiéval",
+          "startMs": 66564,
+          "endMs": 67431
+        }
+      ]
+    },
+    {
+      "id": "line:18",
+      "text": "La magie et les sorts c'est pas médiéval",
+      "startMs": 67431,
+      "endMs": 70538,
+      "segments": [
+        {
+          "id": "line:18:segment:0",
+          "text": "La ",
+          "startMs": 67431,
+          "endMs": 67584
+        },
+        {
+          "id": "line:18:segment:1",
+          "text": "magie ",
+          "startMs": 67584,
+          "endMs": 67802
+        },
+        {
+          "id": "line:18:segment:2",
+          "text": "et ",
+          "startMs": 67802,
+          "endMs": 68137
+        },
+        {
+          "id": "line:18:segment:3",
+          "text": "les ",
+          "startMs": 68137,
+          "endMs": 68475
+        },
+        {
+          "id": "line:18:segment:4",
+          "text": "sorts ",
+          "startMs": 68475,
+          "endMs": 68938
+        },
+        {
+          "id": "line:18:segment:5",
+          "text": "c'est ",
+          "startMs": 68938,
+          "endMs": 69081
+        },
+        {
+          "id": "line:18:segment:6",
+          "text": "pas ",
+          "startMs": 69081,
+          "endMs": 69301
+        },
+        {
+          "id": "line:18:segment:7",
+          "text": "médiéval",
+          "startMs": 69301,
+          "endMs": 70538
+        }
+      ]
+    },
+    {
+      "id": "line:19",
+      "text": "Si c'était moi j'aurais mieux fait que Val",
+      "startMs": 70538,
+      "endMs": 72988,
+      "segments": [
+        {
+          "id": "line:19:segment:0",
+          "text": "Si ",
+          "startMs": 70538,
+          "endMs": 70644
+        },
+        {
+          "id": "line:19:segment:1",
+          "text": "c'était ",
+          "startMs": 70644,
+          "endMs": 71052
+        },
+        {
+          "id": "line:19:segment:2",
+          "text": "moi ",
+          "startMs": 71052,
+          "endMs": 71391
+        },
+        {
+          "id": "line:19:segment:3",
+          "text": "j'aurais ",
+          "startMs": 71391,
+          "endMs": 71810
+        },
+        {
+          "id": "line:19:segment:4",
+          "text": "mieux ",
+          "startMs": 71810,
+          "endMs": 72050
+        },
+        {
+          "id": "line:19:segment:5",
+          "text": "fait ",
+          "startMs": 72050,
+          "endMs": 72243
+        },
+        {
+          "id": "line:19:segment:6",
+          "text": "que ",
+          "startMs": 72243,
+          "endMs": 72564
+        },
+        {
+          "id": "line:19:segment:7",
+          "text": "Val",
+          "startMs": 72564,
+          "endMs": 72988
+        }
+      ]
+    },
+    {
+      "id": "line:20",
+      "text": "Une maison dans le ciel c'est pas médiéval",
+      "startMs": 72988,
+      "endMs": 75400,
+      "segments": [
+        {
+          "id": "line:20:segment:0",
+          "text": "Une ",
+          "startMs": 72988,
+          "endMs": 73090
+        },
+        {
+          "id": "line:20:segment:1",
+          "text": "maison ",
+          "startMs": 73090,
+          "endMs": 73342
+        },
+        {
+          "id": "line:20:segment:2",
+          "text": "dans ",
+          "startMs": 73342,
+          "endMs": 73592
+        },
+        {
+          "id": "line:20:segment:3",
+          "text": "le ",
+          "startMs": 73592,
+          "endMs": 73780
+        },
+        {
+          "id": "line:20:segment:4",
+          "text": "ciel ",
+          "startMs": 73780,
+          "endMs": 74064
+        },
+        {
+          "id": "line:20:segment:5",
+          "text": "c'est ",
+          "startMs": 74064,
+          "endMs": 74282
+        },
+        {
+          "id": "line:20:segment:6",
+          "text": "pas ",
+          "startMs": 74282,
+          "endMs": 74481
+        },
+        {
+          "id": "line:20:segment:7",
+          "text": "médiéval",
+          "startMs": 74481,
+          "endMs": 75400
+        }
+      ]
+    },
+    {
+      "id": "line:21",
+      "text": "Et un site industriel c'est pas médiéval",
+      "startMs": 75400,
+      "endMs": 77997,
+      "segments": [
+        {
+          "id": "line:21:segment:0",
+          "text": "Et ",
+          "startMs": 75400,
+          "endMs": 75513
+        },
+        {
+          "id": "line:21:segment:1",
+          "text": "un ",
+          "startMs": 75513,
+          "endMs": 75714
+        },
+        {
+          "id": "line:21:segment:2",
+          "text": "site ",
+          "startMs": 75714,
+          "endMs": 75950
+        },
+        {
+          "id": "line:21:segment:3",
+          "text": "industriel ",
+          "startMs": 75950,
+          "endMs": 76670
+        },
+        {
+          "id": "line:21:segment:4",
+          "text": "c'est ",
+          "startMs": 76670,
+          "endMs": 76986
+        },
+        {
+          "id": "line:21:segment:5",
+          "text": "pas ",
+          "startMs": 76986,
+          "endMs": 77152
+        },
+        {
+          "id": "line:21:segment:6",
+          "text": "médiéval",
+          "startMs": 77152,
+          "endMs": 77997
+        }
+      ]
+    },
+    {
+      "id": "line:22",
+      "text": "La magie et les sorts c'est pas médiéval",
+      "startMs": 77997,
+      "endMs": 80890,
+      "segments": [
+        {
+          "id": "line:22:segment:0",
+          "text": "La ",
+          "startMs": 77997,
+          "endMs": 78130
+        },
+        {
+          "id": "line:22:segment:1",
+          "text": "magie ",
+          "startMs": 78130,
+          "endMs": 78607
+        },
+        {
+          "id": "line:22:segment:2",
+          "text": "et ",
+          "startMs": 78607,
+          "endMs": 78814
+        },
+        {
+          "id": "line:22:segment:3",
+          "text": "les ",
+          "startMs": 78814,
+          "endMs": 79064
+        },
+        {
+          "id": "line:22:segment:4",
+          "text": "sorts ",
+          "startMs": 79064,
+          "endMs": 79332
+        },
+        {
+          "id": "line:22:segment:5",
+          "text": "c'est ",
+          "startMs": 79332,
+          "endMs": 79504
+        },
+        {
+          "id": "line:22:segment:6",
+          "text": "pas ",
+          "startMs": 79504,
+          "endMs": 79787
+        },
+        {
+          "id": "line:22:segment:7",
+          "text": "médiéval",
+          "startMs": 79787,
+          "endMs": 80890
+        }
+      ]
+    },
+    {
+      "id": "line:23",
+      "text": "Si c'était moi j'aurais mieux fait que Val",
+      "startMs": 80890,
+      "endMs": 83492,
+      "segments": [
+        {
+          "id": "line:23:segment:0",
+          "text": "Si ",
+          "startMs": 80890,
+          "endMs": 81141
+        },
+        {
+          "id": "line:23:segment:1",
+          "text": "c'était ",
+          "startMs": 81141,
+          "endMs": 81511
+        },
+        {
+          "id": "line:23:segment:2",
+          "text": "moi ",
+          "startMs": 81511,
+          "endMs": 81832
+        },
+        {
+          "id": "line:23:segment:3",
+          "text": "j'aurais ",
+          "startMs": 81832,
+          "endMs": 82279
+        },
+        {
+          "id": "line:23:segment:4",
+          "text": "mieux ",
+          "startMs": 82279,
+          "endMs": 82465
+        },
+        {
+          "id": "line:23:segment:5",
+          "text": "fait ",
+          "startMs": 82465,
+          "endMs": 82657
+        },
+        {
+          "id": "line:23:segment:6",
+          "text": "que ",
+          "startMs": 82657,
+          "endMs": 82929
+        },
+        {
+          "id": "line:23:segment:7",
+          "text": "Val",
+          "startMs": 82929,
+          "endMs": 83492
+        }
+      ]
+    },
+    {
+      "id": "line:24",
+      "text": "Une maison dans le ciel c'est pas médiéval",
+      "startMs": 83492,
+      "endMs": 85957,
+      "segments": [
+        {
+          "id": "line:24:segment:0",
+          "text": "Une ",
+          "startMs": 83492,
+          "endMs": 83645
+        },
+        {
+          "id": "line:24:segment:1",
+          "text": "maison ",
+          "startMs": 83645,
+          "endMs": 83985
+        },
+        {
+          "id": "line:24:segment:2",
+          "text": "dans ",
+          "startMs": 83985,
+          "endMs": 84167
+        },
+        {
+          "id": "line:24:segment:3",
+          "text": "le ",
+          "startMs": 84167,
+          "endMs": 84329
+        },
+        {
+          "id": "line:24:segment:4",
+          "text": "ciel ",
+          "startMs": 84329,
+          "endMs": 84680
+        },
+        {
+          "id": "line:24:segment:5",
+          "text": "c'est ",
+          "startMs": 84680,
+          "endMs": 84902
+        },
+        {
+          "id": "line:24:segment:6",
+          "text": "pas ",
+          "startMs": 84902,
+          "endMs": 85072
+        },
+        {
+          "id": "line:24:segment:7",
+          "text": "médiéval",
+          "startMs": 85072,
+          "endMs": 85957
+        }
+      ]
+    },
+    {
+      "id": "line:25",
+      "text": "Et un site industriel c'est pas médiéval",
+      "startMs": 85957,
+      "endMs": 88588,
+      "segments": [
+        {
+          "id": "line:25:segment:0",
+          "text": "Et ",
+          "startMs": 85957,
+          "endMs": 86064
+        },
+        {
+          "id": "line:25:segment:1",
+          "text": "un ",
+          "startMs": 86064,
+          "endMs": 86262
+        },
+        {
+          "id": "line:25:segment:2",
+          "text": "site ",
+          "startMs": 86262,
+          "endMs": 86526
+        },
+        {
+          "id": "line:25:segment:3",
+          "text": "industriel ",
+          "startMs": 86526,
+          "endMs": 87136
+        },
+        {
+          "id": "line:25:segment:4",
+          "text": "c'est ",
+          "startMs": 87136,
+          "endMs": 87406
+        },
+        {
+          "id": "line:25:segment:5",
+          "text": "pas ",
+          "startMs": 87406,
+          "endMs": 87587
+        },
+        {
+          "id": "line:25:segment:6",
+          "text": "médiéval",
+          "startMs": 87587,
+          "endMs": 88588
+        }
+      ]
+    },
+    {
+      "id": "line:26",
+      "text": "La magie et les sorts c'est pas médiéval",
+      "startMs": 88588,
+      "endMs": 91586,
+      "segments": [
+        {
+          "id": "line:26:segment:0",
+          "text": "La ",
+          "startMs": 88588,
+          "endMs": 88734
+        },
+        {
+          "id": "line:26:segment:1",
+          "text": "magie ",
+          "startMs": 88734,
+          "endMs": 89223
+        },
+        {
+          "id": "line:26:segment:2",
+          "text": "et ",
+          "startMs": 89223,
+          "endMs": 89343
+        },
+        {
+          "id": "line:26:segment:3",
+          "text": "les ",
+          "startMs": 89343,
+          "endMs": 89581
+        },
+        {
+          "id": "line:26:segment:4",
+          "text": "sorts ",
+          "startMs": 89581,
+          "endMs": 89925
+        },
+        {
+          "id": "line:26:segment:5",
+          "text": "c'est ",
+          "startMs": 89925,
+          "endMs": 90150
+        },
+        {
+          "id": "line:26:segment:6",
+          "text": "pas ",
+          "startMs": 90150,
+          "endMs": 90331
+        },
+        {
+          "id": "line:26:segment:7",
+          "text": "médiéval",
+          "startMs": 90331,
+          "endMs": 91586
+        }
+      ]
+    },
+    {
+      "id": "line:27",
+      "text": "Si c'était moi j'aurais mieux fait que Val",
+      "startMs": 91586,
+      "endMs": 94405,
+      "segments": [
+        {
+          "id": "line:27:segment:0",
+          "text": "Si ",
+          "startMs": 91586,
+          "endMs": 91726
+        },
+        {
+          "id": "line:27:segment:1",
+          "text": "c'était ",
+          "startMs": 91726,
+          "endMs": 92100
+        },
+        {
+          "id": "line:27:segment:2",
+          "text": "moi ",
+          "startMs": 92100,
+          "endMs": 92401
+        },
+        {
+          "id": "line:27:segment:3",
+          "text": "j'aurais ",
+          "startMs": 92401,
+          "endMs": 92754
+        },
+        {
+          "id": "line:27:segment:4",
+          "text": "mieux ",
+          "startMs": 92754,
+          "endMs": 93027
+        },
+        {
+          "id": "line:27:segment:5",
+          "text": "fait ",
+          "startMs": 93027,
+          "endMs": 93207
+        },
+        {
+          "id": "line:27:segment:6",
+          "text": "que ",
+          "startMs": 93207,
+          "endMs": 93548
+        },
+        {
+          "id": "line:27:segment:7",
+          "text": "Val",
+          "startMs": 93548,
+          "endMs": 94390
+        }
+      ]
+    }
+  ]
+}
