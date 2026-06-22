@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, ref } from 'vue'
 import AudioWaveform from '../components/AudioWaveform.vue'
 import FileDropField from '../components/FileDropField.vue'
 import LyricsDisplay from '../components/LyricsDisplay.vue'
+import ShortcutEditor from '../components/ShortcutEditor.vue'
 import {
   buildSyncedLines,
   createKaraokeFile,
@@ -14,8 +15,7 @@ import {
   type LyricLine,
 } from '../domain/lyrics'
 import {
-  formatShortcut,
-  generatorActions,
+  useGeneratorShortcutSettings,
   useGeneratorShortcuts,
 } from '../generator/shortcuts'
 import type { WaveformRegionChange, WaveformRegionModel } from '../generator/timeline'
@@ -35,6 +35,13 @@ const currentTimeMs = ref(0)
 const audioDurationMs = ref<number>()
 const syncError = ref<string>()
 const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
+const isCapturingShortcut = ref(false)
+const {
+  actions: shortcutActions,
+  hasCustomShortcuts,
+  resetShortcuts,
+  setShortcut,
+} = useGeneratorShortcutSettings()
 
 const syncedLines = computed(() =>
   buildSyncedLines(project.value.draftLines, audioDurationMs.value),
@@ -469,17 +476,21 @@ function downloadKaraokeFile() {
   }
 }
 
-useGeneratorShortcuts({
-  'player.toggle': () => void waveformRef.value?.togglePlayback(),
-  'marker.create': markNextMarker,
-  'marker.undo': undoLastMarker,
-  'player.seekBackward': () => waveformRef.value?.seekBy(-100),
-  'player.seekForward': () => waveformRef.value?.seekBy(100),
-  'marker.nudgeBackward': () => waveformRef.value?.nudgeSelectedRegion(-10),
-  'marker.nudgeForward': () => waveformRef.value?.nudgeSelectedRegion(10),
-  'player.slower': () => waveformRef.value?.adjustPlaybackRate(-1),
-  'player.faster': () => waveformRef.value?.adjustPlaybackRate(1),
-})
+useGeneratorShortcuts(
+  {
+    'player.toggle': () => void waveformRef.value?.togglePlayback(),
+    'marker.create': markNextMarker,
+    'marker.undo': undoLastMarker,
+    'player.seekBackward': () => waveformRef.value?.seekBy(-100),
+    'player.seekForward': () => waveformRef.value?.seekBy(100),
+    'marker.nudgeBackward': () => waveformRef.value?.nudgeSelectedRegion(-10),
+    'marker.nudgeForward': () => waveformRef.value?.nudgeSelectedRegion(10),
+    'player.slower': () => waveformRef.value?.adjustPlaybackRate(-1),
+    'player.faster': () => waveformRef.value?.adjustPlaybackRate(1),
+  },
+  () => !isCapturingShortcut.value,
+  () => shortcutActions.value,
+)
 
 onBeforeUnmount(() => {
   if (audioUrl.value) {
@@ -566,23 +577,13 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <aside class="shortcut-panel" aria-label="Raccourcis du générateur">
-        <div>
-          <p class="eyebrow">Raccourcis</p>
-          <p class="shortcut-panel__description">Actifs hors des champs et des boutons.</p>
-        </div>
-        <dl class="shortcut-list">
-          <div v-for="action in generatorActions" :key="action.id" class="shortcut-list__item">
-            <dt>{{ action.label }}</dt>
-            <dd>
-              <template v-for="(key, index) in formatShortcut(action.shortcut)" :key="key">
-                <span v-if="index > 0" aria-hidden="true">+</span>
-                <kbd>{{ key }}</kbd>
-              </template>
-            </dd>
-          </div>
-        </dl>
-      </aside>
+      <ShortcutEditor
+        :actions="shortcutActions"
+        :has-custom-shortcuts="hasCustomShortcuts"
+        @capturechange="isCapturingShortcut = $event"
+        @reset="resetShortcuts"
+        @update="setShortcut"
+      />
     </div>
 
     <LyricsDisplay

@@ -1,4 +1,4 @@
-import { onBeforeUnmount, onMounted } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 export type GeneratorActionId =
   | 'player.toggle'
@@ -40,7 +40,7 @@ export const generatorActions: GeneratorActionDefinition[] = [
   {
     id: 'marker.undo',
     label: 'Annuler le dernier marqueur',
-    shortcut: { code: 'KeyZ', control: true },
+    shortcut: { key: 'z', control: true },
   },
   {
     id: 'player.seekBackward',
@@ -78,13 +78,22 @@ export const generatorActions: GeneratorActionDefinition[] = [
   },
 ]
 
+const shortcutStorageKey = 'karaoke-maker.generator-shortcuts.v1'
+
 const keyLabels: Record<string, string> = {
+  '-': '−',
+  ArrowDown: '↓',
   ArrowLeft: '←',
   ArrowRight: '→',
+  ArrowUp: '↑',
+  Backspace: 'Retour arrière',
+  Delete: 'Suppr',
+  End: 'Fin',
   Enter: 'Entrée',
-  Equal: '+',
-  Minus: '−',
+  Escape: 'Échap',
+  Home: 'Début',
   Space: 'Espace',
+  Tab: 'Tab',
 }
 
 export function formatShortcut(binding: ShortcutBinding): string[] {
@@ -96,14 +105,161 @@ export function formatShortcut(binding: ShortcutBinding): string[] {
 
   const mainKey = binding.key ?? binding.code ?? ''
 
-  keys.push(keyLabels[mainKey] ?? mainKey.replace(/^Key/, ''))
+  const fallbackLabel = mainKey
+    .replace(/^Key/, '')
+    .replace(/^Digit/, '')
+    .replace(/^Numpad/, 'Pavé ')
+
+  keys.push(keyLabels[mainKey] ?? (/^[a-z]$/.test(mainKey) ? mainKey.toUpperCase() : fallbackLabel))
 
   return keys
 }
 
+export function shortcutFromKeyboardEvent(
+  event: KeyboardEvent,
+): ShortcutBinding | undefined {
+  if (['Alt', 'Control', 'Meta', 'Shift'].includes(event.key) || event.metaKey) {
+    return undefined
+  }
+
+  const useProducedCharacter = event.key.length === 1
+  const producedKey = /^[a-z]$/i.test(event.key) ? event.key.toLowerCase() : event.key
+  const shiftIsModifier = /^[a-z]$/i.test(event.key) && event.shiftKey
+
+  return {
+    ...(useProducedCharacter ? { key: producedKey } : { code: event.code }),
+    ...(event.ctrlKey ? { control: true } : {}),
+    ...(event.altKey ? { alt: true } : {}),
+    ...((!useProducedCharacter && event.shiftKey) || shiftIsModifier ? { shift: true } : {}),
+  }
+}
+
+export function shortcutsEqual(
+  left: ShortcutBinding,
+  right: ShortcutBinding,
+): boolean {
+  return (
+    left.code === right.code &&
+    left.key === right.key &&
+    Boolean(left.control) === Boolean(right.control) &&
+    Boolean(left.alt) === Boolean(right.alt) &&
+    Boolean(left.shift) === Boolean(right.shift)
+  )
+}
+
+function isShortcutBinding(value: unknown): value is ShortcutBinding {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
+
+  const binding = value as Record<string, unknown>
+  const hasCode = typeof binding.code === 'string' && binding.code.length > 0
+  const hasKey = typeof binding.key === 'string' && binding.key.length > 0
+  const optionalBooleansAreValid = ['control', 'alt', 'shift'].every(
+    (property) => binding[property] === undefined || typeof binding[property] === 'boolean',
+  )
+
+  return hasCode !== hasKey && optionalBooleansAreValid
+}
+
+function loadCustomShortcuts(): Partial<Record<GeneratorActionId, ShortcutBinding>> {
+  if (typeof window === 'undefined') {
+    return {}
+  }
+
+  try {
+    const storedValue = window.localStorage.getItem(shortcutStorageKey)
+
+    if (!storedValue) {
+      return {}
+    }
+
+    const parsed = JSON.parse(storedValue) as {
+      version?: unknown
+      bindings?: Record<string, unknown>
+    }
+
+    if (parsed.version !== 1 || !parsed.bindings || typeof parsed.bindings !== 'object') {
+      return {}
+    }
+
+    const customShortcuts: Partial<Record<GeneratorActionId, ShortcutBinding>> = {}
+
+    generatorActions.forEach((action) => {
+      const storedBinding = parsed.bindings?.[action.id]
+
+      if (isShortcutBinding(storedBinding)) {
+        customShortcuts[action.id] = storedBinding
+      }
+    })
+
+    return customShortcuts
+  } catch {
+    return {}
+  }
+}
+
+export function useGeneratorShortcutSettings() {
+  const customShortcuts = ref<Partial<Record<GeneratorActionId, ShortcutBinding>>>(
+    loadCustomShortcuts(),
+  )
+  const actions = computed<GeneratorActionDefinition[]>(() =>
+    generatorActions.map((action) => ({
+      ...action,
+      shortcut: customShortcuts.value[action.id] ?? action.shortcut,
+    })),
+  )
+  const hasCustomShortcuts = computed(
+    () => Object.keys(customShortcuts.value).length > 0,
+  )
+
+  function persist() {
+    try {
+      window.localStorage.setItem(
+        shortcutStorageKey,
+        JSON.stringify({ version: 1, bindings: customShortcuts.value }),
+      )
+    } catch {
+      // The shortcut remains active for the current session if storage is unavailable.
+    }
+  }
+
+  function setShortcut(actionId: GeneratorActionId, shortcut: ShortcutBinding) {
+    const nextShortcuts = { ...customShortcuts.value }
+    const defaultShortcut = generatorActions.find((action) => action.id === actionId)?.shortcut
+
+    if (defaultShortcut && shortcutsEqual(defaultShortcut, shortcut)) {
+      delete nextShortcuts[actionId]
+    } else {
+      nextShortcuts[actionId] = shortcut
+    }
+
+    customShortcuts.value = nextShortcuts
+    persist()
+  }
+
+  function resetShortcuts() {
+    customShortcuts.value = {}
+
+    try {
+      window.localStorage.removeItem(shortcutStorageKey)
+    } catch {
+      // Nothing else to do: defaults are already restored for this session.
+    }
+  }
+
+  return {
+    actions,
+    hasCustomShortcuts,
+    resetShortcuts,
+    setShortcut,
+  }
+}
+
 function matchesShortcut(event: KeyboardEvent, shortcut: ShortcutBinding): boolean {
+  const eventKey = /^[a-z]$/i.test(event.key) ? event.key.toLowerCase() : event.key
   const mainKeyMatches = shortcut.key
-    ? event.key === shortcut.key
+    ? eventKey === shortcut.key
     : event.code === shortcut.code
   const shiftMatches = shortcut.key
     ? shortcut.shift === undefined || event.shiftKey === shortcut.shift
@@ -128,13 +284,14 @@ function isEditableTarget(target: EventTarget | null): boolean {
 export function useGeneratorShortcuts(
   handlers: Partial<Record<GeneratorActionId, () => void>>,
   enabled: () => boolean = () => true,
+  actions: () => GeneratorActionDefinition[] = () => generatorActions,
 ) {
   function onKeyDown(event: KeyboardEvent) {
     if (!enabled() || isEditableTarget(event.target)) {
       return
     }
 
-    const action = generatorActions.find((candidate) =>
+    const action = actions().find((candidate) =>
       matchesShortcut(event, candidate.shortcut),
     )
 

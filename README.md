@@ -97,7 +97,7 @@ La librairie est surtout utile pour l'édition :
 - création et déplacement de zones ou marqueurs ;
 - relecture de passages courts pour ajuster la synchronisation.
 
-Les commandes du générateur passent par un registre d'actions central. Les raccourcis sont fixes et affichés dans l'interface pour le moment ; cette structure permettra d'ajouter ultérieurement leur paramétrage sans disperser la gestion clavier dans les composants.
+Les commandes du générateur passent par un registre d'actions central. Les raccourcis peuvent être modifiés directement dans l'interface, les conflits sont détectés et les préférences sont conservées localement dans le navigateur.
 
 Le lecteur karaoké n'a pas besoin de dépendre de `wavesurfer.js`. Pour jouer une musique et afficher les paroles au bon moment, un lecteur audio natif et une boucle de synchronisation suffisent.
 

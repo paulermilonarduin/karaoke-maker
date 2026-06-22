@@ -395,6 +395,13 @@ p {
   background: #f9f5ec;
 }
 
+.shortcut-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .shortcut-panel__description {
   color: #68716c;
   font-size: 0.82rem;
@@ -402,17 +409,24 @@ p {
 
 .shortcut-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 16px;
+  gap: 7px;
   margin: 0;
 }
 
 .shortcut-list__item {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
   min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+.shortcut-list__item.is-capturing {
+  border-color: #2c7a68;
+  background: #e6f2ed;
 }
 
 .shortcut-list dt {
@@ -430,6 +444,14 @@ p {
   font-size: 0.72rem;
 }
 
+.shortcut-list__keys {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  min-width: 96px;
+}
+
 .shortcut-list kbd {
   min-width: 24px;
   padding: 2px 6px;
@@ -442,6 +464,49 @@ p {
   font-weight: 850;
   text-align: center;
   white-space: nowrap;
+}
+
+.shortcut-list__edit,
+.shortcut-panel__reset {
+  border: 0;
+  border-radius: 5px;
+  color: #2c7a68;
+  background: transparent;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.shortcut-list__edit {
+  min-width: 58px;
+  padding: 5px 7px;
+}
+
+.shortcut-panel__reset {
+  padding: 3px 0;
+  white-space: nowrap;
+}
+
+.shortcut-list__edit:hover,
+.shortcut-list__edit:focus-visible {
+  background: #d4e9e1;
+}
+
+.shortcut-panel__reset:disabled {
+  color: #a8aaa6;
+}
+
+.shortcut-panel__capture,
+.shortcut-panel__error {
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.shortcut-panel__capture {
+  color: #2c7a68;
+}
+
+.shortcut-panel__error {
+  color: #a1382e;
 }
 
 .action-row {
@@ -658,7 +723,20 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .shortcut-list {
+  .shortcut-panel__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .shortcut-panel__reset {
+    align-self: flex-start;
+  }
+
+  .shortcut-list__item {
     grid-template-columns: 1fr;
+  }
+
+  .shortcut-list dd {
+    justify-content: space-between;
   }
 }
