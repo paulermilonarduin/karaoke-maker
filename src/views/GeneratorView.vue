@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue'
-import AudioPlayer from '../components/AudioPlayer.vue'
+import AudioWaveform from '../components/AudioWaveform.vue'
 import FileDropField from '../components/FileDropField.vue'
 import LyricsDisplay from '../components/LyricsDisplay.vue'
 import {
@@ -13,6 +13,12 @@ import {
   type KaraokeProject,
   type LyricLine,
 } from '../domain/lyrics'
+import {
+  formatShortcut,
+  generatorActions,
+  useGeneratorShortcuts,
+} from '../generator/shortcuts'
+import type { WaveformRegionChange, WaveformRegionModel } from '../generator/timeline'
 
 type SegmentPosition = {
   lineIndex: number
@@ -28,6 +34,7 @@ const audioUrl = ref<string>()
 const currentTimeMs = ref(0)
 const audioDurationMs = ref<number>()
 const syncError = ref<string>()
+const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
 
 const syncedLines = computed(() =>
   buildSyncedLines(project.value.draftLines, audioDurationMs.value),
@@ -76,6 +83,74 @@ const nextSegment = computed(() =>
     ? nextSegmentLine.value?.segments[nextSegmentPosition.value.segmentIndex]
     : undefined,
 )
+
+const editingLineIndex = computed(() => {
+  if (nextSegmentPosition.value) {
+    return nextSegmentPosition.value.lineIndex
+  }
+
+  const activeLineId = activeLine.value?.id
+  const activeIndex = project.value.draftLines.findIndex((line) => line.id === activeLineId)
+
+  return activeIndex === -1 ? 0 : activeIndex
+})
+
+const timelineRegions = computed<WaveformRegionModel[]>(() => {
+  const regions: WaveformRegionModel[] = []
+  const allLinesStarted = nextDraftLine.value === undefined
+
+  project.value.draftLines.forEach((line, lineIndex) => {
+    if (line.startMs === undefined) {
+      return
+    }
+
+    const lineEndMs =
+      line.endMs ??
+      project.value.draftLines[lineIndex + 1]?.startMs ??
+      (allLinesStarted ? audioDurationMs.value : undefined)
+
+    regions.push({
+      id: `line/${line.id}`,
+      kind: 'line',
+      label: `L${lineIndex + 1}`,
+      startMs: line.startMs,
+      endMs: lineEndMs !== undefined && lineEndMs > line.startMs ? lineEndMs : undefined,
+      editable: true,
+    })
+
+    if (
+      lineEndMs === undefined ||
+      syncPhase.value === 'lines' ||
+      lineIndex !== editingLineIndex.value
+    ) {
+      return
+    }
+
+    line.segments.forEach((segment, segmentIndex) => {
+      if (segment.startMs === undefined) {
+        return
+      }
+
+      const segmentEndMs =
+        segment.endMs ?? line.segments[segmentIndex + 1]?.startMs ?? lineEndMs
+
+      if (segmentEndMs <= segment.startMs) {
+        return
+      }
+
+      regions.push({
+        id: `segment/${segment.id}`,
+        kind: 'segment',
+        label: segment.text.trim(),
+        startMs: segment.startMs,
+        endMs: segmentEndMs,
+        editable: true,
+      })
+    })
+  })
+
+  return regions
+})
 const syncPhase = computed<'lines' | 'segments'>(() =>
   project.value.draftLines.length === 0 || nextDraftLine.value ? 'lines' : 'segments',
 )
@@ -153,9 +228,22 @@ function markNextLine() {
   }
 
   const line = project.value.draftLines[index]
+  const previousLine = project.value.draftLines[index - 1]
+
+  if (previousLine) {
+    previousLine.endMs = currentTimeMs.value
+
+    const previousLastSegment = previousLine.segments[previousLine.segments.length - 1]
+
+    if (previousLastSegment.startMs !== undefined) {
+      previousLastSegment.endMs = currentTimeMs.value
+    }
+  }
 
   line.startMs = currentTimeMs.value
+  line.endMs = undefined
   line.segments[0].startMs = currentTimeMs.value
+  line.segments[0].endMs = undefined
   syncError.value = undefined
 }
 
@@ -182,11 +270,21 @@ function markNextSegment() {
     return
   }
 
+  if (previousSegment) {
+    previousSegment.endMs = currentTimeMs.value
+  }
+
   segment.startMs = currentTimeMs.value
+  segment.endMs = undefined
   syncError.value = undefined
 }
 
 function markNextMarker() {
+  if (!audioUrl.value) {
+    syncError.value = 'Chargez une piste audio avant de placer des marqueurs.'
+    return
+  }
+
   if (syncPhase.value === 'lines') {
     markNextLine()
   } else {
@@ -200,7 +298,9 @@ function undoLastMarker() {
 
     for (let segmentIndex = line.segments.length - 1; segmentIndex >= 1; segmentIndex -= 1) {
       if (line.segments[segmentIndex].startMs !== undefined) {
+        line.segments[segmentIndex - 1].endMs = undefined
         line.segments[segmentIndex].startMs = undefined
+        line.segments[segmentIndex].endMs = undefined
         syncError.value = undefined
         return
       }
@@ -211,11 +311,134 @@ function undoLastMarker() {
     const line = project.value.draftLines[lineIndex]
 
     if (line.startMs !== undefined) {
+      const previousLine = project.value.draftLines[lineIndex - 1]
+
+      if (previousLine) {
+        previousLine.endMs = undefined
+        previousLine.segments[previousLine.segments.length - 1].endMs = undefined
+      }
+
       line.startMs = undefined
+      line.endMs = undefined
       line.segments[0].startMs = undefined
+      line.segments[0].endMs = undefined
       syncError.value = undefined
       return
     }
+  }
+}
+
+function clamp(value: number, minimum: number, maximum: number): number {
+  return Math.min(maximum, Math.max(minimum, value))
+}
+
+function onRegionChange(change: WaveformRegionChange) {
+  if (change.kind === 'line') {
+    const lineId = change.id.replace(/^line\//, '')
+    const lineIndex = project.value.draftLines.findIndex((line) => line.id === lineId)
+    const line = project.value.draftLines[lineIndex]
+
+    if (!line || line.startMs === undefined) {
+      return
+    }
+
+    const oldRegion = timelineRegions.value.find((region) => region.id === change.id)
+
+    if (oldRegion?.endMs === undefined) {
+      const previousLine = project.value.draftLines[lineIndex - 1]
+      const nextLine = project.value.draftLines[lineIndex + 1]
+      const minimumStart = previousLine?.endMs ?? previousLine?.startMs ?? 0
+      const maximumStart = Math.max(
+        minimumStart,
+        (nextLine?.startMs ?? audioDurationMs.value ?? change.startMs + 1) - 1,
+      )
+      const startMs = clamp(change.startMs, minimumStart, maximumStart)
+      const delta = startMs - line.startMs
+
+      line.startMs = startMs
+      line.segments.forEach((segment) => {
+        if (segment.startMs !== undefined) segment.startMs += delta
+        if (segment.endMs !== undefined) segment.endMs += delta
+      })
+      syncError.value = undefined
+      return
+    }
+
+    const previousLine = project.value.draftLines[lineIndex - 1]
+    const nextLine = project.value.draftLines[lineIndex + 1]
+    const minimumStart = previousLine?.endMs ?? 0
+    const maximumEnd = nextLine?.startMs ?? audioDurationMs.value ?? change.endMs
+    const oldStartMs = line.startMs
+    const oldEndMs = line.endMs ?? oldRegion.endMs
+    const rawStartDelta = change.startMs - oldStartMs
+    const rawEndDelta = change.endMs - oldEndMs
+    const movedAsBlock = Math.abs(rawStartDelta - rawEndDelta) <= 1
+    const oldLengthMs = oldEndMs - oldStartMs
+    const startMs = movedAsBlock
+      ? clamp(change.startMs, minimumStart, maximumEnd - oldLengthMs)
+      : clamp(change.startMs, minimumStart, maximumEnd - 1)
+    const endMs = movedAsBlock
+      ? startMs + oldLengthMs
+      : clamp(change.endMs, startMs + 1, maximumEnd)
+    const startDelta = startMs - oldStartMs
+
+    line.startMs = startMs
+    line.endMs = endMs
+
+    if (movedAsBlock) {
+      line.segments.forEach((segment) => {
+        if (segment.startMs !== undefined) segment.startMs += startDelta
+        if (segment.endMs !== undefined) segment.endMs += startDelta
+      })
+    } else {
+      const firstSegment = line.segments[0]
+      const lastSegment = line.segments[line.segments.length - 1]
+
+      if (firstSegment.startMs === oldStartMs) firstSegment.startMs = startMs
+      if (lastSegment.endMs === oldEndMs) lastSegment.endMs = endMs
+    }
+
+    syncError.value = undefined
+    return
+  }
+
+  const segmentId = change.id.replace(/^segment\//, '')
+
+  for (const line of project.value.draftLines) {
+    const segmentIndex = line.segments.findIndex((segment) => segment.id === segmentId)
+
+    if (segmentIndex === -1 || line.startMs === undefined) {
+      continue
+    }
+
+    const segment = line.segments[segmentIndex]
+    const previousSegment = line.segments[segmentIndex - 1]
+    const nextSegment = line.segments[segmentIndex + 1]
+    const oldRegion = timelineRegions.value.find((region) => region.id === change.id)
+    const lineEndMs =
+      line.endMs ??
+      project.value.draftLines[project.value.draftLines.indexOf(line) + 1]?.startMs ??
+      audioDurationMs.value ??
+      change.endMs
+    const minimumStart = previousSegment?.endMs ?? line.startMs
+    const maximumEnd = nextSegment?.startMs ?? lineEndMs
+    const oldStartMs = segment.startMs ?? oldRegion?.startMs ?? change.startMs
+    const oldEndMs = segment.endMs ?? oldRegion?.endMs ?? change.endMs
+    const rawStartDelta = change.startMs - oldStartMs
+    const rawEndDelta = change.endMs - oldEndMs
+    const movedAsBlock = Math.abs(rawStartDelta - rawEndDelta) <= 1
+    const oldLengthMs = oldEndMs - oldStartMs
+    const startMs = movedAsBlock
+      ? clamp(change.startMs, minimumStart, maximumEnd - oldLengthMs)
+      : clamp(change.startMs, minimumStart, maximumEnd - 1)
+    const endMs = movedAsBlock
+      ? startMs + oldLengthMs
+      : clamp(change.endMs, startMs + 1, maximumEnd)
+
+    segment.startMs = startMs
+    segment.endMs = endMs
+    syncError.value = undefined
+    return
   }
 }
 
@@ -245,6 +468,18 @@ function downloadKaraokeFile() {
     syncError.value = error instanceof Error ? error.message : 'Impossible de générer le fichier.'
   }
 }
+
+useGeneratorShortcuts({
+  'player.toggle': () => void waveformRef.value?.togglePlayback(),
+  'marker.create': markNextMarker,
+  'marker.undo': undoLastMarker,
+  'player.seekBackward': () => waveformRef.value?.seekBy(-100),
+  'player.seekForward': () => waveformRef.value?.seekBy(100),
+  'marker.nudgeBackward': () => waveformRef.value?.nudgeSelectedRegion(-10),
+  'marker.nudgeForward': () => waveformRef.value?.nudgeSelectedRegion(10),
+  'player.slower': () => waveformRef.value?.adjustPlaybackRate(-1),
+  'player.faster': () => waveformRef.value?.adjustPlaybackRate(1),
+})
 
 onBeforeUnmount(() => {
   if (audioUrl.value) {
@@ -279,10 +514,13 @@ onBeforeUnmount(() => {
         />
       </div>
 
-      <AudioPlayer
+      <AudioWaveform
+        ref="waveformRef"
         :audio-url="audioUrl"
+        :regions="timelineRegions"
         @timeupdate="currentTimeMs = $event"
         @durationchange="audioDurationMs = $event"
+        @regionchange="onRegionChange"
       />
 
       <div class="sync-panel">
@@ -309,7 +547,7 @@ onBeforeUnmount(() => {
           <button
             class="button button--primary"
             type="button"
-            :disabled="!nextDraftLine && !nextSegment"
+            :disabled="!audioUrl || (!nextDraftLine && !nextSegment)"
             @click="markNextMarker"
           >
             {{ syncPhase === 'lines' ? 'Marquer la ligne' : 'Marquer le mot' }}
@@ -327,6 +565,24 @@ onBeforeUnmount(() => {
           </button>
         </div>
       </div>
+
+      <aside class="shortcut-panel" aria-label="Raccourcis du générateur">
+        <div>
+          <p class="eyebrow">Raccourcis</p>
+          <p class="shortcut-panel__description">Actifs hors des champs et des boutons.</p>
+        </div>
+        <dl class="shortcut-list">
+          <div v-for="action in generatorActions" :key="action.id" class="shortcut-list__item">
+            <dt>{{ action.label }}</dt>
+            <dd>
+              <template v-for="(key, index) in formatShortcut(action.shortcut)" :key="key">
+                <span v-if="index > 0" aria-hidden="true">+</span>
+                <kbd>{{ key }}</kbd>
+              </template>
+            </dd>
+          </div>
+        </dl>
+      </aside>
     </div>
 
     <LyricsDisplay

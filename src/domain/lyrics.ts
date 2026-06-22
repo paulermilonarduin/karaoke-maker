@@ -19,12 +19,14 @@ export type DraftLyricSegment = {
   id: string
   text: string
   startMs?: number
+  endMs?: number
 }
 
 export type DraftLyricLine = {
   id: string
   text: string
   startMs?: number
+  endMs?: number
   segments: DraftLyricSegment[]
 }
 
@@ -77,7 +79,7 @@ export function buildSyncedLines(
   )
 
   return startedLines.map((line, lineIndex) => {
-    const endMs = startedLines[lineIndex + 1]?.startMs ?? audioDurationMs
+    const endMs = line.endMs ?? startedLines[lineIndex + 1]?.startMs ?? audioDurationMs
     const allSegmentsStarted = line.segments.every((segment) => segment.startMs !== undefined)
     const segments =
       endMs !== undefined && allSegmentsStarted
@@ -85,7 +87,7 @@ export function buildSyncedLines(
             id: segment.id,
             text: segment.text,
             startMs: segment.startMs as number,
-            endMs: line.segments[segmentIndex + 1]?.startMs ?? endMs,
+            endMs: segment.endMs ?? line.segments[segmentIndex + 1]?.startMs ?? endMs,
           }))
         : undefined
 

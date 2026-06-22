@@ -24,15 +24,16 @@ La partie catalogue permettra de retrouver les musiques déjà préparées et de
 
 Elle servira de bibliothèque de karaokés disponibles, avec un lecteur capable d'afficher les paroles au bon moment pendant la lecture audio.
 
-## V1 POC
+## POC actuel
 
 Une première version fonctionnelle peut rester volontairement simple :
 
 - importer ou référencer un MP3 ;
-- charger un fichier de paroles synchronisées ;
+- synchroniser les lignes puis les mots en deux passes ;
+- ajuster les marqueurs directement sur la waveform ;
+- ralentir ou accélérer la lecture en conservant la tonalité ;
 - lire la musique dans un lecteur web ;
-- afficher le bon bloc de texte au bon moment ;
-- ne pas encore gérer le surlignage progressif des mots ou syllabes.
+- afficher et surligner progressivement les paroles au niveau des mots.
 
 Cette V1 doit surtout valider le flux principal : créer une synchronisation minimale, la sauvegarder, puis la rejouer correctement.
 
@@ -87,7 +88,7 @@ Les détails de lancement et de debug sont disponibles dans `Vue.md`.
 
 ## Édition audio
 
-La partie génération pourra utiliser `wavesurfer.js` pour afficher la forme d'onde du MP3, naviguer précisément dans la musique et placer des marqueurs temporels.
+La partie génération utilise `wavesurfer.js` pour afficher la forme d'onde du MP3, naviguer précisément dans la musique et placer des marqueurs temporels.
 
 La librairie est surtout utile pour l'édition :
 
@@ -95,6 +96,8 @@ La librairie est surtout utile pour l'édition :
 - timeline avec repères de temps ;
 - création et déplacement de zones ou marqueurs ;
 - relecture de passages courts pour ajuster la synchronisation.
+
+Les commandes du générateur passent par un registre d'actions central. Les raccourcis sont fixes et affichés dans l'interface pour le moment ; cette structure permettra d'ajouter ultérieurement leur paramétrage sans disperser la gestion clavier dans les composants.
 
 Le lecteur karaoké n'a pas besoin de dépendre de `wavesurfer.js`. Pour jouer une musique et afficher les paroles au bon moment, un lecteur audio natif et une boucle de synchronisation suffisent.
 
