@@ -76,7 +76,7 @@ Le résultat est généré dans `release/`.
 
 - Ouvrir l'application dans Chrome ou Edge avec les DevTools.
 - Installer Vue Devtools dans le navigateur pour inspecter les composants.
-- Surveiller la console navigateur pour les erreurs de chargement de fichiers, de parsing LRC ou de lecture audio.
+- Surveiller la console navigateur pour les erreurs de chargement de fichiers, de validation JSON ou de lecture audio.
 - Utiliser `npm run typecheck` quand une erreur Vue ou TypeScript n'est pas claire.
 - Utiliser `npm run typecheck:electron` pour vérifier uniquement le code Electron.
 

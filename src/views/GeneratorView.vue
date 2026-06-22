@@ -5,33 +5,95 @@ import FileDropField from '../components/FileDropField.vue'
 import LyricsDisplay from '../components/LyricsDisplay.vue'
 import {
   buildSyncedLines,
+  createKaraokeFile,
   findActiveLine,
   formatTimestamp,
   parsePlainLyrics,
-  serializeLrc,
+  serializeKaraokeFile,
   type KaraokeProject,
   type LyricLine,
 } from '../domain/lyrics'
 
+type SegmentPosition = {
+  lineIndex: number
+  segmentIndex: number
+}
+
 const project = ref<KaraokeProject>({
   title: 'Nouveau karaoké',
-  lines: [],
   draftLines: [],
 })
 
 const audioUrl = ref<string>()
-const currentTime = ref(0)
-const audioDuration = ref<number>()
+const currentTimeMs = ref(0)
+const audioDurationMs = ref<number>()
+const syncError = ref<string>()
 
-const syncedLines = computed(() => buildSyncedLines(project.value.draftLines))
-const syncedCount = computed(() => syncedLines.value.length)
+const syncedLines = computed(() =>
+  buildSyncedLines(project.value.draftLines, audioDurationMs.value),
+)
+const syncedLineCount = computed(
+  () => project.value.draftLines.filter((line) => line.startMs !== undefined).length,
+)
+const totalSegmentCount = computed(() =>
+  project.value.draftLines.reduce((total, line) => total + line.segments.length, 0),
+)
+const syncedSegmentCount = computed(() =>
+  project.value.draftLines.reduce(
+    (total, line) =>
+      total + line.segments.filter((segment) => segment.startMs !== undefined).length,
+    0,
+  ),
+)
 const nextDraftLineIndex = computed(() =>
-  project.value.draftLines.findIndex((line) => line.start === undefined),
+  project.value.draftLines.findIndex((line) => line.startMs === undefined),
 )
 const nextDraftLine = computed(() => project.value.draftLines[nextDraftLineIndex.value])
-const canExport = computed(() => syncedLines.value.length > 0)
+const nextSegmentPosition = computed<SegmentPosition | undefined>(() => {
+  if (nextDraftLine.value) {
+    return undefined
+  }
 
-const activeLine = computed(() => findActiveLine(syncedLines.value, currentTime.value))
+  for (let lineIndex = 0; lineIndex < project.value.draftLines.length; lineIndex += 1) {
+    const segmentIndex = project.value.draftLines[lineIndex].segments.findIndex(
+      (segment) => segment.startMs === undefined,
+    )
+
+    if (segmentIndex !== -1) {
+      return { lineIndex, segmentIndex }
+    }
+  }
+
+  return undefined
+})
+const nextSegmentLine = computed(() =>
+  nextSegmentPosition.value
+    ? project.value.draftLines[nextSegmentPosition.value.lineIndex]
+    : undefined,
+)
+const nextSegment = computed(() =>
+  nextSegmentPosition.value
+    ? nextSegmentLine.value?.segments[nextSegmentPosition.value.segmentIndex]
+    : undefined,
+)
+const syncPhase = computed<'lines' | 'segments'>(() =>
+  project.value.draftLines.length === 0 || nextDraftLine.value ? 'lines' : 'segments',
+)
+const syncProgress = computed(() =>
+  syncPhase.value === 'lines'
+    ? `${syncedLineCount.value} / ${project.value.draftLines.length} lignes`
+    : `${syncedSegmentCount.value} / ${totalSegmentCount.value} mots`,
+)
+const canExport = computed(
+  () =>
+    project.value.draftLines.length > 0 &&
+    nextDraftLine.value === undefined &&
+    nextSegmentPosition.value === undefined &&
+    audioDurationMs.value !== undefined &&
+    syncedLines.value.length === project.value.draftLines.length,
+)
+
+const activeLine = computed(() => findActiveLine(syncedLines.value, currentTimeMs.value))
 const previousLine = computed<LyricLine | undefined>(() => {
   const line = activeLine.value
 
@@ -61,16 +123,19 @@ function onAudioFile(file: File) {
   }
 
   audioUrl.value = URL.createObjectURL(file)
-  audioDuration.value = undefined
+  currentTimeMs.value = 0
+  audioDurationMs.value = undefined
+  syncError.value = undefined
   project.value.audioFileName = file.name
   project.value.title = file.name.replace(/\.[^.]+$/, '')
 }
 
 async function onLyricsFile(file: File) {
   const content = await file.text()
+
   project.value.lyricsFileName = file.name
   project.value.draftLines = parsePlainLyrics(content)
-  project.value.lines = []
+  syncError.value = undefined
 }
 
 function markNextLine() {
@@ -80,39 +145,105 @@ function markNextLine() {
     return
   }
 
-  project.value.draftLines[index].start = currentTime.value
-  project.value.lines = syncedLines.value
-}
+  const previousStartMs = project.value.draftLines[index - 1]?.startMs
 
-function undoLastMarker() {
-  let lastSyncedIndex = -1
-
-  for (let index = project.value.draftLines.length - 1; index >= 0; index -= 1) {
-    if (project.value.draftLines[index].start !== undefined) {
-      lastSyncedIndex = index
-      break
-    }
-  }
-
-  if (lastSyncedIndex === -1) {
+  if (previousStartMs !== undefined && currentTimeMs.value <= previousStartMs) {
+    syncError.value = 'Le marqueur doit être placé après celui de la ligne précédente.'
     return
   }
 
-  project.value.draftLines[lastSyncedIndex].start = undefined
-  project.value.lines = syncedLines.value
+  const line = project.value.draftLines[index]
+
+  line.startMs = currentTimeMs.value
+  line.segments[0].startMs = currentTimeMs.value
+  syncError.value = undefined
 }
 
-function downloadLrc() {
-  const lrcContent = serializeLrc(syncedLines.value)
-  const fileName = `${project.value.title || 'karaoke'}.lrc`
-  const blob = new Blob([lrcContent], { type: 'text/plain;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
+function markNextSegment() {
+  const position = nextSegmentPosition.value
 
-  link.href = url
-  link.download = fileName
-  link.click()
-  URL.revokeObjectURL(url)
+  if (!position) {
+    return
+  }
+
+  const line = project.value.draftLines[position.lineIndex]
+  const segment = line.segments[position.segmentIndex]
+  const previousSegment = line.segments[position.segmentIndex - 1]
+  const lineEndMs =
+    project.value.draftLines[position.lineIndex + 1]?.startMs ?? audioDurationMs.value
+
+  if (previousSegment?.startMs !== undefined && currentTimeMs.value <= previousSegment.startMs) {
+    syncError.value = 'Le marqueur doit être placé après celui du mot précédent.'
+    return
+  }
+
+  if (lineEndMs !== undefined && currentTimeMs.value >= lineEndMs) {
+    syncError.value = 'Le marqueur doit rester dans les limites de la ligne.'
+    return
+  }
+
+  segment.startMs = currentTimeMs.value
+  syncError.value = undefined
+}
+
+function markNextMarker() {
+  if (syncPhase.value === 'lines') {
+    markNextLine()
+  } else {
+    markNextSegment()
+  }
+}
+
+function undoLastMarker() {
+  for (let lineIndex = project.value.draftLines.length - 1; lineIndex >= 0; lineIndex -= 1) {
+    const line = project.value.draftLines[lineIndex]
+
+    for (let segmentIndex = line.segments.length - 1; segmentIndex >= 1; segmentIndex -= 1) {
+      if (line.segments[segmentIndex].startMs !== undefined) {
+        line.segments[segmentIndex].startMs = undefined
+        syncError.value = undefined
+        return
+      }
+    }
+  }
+
+  for (let lineIndex = project.value.draftLines.length - 1; lineIndex >= 0; lineIndex -= 1) {
+    const line = project.value.draftLines[lineIndex]
+
+    if (line.startMs !== undefined) {
+      line.startMs = undefined
+      line.segments[0].startMs = undefined
+      syncError.value = undefined
+      return
+    }
+  }
+}
+
+function downloadKaraokeFile() {
+  if (audioDurationMs.value === undefined) {
+    return
+  }
+
+  try {
+    const karaokeFile = createKaraokeFile(
+      project.value,
+      syncedLines.value,
+      audioDurationMs.value,
+    )
+    const content = serializeKaraokeFile(karaokeFile)
+    const fileName = `${project.value.title || 'karaoke'}.karaoke.json`
+    const blob = new Blob([content], { type: 'application/json;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+
+    link.href = url
+    link.download = fileName
+    link.click()
+    URL.revokeObjectURL(url)
+    syncError.value = undefined
+  } catch (error) {
+    syncError.value = error instanceof Error ? error.message : 'Impossible de générer le fichier.'
+  }
 }
 
 onBeforeUnmount(() => {
@@ -130,7 +261,7 @@ onBeforeUnmount(() => {
           <p class="eyebrow">Génération</p>
           <h2>{{ project.title }}</h2>
         </div>
-        <p class="line-count">{{ syncedCount }} / {{ project.draftLines.length }} marquées</p>
+        <p class="line-count">{{ syncProgress }}</p>
       </div>
 
       <div class="file-grid">
@@ -150,47 +281,57 @@ onBeforeUnmount(() => {
 
       <AudioPlayer
         :audio-url="audioUrl"
-        @timeupdate="currentTime = $event"
-        @durationchange="audioDuration = $event"
+        @timeupdate="currentTimeMs = $event"
+        @durationchange="audioDurationMs = $event"
       />
 
       <div class="sync-panel">
         <div>
-          <p class="eyebrow">Synchronisation</p>
-          <p class="sync-panel__time">{{ formatTimestamp(currentTime) }}</p>
+          <p class="eyebrow">
+            {{ syncPhase === 'lines' ? 'Synchronisation des lignes' : 'Synchronisation des mots' }}
+          </p>
+          <p class="sync-panel__time">{{ formatTimestamp(currentTimeMs) }}</p>
         </div>
 
         <p class="sync-panel__line">
-          {{ nextDraftLine?.text || 'Toutes les lignes ont un marqueur temporel.' }}
+          {{
+            nextDraftLine?.text ||
+            nextSegmentLine?.text ||
+            'Toutes les paroles sont synchronisées.'
+          }}
         </p>
+        <p v-if="nextSegment" class="sync-panel__hint">
+          Prochain mot : <strong>{{ nextSegment.text.trim() }}</strong>
+        </p>
+        <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
 
         <div class="action-row">
           <button
             class="button button--primary"
             type="button"
-            :disabled="!nextDraftLine"
-            @click="markNextLine"
+            :disabled="!nextDraftLine && !nextSegment"
+            @click="markNextMarker"
           >
-            Marquer la ligne
+            {{ syncPhase === 'lines' ? 'Marquer la ligne' : 'Marquer le mot' }}
           </button>
           <button
             class="button"
             type="button"
-            :disabled="syncedCount === 0"
+            :disabled="syncedLineCount === 0"
             @click="undoLastMarker"
           >
             Annuler
           </button>
-          <button class="button" type="button" :disabled="!canExport" @click="downloadLrc">
-            Exporter LRC
+          <button class="button" type="button" :disabled="!canExport" @click="downloadKaraokeFile">
+            Exporter JSON
           </button>
         </div>
       </div>
     </div>
 
     <LyricsDisplay
-      :current-time="currentTime"
-      :fallback-end-time="audioDuration"
+      :current-time-ms="currentTimeMs"
+      :fallback-end-time-ms="audioDurationMs"
       :active-line="activeLine"
       :previous-line="previousLine"
       :next-line="nextLine"

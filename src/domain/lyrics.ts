@@ -1,61 +1,54 @@
-export type LyricToken = {
+export const KARAOKE_SCHEMA_VERSION = 1 as const
+
+export type LyricSegment = {
+  id: string
   text: string
-  start: number
-  end?: number
+  startMs: number
+  endMs: number
 }
 
 export type LyricLine = {
   id: string
-  start: number
-  end?: number
+  startMs: number
+  endMs?: number
   text: string
-  tokens?: LyricToken[]
+  segments?: LyricSegment[]
+}
+
+export type DraftLyricSegment = {
+  id: string
+  text: string
+  startMs?: number
 }
 
 export type DraftLyricLine = {
   id: string
   text: string
-  start?: number
+  startMs?: number
+  segments: DraftLyricSegment[]
 }
 
 export type KaraokeProject = {
   title: string
   audioFileName?: string
   lyricsFileName?: string
-  lines: LyricLine[]
   draftLines: DraftLyricLine[]
 }
 
-const lrcLinePattern = /^\[(\d{1,2}):(\d{2})(?:[.:](\d{1,3}))?\](.*)$/
+export type KaraokeFile = {
+  schemaVersion: typeof KARAOKE_SCHEMA_VERSION
+  title: string
+  audio: {
+    fileName?: string
+    durationMs: number
+  }
+  lines: Array<LyricLine & { endMs: number; segments: LyricSegment[] }>
+}
 
-export function parseLrc(content: string): LyricLine[] {
-  const parsedLines = content
-    .split(/\r?\n/)
-    .map((rawLine) => {
-      const match = rawLine.match(lrcLinePattern)
-
-      if (!match) {
-        return null
-      }
-
-      const minutes = Number(match[1])
-      const seconds = Number(match[2])
-      const fraction = match[3] ?? '0'
-      const normalizedFraction = Number(fraction.padEnd(3, '0').slice(0, 3)) / 1000
-      const text = match[4].trim()
-
-      return {
-        id: `${minutes}:${seconds}:${fraction}:${text}`,
-        start: minutes * 60 + seconds + normalizedFraction,
-        text,
-      } satisfies LyricLine
-    })
-    .filter((line): line is LyricLine => line !== null)
-    .sort((left, right) => left.start - right.start)
-
-  return parsedLines.map((line, index) => ({
-    ...line,
-    end: parsedLines[index + 1]?.start,
+function splitIntoSegments(text: string, lineId: string): DraftLyricSegment[] {
+  return (text.match(/\S+\s*/g) ?? [text]).map((segmentText, index) => ({
+    id: `${lineId}:segment:${index}`,
+    text: segmentText,
   }))
 }
 
@@ -64,56 +57,214 @@ export function parsePlainLyrics(content: string): DraftLyricLine[] {
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean)
-    .map((text, index) => ({
-      id: `${index}:${text}`,
-      text,
-    }))
+    .map((text, index) => {
+      const id = `line:${index}`
+
+      return {
+        id,
+        text,
+        segments: splitIntoSegments(text, id),
+      }
+    })
 }
 
-export function buildSyncedLines(draftLines: DraftLyricLine[]): LyricLine[] {
-  const syncedLines = draftLines
-    .filter((line): line is DraftLyricLine & { start: number } => line.start !== undefined)
-    .map((line) => ({
+export function buildSyncedLines(
+  draftLines: DraftLyricLine[],
+  audioDurationMs?: number,
+): LyricLine[] {
+  const startedLines = draftLines.filter(
+    (line): line is DraftLyricLine & { startMs: number } => line.startMs !== undefined,
+  )
+
+  return startedLines.map((line, lineIndex) => {
+    const endMs = startedLines[lineIndex + 1]?.startMs ?? audioDurationMs
+    const allSegmentsStarted = line.segments.every((segment) => segment.startMs !== undefined)
+    const segments =
+      endMs !== undefined && allSegmentsStarted
+        ? line.segments.map((segment, segmentIndex) => ({
+            id: segment.id,
+            text: segment.text,
+            startMs: segment.startMs as number,
+            endMs: line.segments[segmentIndex + 1]?.startMs ?? endMs,
+          }))
+        : undefined
+
+    return {
       id: line.id,
-      start: line.start,
+      startMs: line.startMs,
+      endMs,
       text: line.text,
-    }))
-
-  return syncedLines.map((line, index) => ({
-    ...line,
-    end: syncedLines[index + 1]?.start,
-  }))
-}
-
-export function serializeLrc(lines: LyricLine[]): string {
-  return lines.map((line) => `[${formatLrcTimestamp(line.start)}]${line.text}`).join('\n')
-}
-
-export function findActiveLine(lines: LyricLine[], currentTime: number): LyricLine | undefined {
-  return lines.find((line, index) => {
-    const nextLine = lines[index + 1]
-    const end = line.end ?? nextLine?.start ?? Number.POSITIVE_INFINITY
-
-    return currentTime >= line.start && currentTime < end
+      segments,
+    }
   })
 }
 
-function formatLrcTimestamp(timeInSeconds: number): string {
-  const safeTime = Math.max(0, timeInSeconds)
-  const minutes = Math.floor(safeTime / 60)
-  const seconds = Math.floor(safeTime % 60)
-  const centiseconds = Math.floor((safeTime % 1) * 100)
+export function createKaraokeFile(
+  project: KaraokeProject,
+  lines: LyricLine[],
+  audioDurationMs: number,
+): KaraokeFile {
+  const completeLines = lines.map((line) => {
+    if (line.endMs === undefined || !line.segments) {
+      throw new Error(`La ligne « ${line.text} » n'est pas entièrement synchronisée.`)
+    }
 
-  return `${minutes.toString().padStart(2, '0')}:${seconds
-    .toString()
-    .padStart(2, '0')}.${centiseconds.toString().padStart(2, '0')}`
+    return {
+      ...line,
+      endMs: line.endMs,
+      segments: line.segments,
+    }
+  })
+
+  const file: KaraokeFile = {
+    schemaVersion: KARAOKE_SCHEMA_VERSION,
+    title: project.title,
+    audio: {
+      fileName: project.audioFileName,
+      durationMs: audioDurationMs,
+    },
+    lines: completeLines,
+  }
+
+  return parseKaraokeFile(JSON.stringify(file))
 }
 
-export function formatTimestamp(timeInSeconds: number): string {
-  const safeTime = Math.max(0, timeInSeconds)
-  const minutes = Math.floor(safeTime / 60)
-  const seconds = Math.floor(safeTime % 60)
-  const milliseconds = Math.floor((safeTime % 1) * 1000)
+export function serializeKaraokeFile(file: KaraokeFile): string {
+  return `${JSON.stringify(file, null, 2)}\n`
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function isNonNegativeInteger(value: unknown): value is number {
+  return Number.isInteger(value) && (value as number) >= 0
+}
+
+function parseSegment(value: unknown, line: LyricLine, index: number): LyricSegment {
+  if (!isRecord(value)) {
+    throw new Error(`Le segment ${index + 1} de la ligne « ${line.text} » est invalide.`)
+  }
+
+  const { id, text, startMs, endMs } = value
+
+  if (
+    typeof id !== 'string' ||
+    typeof text !== 'string' ||
+    !isNonNegativeInteger(startMs) ||
+    !isNonNegativeInteger(endMs) ||
+    endMs <= startMs
+  ) {
+    throw new Error(`Le segment ${index + 1} de la ligne « ${line.text} » est invalide.`)
+  }
+
+  if (startMs < line.startMs || (line.endMs !== undefined && endMs > line.endMs)) {
+    throw new Error(`Le segment « ${text} » dépasse les limites de sa ligne.`)
+  }
+
+  return { id, text, startMs, endMs }
+}
+
+function parseLine(value: unknown, index: number): KaraokeFile['lines'][number] {
+  if (!isRecord(value)) {
+    throw new Error(`La ligne ${index + 1} est invalide.`)
+  }
+
+  const { id, text, startMs, endMs, segments } = value
+
+  if (
+    typeof id !== 'string' ||
+    typeof text !== 'string' ||
+    !isNonNegativeInteger(startMs) ||
+    !isNonNegativeInteger(endMs) ||
+    endMs <= startMs ||
+    !Array.isArray(segments) ||
+    segments.length === 0
+  ) {
+    throw new Error(`La ligne ${index + 1} est invalide.`)
+  }
+
+  const line: LyricLine & { endMs: number } = { id, text, startMs, endMs }
+  const parsedSegments = segments.map((segment, segmentIndex) =>
+    parseSegment(segment, line, segmentIndex),
+  )
+
+  parsedSegments.forEach((segment, segmentIndex) => {
+    const previousSegment = parsedSegments[segmentIndex - 1]
+
+    if (previousSegment && segment.startMs < previousSegment.endMs) {
+      throw new Error(`Les segments de la ligne « ${text} » se chevauchent.`)
+    }
+  })
+
+  if (parsedSegments.map((segment) => segment.text).join('') !== text) {
+    throw new Error(`Les segments de la ligne « ${text} » ne reconstituent pas son texte.`)
+  }
+
+  return { ...line, segments: parsedSegments }
+}
+
+export function parseKaraokeFile(content: string): KaraokeFile {
+  let value: unknown
+
+  try {
+    value = JSON.parse(content)
+  } catch {
+    throw new Error('Le fichier karaoké ne contient pas un JSON valide.')
+  }
+
+  if (!isRecord(value) || value.schemaVersion !== KARAOKE_SCHEMA_VERSION) {
+    throw new Error(`La version du fichier karaoké n'est pas supportée.`)
+  }
+
+  if (typeof value.title !== 'string' || !isRecord(value.audio) || !Array.isArray(value.lines)) {
+    throw new Error('La structure du fichier karaoké est invalide.')
+  }
+
+  const { fileName, durationMs } = value.audio
+
+  if (
+    (fileName !== undefined && typeof fileName !== 'string') ||
+    !isNonNegativeInteger(durationMs)
+  ) {
+    throw new Error('Les informations audio du fichier karaoké sont invalides.')
+  }
+
+  const lines = value.lines.map((line, index) => parseLine(line, index))
+
+  lines.forEach((line, index) => {
+    const previousLine = lines[index - 1]
+
+    if (previousLine && line.startMs < previousLine.endMs) {
+      throw new Error(`Les lignes « ${previousLine.text} » et « ${line.text} » se chevauchent.`)
+    }
+
+    if (line.endMs > durationMs) {
+      throw new Error(`La ligne « ${line.text} » dépasse la durée de la piste audio.`)
+    }
+  })
+
+  return {
+    schemaVersion: KARAOKE_SCHEMA_VERSION,
+    title: value.title,
+    audio: { fileName, durationMs },
+    lines,
+  }
+}
+
+export function findActiveLine(lines: LyricLine[], currentTimeMs: number): LyricLine | undefined {
+  return lines.find((line, index) => {
+    const endMs = line.endMs ?? lines[index + 1]?.startMs ?? Number.POSITIVE_INFINITY
+
+    return currentTimeMs >= line.startMs && currentTimeMs < endMs
+  })
+}
+
+export function formatTimestamp(timeMs: number): string {
+  const safeTimeMs = Math.max(0, Math.floor(timeMs))
+  const minutes = Math.floor(safeTimeMs / 60_000)
+  const seconds = Math.floor((safeTimeMs % 60_000) / 1000)
+  const milliseconds = safeTimeMs % 1000
 
   return `${minutes.toString().padStart(2, '0')}:${seconds
     .toString()

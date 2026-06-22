@@ -38,27 +38,23 @@ Cette V1 doit surtout valider le flux principal : créer une synchronisation min
 
 ## Format des paroles
 
-Il existe déjà des formats adaptés à la synchronisation de paroles, comme LRC ou Enhanced LRC. Ils peuvent servir de base pour une première itération.
-
-À terme, l'application devra probablement gérer un format plus précis. Les paroles d'une musique ne défilent pas toujours de manière linéaire : certains passages accélèrent, certaines syllabes sont allongées, plusieurs chanteurs peuvent se répondre, et le rythme réel ne correspond pas toujours à une simple ligne affichée pendant un intervalle fixe.
-
-Le format cible devra donc pouvoir représenter :
+Karaoke Maker utilise un format JSON interne versionné (`*.karaoke.json`). Il représente :
 
 - une ligne de paroles complète ;
-- plusieurs marqueurs temporels à l'intérieur d'une même ligne ;
-- une synchronisation plus fine par mot ou par syllabe ;
-- les informations nécessaires pour animer les paroles au bon rythme pendant la lecture.
+- plusieurs segments temporels à l'intérieur d'une même ligne ;
+- un début et une fin explicites en millisecondes pour chaque mot ou syllabe ;
+- les informations audio nécessaires pour valider et rejouer la synchronisation.
 
 ## Direction technique initiale
 
 La priorité est de construire un POC utilisable avant d'optimiser le format final.
 
-Une approche pragmatique consiste à :
+L'approche retenue consiste à :
 
-1. démarrer avec un format simple basé sur des blocs temporels ;
-2. supporter ensuite un format plus fin, inspiré des formats existants ;
-3. conserver une séparation claire entre la musique, les paroles brutes et les données de synchronisation ;
-4. prévoir un export/import stable pour que les karaokés créés restent réutilisables.
+1. synchroniser d'abord le début des lignes ;
+2. effectuer une seconde passe pour synchroniser les mots ;
+3. générer un fichier JSON utilisé directement par le lecteur ;
+4. conserver les timestamps sous forme d'entiers en millisecondes.
 
 ## Stack technique
 
@@ -104,26 +100,27 @@ Le lecteur karaoké n'a pas besoin de dépendre de `wavesurfer.js`. Pour jouer u
 
 ## Format interne cible
 
-La V1 peut importer ou exporter des formats existants comme LRC, Enhanced LRC ou WebVTT.
-
-Pour gérer ensuite une synchronisation plus précise, le projet pourra utiliser un format JSON interne capable de représenter des lignes, des mots ou des syllabes avec leurs propres marqueurs temporels.
-
-Exemple de direction :
+Le JSON est la source de vérité unique. Chaque segment conserve son texte exact, espaces compris, afin que leur concaténation reconstitue la ligne.
 
 ```json
 {
+  "schemaVersion": 1,
   "title": "Song title",
-  "audio": "song.mp3",
+  "audio": {
+    "fileName": "song.mp3",
+    "durationMs": 180000
+  },
   "lines": [
     {
-      "start": 12.4,
-      "end": 16.8,
+      "id": "line:0",
+      "startMs": 12400,
+      "endMs": 16800,
       "text": "Bonjour tout le monde",
-      "tokens": [
-        { "text": "Bonjour", "start": 12.4, "end": 13.6 },
-        { "text": "tout", "start": 13.8, "end": 14.5 },
-        { "text": "le", "start": 14.6, "end": 14.9 },
-        { "text": "monde", "start": 15.0, "end": 16.8 }
+      "segments": [
+        { "id": "line:0:segment:0", "text": "Bonjour ", "startMs": 12400, "endMs": 13600 },
+        { "id": "line:0:segment:1", "text": "tout ", "startMs": 13800, "endMs": 14500 },
+        { "id": "line:0:segment:2", "text": "le ", "startMs": 14600, "endMs": 14900 },
+        { "id": "line:0:segment:3", "text": "monde", "startMs": 15000, "endMs": 16800 }
       ]
     }
   ]
@@ -147,10 +144,6 @@ src/
   domain/
     lyrics.ts
     sync.ts
-    formats/
-      lrc.ts
-      vtt.ts
-      karaoke-json.ts
 ```
 
 La logique de parsing et de synchronisation doit rester autant que possible hors des composants Vue, afin de pouvoir la tester facilement.

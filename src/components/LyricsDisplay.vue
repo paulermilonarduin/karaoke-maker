@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onBeforeUpdate, onMounted, ref, watch } from 'vue'
-import type { LyricLine } from '../domain/lyrics'
+import type { LyricLine, LyricSegment } from '../domain/lyrics'
 import { formatTimestamp } from '../domain/lyrics'
 
 const props = defineProps<{
-  currentTime: number
-  fallbackEndTime?: number
+  currentTimeMs: number
+  fallbackEndTimeMs?: number
   activeLine?: LyricLine
   previousLine?: LyricLine
   nextLine?: LyricLine
@@ -16,6 +16,7 @@ type DisplayLine = {
   id: string
   position: 'previous' | 'current' | 'next'
   text: string
+  segments?: LyricSegment[]
 }
 
 const displayElement = ref<HTMLElement>()
@@ -24,16 +25,22 @@ let resizeObserver: ResizeObserver | undefined
 
 const activeLineProgress = computed(() => {
   const line = props.activeLine
-  const end = line?.end ?? props.fallbackEndTime
+  const endMs = line?.endMs ?? props.fallbackEndTimeMs
 
-  if (!line || end === undefined || end <= line.start) {
+  if (!line || endMs === undefined || endMs <= line.startMs) {
     return 0
   }
 
-  const progress = (props.currentTime - line.start) / (end - line.start)
+  const progress = (props.currentTimeMs - line.startMs) / (endMs - line.startMs)
 
   return Math.min(1, Math.max(0, progress))
 })
+
+function getSegmentProgress(segment: LyricSegment): number {
+  const progress = (props.currentTimeMs - segment.startMs) / (segment.endMs - segment.startMs)
+
+  return Math.min(1, Math.max(0, progress))
+}
 
 const visibleLines = computed<DisplayLine[]>(() => {
   const lines: DisplayLine[] = []
@@ -43,12 +50,18 @@ const visibleLines = computed<DisplayLine[]>(() => {
       id: props.previousLine.id,
       position: 'previous',
       text: props.previousLine.text,
+      segments: props.previousLine.segments,
     })
   }
 
   lines.push(
     props.activeLine
-      ? { id: props.activeLine.id, position: 'current', text: props.activeLine.text }
+      ? {
+          id: props.activeLine.id,
+          position: 'current',
+          text: props.activeLine.text,
+          segments: props.activeLine.segments,
+        }
       : {
           id: 'lyrics-placeholder',
           position: 'current',
@@ -57,7 +70,12 @@ const visibleLines = computed<DisplayLine[]>(() => {
   )
 
   if (props.nextLine) {
-    lines.push({ id: props.nextLine.id, position: 'next', text: props.nextLine.text })
+    lines.push({
+      id: props.nextLine.id,
+      position: 'next',
+      text: props.nextLine.text,
+      segments: props.nextLine.segments,
+    })
   }
 
   return lines
@@ -108,7 +126,7 @@ onBeforeUnmount(() => {
 <template>
   <section ref="displayElement" class="lyrics-display" aria-label="Aperçu karaoké">
     <p class="lyrics-display__time">
-      {{ activeLine ? formatTimestamp(activeLine.start) : '00:00.000' }}
+      {{ activeLine ? formatTimestamp(activeLine.startMs) : '00:00.000' }}
     </p>
     <div class="lyrics-display__stack">
       <p
@@ -119,15 +137,26 @@ onBeforeUnmount(() => {
         :class="`lyrics-display__${line.position}`"
       >
         <span
-          class="lyrics-display__text"
-          :class="{ 'text-highlight': line.position === 'current' }"
-          :data-text="line.position === 'current' ? line.text : undefined"
-          :style="
-            line.position === 'current'
-              ? { '--highlight-progress': `${activeLineProgress * 100}%` }
-              : undefined
-          "
+          v-if="line.position === 'current' && line.segments"
+          class="lyrics-display__text lyrics-display__segments"
         >
+          <span
+            v-for="segment in line.segments"
+            :key="segment.id"
+            class="text-highlight"
+            :data-text="segment.text"
+            :style="{ '--highlight-progress': `${getSegmentProgress(segment) * 100}%` }"
+          >{{ segment.text }}</span>
+        </span>
+        <span
+          v-else-if="line.position === 'current'"
+          class="lyrics-display__text text-highlight"
+          :data-text="line.text"
+          :style="{ '--highlight-progress': `${activeLineProgress * 100}%` }"
+        >
+          {{ line.text }}
+        </span>
+        <span v-else class="lyrics-display__text">
           {{ line.text }}
         </span>
       </p>

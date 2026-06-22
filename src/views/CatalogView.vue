@@ -3,13 +3,14 @@ import { computed, ref } from 'vue'
 import { catalogTracks, type CatalogTrack } from '../catalog/tracks'
 import AudioPlayer from '../components/AudioPlayer.vue'
 import LyricsDisplay from '../components/LyricsDisplay.vue'
-import { findActiveLine, parseLrc, type LyricLine } from '../domain/lyrics'
+import { findActiveLine, parseKaraokeFile, type LyricLine } from '../domain/lyrics'
 
 const selectedTrack = ref<CatalogTrack>(catalogTracks[0])
-const currentTime = ref(0)
-const audioDuration = ref<number>()
-const lyrics = computed(() => parseLrc(selectedTrack.value.lyricsContent))
-const activeLine = computed(() => findActiveLine(lyrics.value, currentTime.value))
+const currentTimeMs = ref(0)
+const audioDurationMs = ref<number>()
+const karaokeFile = computed(() => parseKaraokeFile(selectedTrack.value.karaokeContent))
+const lyrics = computed(() => karaokeFile.value.lines)
+const activeLine = computed(() => findActiveLine(lyrics.value, currentTimeMs.value))
 const previousLine = computed<LyricLine | undefined>(() => {
   const line = activeLine.value
 
@@ -35,8 +36,8 @@ const nextLine = computed<LyricLine | undefined>(() => {
 
 function selectTrack(track: CatalogTrack) {
   selectedTrack.value = track
-  currentTime.value = 0
-  audioDuration.value = undefined
+  currentTimeMs.value = 0
+  audioDurationMs.value = undefined
 }
 </script>
 
@@ -61,7 +62,7 @@ function selectTrack(track: CatalogTrack) {
           @click="selectTrack(track)"
         >
           <span>{{ track.title }}</span>
-          <span class="catalog-track__format">MP3 + LRC</span>
+          <span class="catalog-track__format">MP3 + JSON</span>
         </button>
       </aside>
 
@@ -73,12 +74,12 @@ function selectTrack(track: CatalogTrack) {
         <AudioPlayer
           :key="selectedTrack.id"
           :audio-url="selectedTrack.audioUrl"
-          @timeupdate="currentTime = $event"
-          @durationchange="audioDuration = $event"
+          @timeupdate="currentTimeMs = $event"
+          @durationchange="audioDurationMs = $event"
         />
         <LyricsDisplay
-          :current-time="currentTime"
-          :fallback-end-time="audioDuration"
+          :current-time-ms="currentTimeMs"
+          :fallback-end-time-ms="audioDurationMs"
           :active-line="activeLine"
           :previous-line="previousLine"
           :next-line="nextLine"

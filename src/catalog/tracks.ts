@@ -1,11 +1,11 @@
 import minecraftAudioUrl from '../assets/catalog/minecraft/Minecraft.mp3'
-import minecraftLyrics from '../assets/catalog/minecraft/Minecraft.lrc?raw'
+import minecraftKaraoke from '../assets/catalog/minecraft/Minecraft.karaoke.json?raw'
 
 export type CatalogTrack = {
   id: string
   title: string
   audioUrl: string
-  lyricsContent: string
+  karaokeContent: string
 }
 
 export const catalogTracks: CatalogTrack[] = [
@@ -13,6 +13,6 @@ export const catalogTracks: CatalogTrack[] = [
     id: 'minecraft',
     title: 'Minecraft',
     audioUrl: minecraftAudioUrl,
-    lyricsContent: minecraftLyrics,
+    karaokeContent: minecraftKaraoke,
   },
 ]

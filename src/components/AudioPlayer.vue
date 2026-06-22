@@ -15,7 +15,7 @@ let animationFrameId: number | undefined
 
 function emitCurrentTime() {
   if (audioElement.value) {
-    emit('timeupdate', audioElement.value.currentTime)
+    emit('timeupdate', Math.round(audioElement.value.currentTime * 1000))
   }
 }
 
@@ -23,7 +23,7 @@ function emitMetadata() {
   emitCurrentTime()
 
   if (audioElement.value && Number.isFinite(audioElement.value.duration)) {
-    emit('durationchange', audioElement.value.duration)
+    emit('durationchange', Math.round(audioElement.value.duration * 1000))
   }
 }
 

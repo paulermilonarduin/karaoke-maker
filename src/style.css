@@ -249,6 +249,21 @@ p {
   line-height: 1.3;
 }
 
+.sync-panel__hint {
+  color: #59605b;
+  font-size: 0.9rem;
+}
+
+.sync-panel__hint strong {
+  color: #2c7a68;
+}
+
+.sync-panel__error {
+  color: #a1382e;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
 .action-row {
   display: grid;
   grid-template-columns: minmax(150px, 1.2fr) repeat(2, minmax(96px, 0.8fr));
@@ -318,6 +333,14 @@ p {
   font-weight: 900;
   line-height: 1.05;
   transform: translateY(-50%);
+}
+
+.lyrics-display__segments {
+  display: inline-flex;
+}
+
+.lyrics-display__segments .text-highlight {
+  white-space: pre;
 }
 
 .text-highlight {
