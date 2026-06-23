@@ -238,9 +238,10 @@ p {
 .line-count {
   flex: 0 0 auto;
   padding: 6px 10px;
+  border: 1px solid var(--color-border-muted);
   border-radius: 6px;
-  background: #f2e5d5;
-  color: #78542a;
+  background: color-mix(in srgb, var(--color-accent) 13%, transparent);
+  color: var(--color-accent);
   font-size: 0.85rem;
   font-weight: 800;
 }
@@ -605,7 +606,7 @@ p {
 
 .action-row {
   display: grid;
-  grid-template-columns: minmax(150px, 1.2fr) repeat(2, minmax(96px, 0.8fr));
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: 8px;
 }
 
@@ -684,6 +685,45 @@ p {
 
 .lyrics-display__segments .text-highlight {
   white-space: pre;
+}
+
+.lyrics-display__bridge {
+  --bridge-progress: 0%;
+
+  display: inline-grid;
+  width: min(780px, 86vw);
+  gap: 14px;
+  justify-items: center;
+  white-space: normal;
+}
+
+.lyrics-display__bridge-track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 14px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 62%, transparent);
+  border-radius: 8px;
+  background: var(--color-bg);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.34);
+  transform: skewX(-5deg);
+  transform-origin: left center;
+}
+
+.lyrics-display__bridge-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--bridge-progress);
+  border-radius: 7px 0 0 7px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-accent) 72%, transparent),
+    var(--color-accent)
+  );
+  box-shadow:
+    0 0 4px color-mix(in srgb, var(--color-accent) 62%, transparent),
+    0 0 10px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .text-highlight {
@@ -1044,11 +1084,6 @@ p {
 .shortcut-list kbd,
 .catalog-track {
   color: var(--color-text);
-}
-
-.line-count {
-  color: var(--color-warning);
-  background: rgba(224, 168, 75, 0.14);
 }
 
 .view-switcher__button--active,

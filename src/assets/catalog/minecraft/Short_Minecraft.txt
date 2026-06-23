@@ -1,3 +1,4 @@
+[bridge]
 Le serveur Minecraft c'est une bonne idée
 Mais bon moi je crois que j'aurais mieux fait
 Sans arbres moches qui donnent pas de graines

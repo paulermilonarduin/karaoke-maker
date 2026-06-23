@@ -7,6 +7,13 @@
   },
   "lines": [
     {
+      "id": "bridge:intro",
+      "kind": "bridge",
+      "text": "",
+      "startMs": 0,
+      "endMs": 20081
+    },
+    {
       "id": "line:0",
       "text": "Le serveur Minecraft c'est une bonne idée",
       "startMs": 20081,

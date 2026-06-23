@@ -30,6 +30,7 @@ Une première version fonctionnelle peut rester volontairement simple :
 
 - importer ou référencer un MP3 ;
 - synchroniser les lignes puis les mots en deux passes ;
+- ajouter des blocs d’interlude pour les passages sans paroles ;
 - ajuster les marqueurs directement sur la waveform ;
 - ralentir ou accélérer la lecture en conservant la tonalité ;
 - personnaliser la couleur principale depuis les paramètres ;
@@ -45,8 +46,11 @@ Karaoke Maker utilise un format JSON interne versionné (`*.karaoke.json`). Il r
 
 - une ligne de paroles complète ;
 - plusieurs segments temporels à l'intérieur d'une même ligne ;
+- des blocs d’interlude (`kind: "bridge"`) pour les passages instrumentaux ou sans paroles ;
 - un début et une fin explicites en millisecondes pour chaque mot ou syllabe ;
 - les informations audio nécessaires pour valider et rejouer la synchronisation.
+
+Dans un fichier de paroles brut, une ligne `[bridge]`, `[instrumental]`, `[break]` ou `[pause]` crée un bloc sans paroles. Le générateur permet aussi d’ajouter un interlude à l’instant courant pendant la synchronisation.
 
 ## Direction technique initiale
 
@@ -128,7 +132,15 @@ Le JSON est la source de vérité unique. Chaque segment conserve son texte exac
   },
   "lines": [
     {
+      "id": "bridge:intro",
+      "kind": "bridge",
+      "text": "",
+      "startMs": 0,
+      "endMs": 12400
+    },
+    {
       "id": "line:0",
+      "kind": "lyrics",
       "startMs": 12400,
       "endMs": 16800,
       "text": "Bonjour tout le monde",

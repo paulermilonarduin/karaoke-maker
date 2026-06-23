@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onBeforeUpdate, onMounted, ref, watch } from 'vue'
 import type { LyricLine, LyricSegment } from '../domain/lyrics'
-import { formatTimestamp } from '../domain/lyrics'
+import { formatTimestamp, isBridgeLine } from '../domain/lyrics'
 import { useI18n } from '../i18n'
 
 const props = defineProps<{
@@ -15,6 +15,7 @@ const props = defineProps<{
 
 type DisplayLine = {
   id: string
+  kind?: LyricLine['kind']
   position: 'previous' | 'current' | 'next'
   text: string
   segments?: LyricSegment[]
@@ -50,8 +51,11 @@ const visibleLines = computed<DisplayLine[]>(() => {
   if (props.previousLine) {
     lines.push({
       id: props.previousLine.id,
+      kind: props.previousLine.kind,
       position: 'previous',
-      text: props.previousLine.text,
+      text: isBridgeLine(props.previousLine)
+        ? t('lyricsDisplay.bridgeLabel')
+        : props.previousLine.text,
       segments: props.previousLine.segments,
     })
   }
@@ -60,8 +64,11 @@ const visibleLines = computed<DisplayLine[]>(() => {
     props.activeLine
       ? {
           id: props.activeLine.id,
+          kind: props.activeLine.kind,
           position: 'current',
-          text: props.activeLine.text,
+          text: isBridgeLine(props.activeLine)
+            ? t('lyricsDisplay.bridgeLabel')
+            : props.activeLine.text,
           segments: props.activeLine.segments,
         }
       : {
@@ -74,8 +81,9 @@ const visibleLines = computed<DisplayLine[]>(() => {
   if (props.nextLine) {
     lines.push({
       id: props.nextLine.id,
+      kind: props.nextLine.kind,
       position: 'next',
-      text: props.nextLine.text,
+      text: isBridgeLine(props.nextLine) ? t('lyricsDisplay.bridgeLabel') : props.nextLine.text,
       segments: props.nextLine.segments,
     })
   }
@@ -139,7 +147,21 @@ onBeforeUnmount(() => {
         :class="`lyrics-display__${line.position}`"
       >
         <span
-          v-if="line.position === 'current' && line.segments"
+          v-if="line.position === 'current' && line.kind === 'bridge'"
+          class="lyrics-display__text lyrics-display__bridge"
+          :style="{ '--bridge-progress': `${activeLineProgress * 100}%` }"
+          role="progressbar"
+          :aria-label="t('lyricsDisplay.bridgeLabel')"
+          :aria-valuenow="Math.round(activeLineProgress * 100)"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <span class="lyrics-display__bridge-track" aria-hidden="true">
+            <span class="lyrics-display__bridge-fill"></span>
+          </span>
+        </span>
+        <span
+          v-else-if="line.position === 'current' && line.segments"
           class="lyrics-display__text lyrics-display__segments"
         >
           <span

@@ -8,8 +8,10 @@ import {
   createKaraokeFile,
   findActiveLine,
   formatTimestamp,
+  isBridgeLine,
   parsePlainLyrics,
   serializeKaraokeFile,
+  type DraftLyricLine,
   type KaraokeProject,
 } from '../domain/lyrics'
 import {
@@ -32,6 +34,7 @@ const project = ref<KaraokeProject>({
   title: '',
   draftLines: [],
 })
+const manualBridgeCount = ref(0)
 
 const audioUrl = ref<string>()
 const currentTimeMs = ref(0)
@@ -123,13 +126,14 @@ const timelineRegions = computed<WaveformRegionModel[]>(() => {
     regions.push({
       id: `line/${line.id}`,
       kind: 'line',
-      label: `L${lineIndex + 1}`,
+      label: isBridgeLine(line) ? `B${lineIndex + 1}` : `L${lineIndex + 1}`,
       startMs: line.startMs,
       endMs: lineEndMs !== undefined && lineEndMs > line.startMs ? lineEndMs : undefined,
       editable: true,
     })
 
     if (
+      isBridgeLine(line) ||
       lineEndMs === undefined ||
       syncPhase.value === 'lines' ||
       lineIndex !== editingLineIndex.value
@@ -167,7 +171,7 @@ const syncPhase = computed<'lines' | 'segments'>(() =>
 )
 const syncProgress = computed(() =>
   syncPhase.value === 'lines'
-    ? t('generator.progressLines', {
+    ? t('generator.progressBlocks', {
         current: syncedLineCount.value,
         total: project.value.draftLines.length,
       })
@@ -186,6 +190,16 @@ const canExport = computed(
 )
 
 const activeLine = computed(() => findActiveLine(syncedLines.value, currentTimeMs.value))
+
+const nextDraftLineLabel = computed(() => getDraftLineLabel(nextDraftLine.value))
+
+function getDraftLineLabel(line?: DraftLyricLine): string | undefined {
+  if (!line) {
+    return undefined
+  }
+
+  return isBridgeLine(line) ? t('generator.bridgeBlock') : line.text
+}
 
 function onAudioFile(file: File) {
   if (audioUrl.value) {
@@ -230,15 +244,60 @@ function markNextLine() {
 
     const previousLastSegment = previousLine.segments[previousLine.segments.length - 1]
 
-    if (previousLastSegment.startMs !== undefined) {
+    if (previousLastSegment?.startMs !== undefined) {
       previousLastSegment.endMs = currentTimeMs.value
     }
   }
 
   line.startMs = currentTimeMs.value
   line.endMs = undefined
-  line.segments[0].startMs = currentTimeMs.value
-  line.segments[0].endMs = undefined
+
+  if (!isBridgeLine(line)) {
+    line.segments[0].startMs = currentTimeMs.value
+    line.segments[0].endMs = undefined
+  }
+
+  syncError.value = undefined
+}
+
+function addBridgeBlock() {
+  if (syncPhase.value !== 'lines') {
+    return
+  }
+
+  if (!audioUrl.value) {
+    syncError.value = t('generator.error.missingAudio')
+    return
+  }
+
+  const insertIndex =
+    nextDraftLineIndex.value === -1 ? project.value.draftLines.length : nextDraftLineIndex.value
+  const previousLine = project.value.draftLines[insertIndex - 1]
+
+  if (previousLine?.startMs !== undefined && currentTimeMs.value <= previousLine.startMs) {
+    syncError.value = t('generator.error.lineOrder')
+    return
+  }
+
+  if (previousLine?.startMs !== undefined) {
+    previousLine.endMs = currentTimeMs.value
+
+    const previousLastSegment = previousLine.segments[previousLine.segments.length - 1]
+
+    if (previousLastSegment?.startMs !== undefined) {
+      previousLastSegment.endMs = currentTimeMs.value
+    }
+  }
+
+  manualBridgeCount.value += 1
+  project.value.draftLines.splice(insertIndex, 0, {
+    id: `bridge:manual:${Date.now()}:${manualBridgeCount.value}`,
+    kind: 'bridge',
+    text: '',
+    startMs: currentTimeMs.value,
+    endMs: undefined,
+    segments: [],
+  })
   syncError.value = undefined
 }
 
@@ -310,13 +369,24 @@ function undoLastMarker() {
 
       if (previousLine) {
         previousLine.endMs = undefined
-        previousLine.segments[previousLine.segments.length - 1].endMs = undefined
+
+        const previousLastSegment = previousLine.segments[previousLine.segments.length - 1]
+
+        if (previousLastSegment) {
+          previousLastSegment.endMs = undefined
+        }
       }
 
       line.startMs = undefined
       line.endMs = undefined
-      line.segments[0].startMs = undefined
-      line.segments[0].endMs = undefined
+
+      const firstSegment = line.segments[0]
+
+      if (firstSegment) {
+        firstSegment.startMs = undefined
+        firstSegment.endMs = undefined
+      }
+
       syncError.value = undefined
       return
     }
@@ -389,8 +459,8 @@ function onRegionChange(change: WaveformRegionChange) {
       const firstSegment = line.segments[0]
       const lastSegment = line.segments[line.segments.length - 1]
 
-      if (firstSegment.startMs === oldStartMs) firstSegment.startMs = startMs
-      if (lastSegment.endMs === oldEndMs) lastSegment.endMs = endMs
+      if (firstSegment?.startMs === oldStartMs) firstSegment.startMs = startMs
+      if (lastSegment?.endMs === oldEndMs) lastSegment.endMs = endMs
     }
 
     syncError.value = undefined
@@ -468,6 +538,7 @@ useGeneratorShortcuts(
   {
     'player.toggle': () => void waveformRef.value?.togglePlayback(),
     'marker.create': markNextMarker,
+    'marker.bridge': addBridgeBlock,
     'marker.undo': undoLastMarker,
     'player.seekBackward': () => waveformRef.value?.seekBy(-100),
     'player.seekForward': () => waveformRef.value?.seekBy(100),
@@ -534,7 +605,7 @@ onBeforeUnmount(() => {
 
           <p class="sync-panel__line">
             {{
-              nextDraftLine?.text ||
+              nextDraftLineLabel ||
               nextSegmentLine?.text ||
               t('generator.complete')
             }}
@@ -551,7 +622,16 @@ onBeforeUnmount(() => {
               :disabled="!audioUrl || (!nextDraftLine && !nextSegment)"
               @click="markNextMarker"
             >
-              {{ syncPhase === 'lines' ? t('generator.markLine') : t('generator.markWord') }}
+              {{ t('generator.mark') }}
+            </button>
+            <button
+              v-if="syncPhase === 'lines'"
+              class="button"
+              type="button"
+              :disabled="!audioUrl"
+              @click="addBridgeBlock"
+            >
+              {{ t('generator.addBridge') }}
             </button>
             <button
               class="button"
