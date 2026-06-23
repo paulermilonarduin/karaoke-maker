@@ -24,6 +24,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@property --highlight-progress {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 0%;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -138,6 +144,27 @@ p {
 
 .karaoke-logo .text-highlight {
   padding-right: 0.12em;
+}
+
+.karaoke-logo--animated .text-highlight {
+  animation: logo-highlight-progress 3s linear infinite;
+}
+
+@keyframes logo-highlight-progress {
+  from {
+    --highlight-progress: 0%;
+  }
+
+  to {
+    --highlight-progress: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .karaoke-logo--animated .text-highlight {
+    --highlight-progress: 65%;
+    animation: none;
+  }
 }
 
 .eyebrow {
@@ -852,8 +879,6 @@ p {
 
 .language-picker {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
   gap: 12px;
   padding: 12px;
   border: 1px solid var(--color-border-muted);
@@ -871,13 +896,44 @@ p {
   color: var(--color-text-muted);
 }
 
-.language-picker select {
-  min-width: 130px;
+.language-picker__options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 8px 10px;
   border: 1px solid var(--color-border-muted);
   border-radius: 6px;
-  padding: 8px 10px;
+  text-align: left;
   color: var(--color-text);
   background: var(--color-surface);
+}
+
+.language-option:hover,
+.language-option:focus-visible {
+  border-color: var(--color-accent);
+  background: var(--color-surface-hover);
+}
+
+.language-option.is-active {
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.language-option.is-active small {
+  color: color-mix(in srgb, var(--color-on-accent) 78%, transparent);
+}
+
+.language-option__flag {
+  font-size: 1.35rem;
+  line-height: 1;
 }
 
 .color-presets {

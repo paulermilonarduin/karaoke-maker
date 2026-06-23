@@ -5,12 +5,14 @@ export type KaraokeLogoSize = 'small' | 'medium' | 'large'
 
 const props = withDefaults(
   defineProps<{
+    animated?: boolean
     progress?: number
     size?: KaraokeLogoSize
     text?: string
     tilt?: number
   }>(),
   {
+    animated: false,
     progress: 65,
     size: 'medium',
     text: 'KARAOKE MAKER',
@@ -30,7 +32,7 @@ const highlightStyle = computed(() => ({
 <template>
   <span
     class="karaoke-logo"
-    :class="`karaoke-logo--${size}`"
+    :class="[`karaoke-logo--${size}`, { 'karaoke-logo--animated': animated }]"
     :style="logoStyle"
   >
     <span class="text-highlight" :data-text="text" :style="highlightStyle">{{ text }}</span>

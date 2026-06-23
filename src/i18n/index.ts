@@ -60,7 +60,9 @@ const frMessages = {
   'settings.accentTitle': 'Couleur principale',
   'settings.appearance': 'Apparence',
   'settings.chooseColor': 'Choisir la couleur {color}',
+  'settings.chooseLanguage': 'Choisir {language} ({country})',
   'settings.eyebrow': 'Paramètres',
+  'settings.languageAria': 'Langues disponibles',
   'settings.languageDescription': 'Change les libellés de l’interface.',
   'settings.languageTitle': 'Langue',
   'settings.preview': 'Aperçu',
@@ -157,7 +159,9 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'settings.accentTitle': 'Primary color',
   'settings.appearance': 'Appearance',
   'settings.chooseColor': 'Choose color {color}',
+  'settings.chooseLanguage': 'Choose {language} ({country})',
   'settings.eyebrow': 'Settings',
+  'settings.languageAria': 'Available languages',
   'settings.languageDescription': 'Changes the interface labels.',
   'settings.languageTitle': 'Language',
   'settings.preview': 'Preview',
@@ -196,9 +200,30 @@ const enMessages: Record<keyof typeof frMessages, string> = {
 export type Locale = 'fr' | 'en'
 export type TranslationKey = keyof typeof frMessages
 
-export const localeOptions: { value: Locale; label: string }[] = [
-  { value: 'fr', label: 'Français' },
-  { value: 'en', label: 'English' },
+export const localeOptions: {
+  value: Locale
+  label: string
+  flag: string
+  countryLabel: Record<Locale, string>
+}[] = [
+  {
+    value: 'fr',
+    label: 'Français',
+    flag: '🇫🇷',
+    countryLabel: {
+      fr: 'France',
+      en: 'France',
+    },
+  },
+  {
+    value: 'en',
+    label: 'English',
+    flag: '🇬🇧',
+    countryLabel: {
+      fr: 'Royaume-Uni',
+      en: 'United Kingdom',
+    },
+  },
 ]
 
 const localeStorageKey = 'karaoke-maker.locale.v1'

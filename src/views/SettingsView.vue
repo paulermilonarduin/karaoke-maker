@@ -20,10 +20,6 @@ const { t } = useI18n()
 function onColorInput(event: Event) {
   emit('update', (event.target as HTMLInputElement).value)
 }
-
-function onLocaleChange(event: Event) {
-  emit('localeupdate', (event.target as HTMLSelectElement).value as Locale)
-}
 </script>
 
 <template>
@@ -73,21 +69,36 @@ function onLocaleChange(event: Event) {
           ></button>
         </div>
 
-        <label class="language-picker">
-          <span>
+        <div class="language-picker">
+          <div>
             <strong>{{ t('settings.languageTitle') }}</strong>
             <small>{{ t('settings.languageDescription') }}</small>
-          </span>
-          <select :value="locale" @change="onLocaleChange">
-            <option
+          </div>
+
+          <div class="language-picker__options" :aria-label="t('settings.languageAria')">
+            <button
               v-for="option in localeOptions"
               :key="option.value"
-              :value="option.value"
+              class="language-option"
+              :class="{ 'is-active': locale === option.value }"
+              type="button"
+              :aria-pressed="locale === option.value"
+              :aria-label="
+                t('settings.chooseLanguage', {
+                  language: option.label,
+                  country: option.countryLabel[locale],
+                })
+              "
+              @click="emit('localeupdate', option.value)"
             >
-              {{ option.label }}
-            </option>
-          </select>
-        </label>
+              <span class="language-option__flag" aria-hidden="true">{{ option.flag }}</span>
+              <span>
+                <strong>{{ option.label }}</strong>
+                <small>{{ option.countryLabel[locale] }}</small>
+              </span>
+            </button>
+          </div>
+        </div>
 
         <button
           class="button"
@@ -101,7 +112,7 @@ function onLocaleChange(event: Event) {
 
       <article class="settings-preview">
         <p class="eyebrow">{{ t('settings.preview') }}</p>
-        <KaraokeLogo size="medium" :progress="65" />
+        <KaraokeLogo animated size="medium" :progress="0" />
         <p>{{ t('settings.previewDescription') }}</p>
         <button class="button button--primary" type="button">{{ t('settings.previewButton') }}</button>
       </article>
