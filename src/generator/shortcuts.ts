@@ -4,7 +4,7 @@ import type { Locale, TranslationKey } from '../i18n'
 export type GeneratorActionId =
   | 'player.toggle'
   | 'marker.create'
-  | 'marker.bridge'
+  | 'marker.interlude'
   | 'marker.undo'
   | 'player.seekBackward'
   | 'player.seekForward'
@@ -40,8 +40,8 @@ export const generatorActions: GeneratorActionDefinition[] = [
     shortcut: { code: 'Enter' },
   },
   {
-    id: 'marker.bridge',
-    labelKey: 'shortcut.action.markerBridge',
+    id: 'marker.interlude',
+    labelKey: 'shortcut.action.markerInterlude',
     shortcut: { key: 'b' },
   },
   {

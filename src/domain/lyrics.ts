@@ -7,11 +7,11 @@ export type LyricSegment = {
   endMs: number
 }
 
-export type LyricLineKind = 'lyrics' | 'bridge'
+export type LyricLineKind = 'lyrics' | 'interlude'
 
 export type LyricLine = {
   id: string
-  kind?: LyricLineKind
+  kind: LyricLineKind
   startMs: number
   endMs?: number
   text: string
@@ -27,7 +27,7 @@ export type DraftLyricSegment = {
 
 export type DraftLyricLine = {
   id: string
-  kind?: LyricLineKind
+  kind: LyricLineKind
   text: string
   startMs?: number
   endMs?: number
@@ -51,8 +51,8 @@ export type KaraokeFile = {
   lines: Array<LyricLine & { endMs: number }>
 }
 
-export function isBridgeLine(line: Pick<LyricLine, 'kind'>): boolean {
-  return line.kind === 'bridge'
+export function isInterludeLine(line: Pick<LyricLine, 'kind'>): boolean {
+  return line.kind === 'interlude'
 }
 
 function splitIntoSegments(text: string, lineId: string): DraftLyricSegment[] {
@@ -62,25 +62,12 @@ function splitIntoSegments(text: string, lineId: string): DraftLyricSegment[] {
   }))
 }
 
-function isBridgeMarker(text: string): boolean {
-  return /^\[(bridge|instrumental|break|pause)\]$/i.test(text.trim())
-}
-
 export function parsePlainLyrics(content: string): DraftLyricLine[] {
   return content
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean)
     .map((text, index) => {
-      if (isBridgeMarker(text)) {
-        return {
-          id: `bridge:${index}`,
-          kind: 'bridge',
-          text: '',
-          segments: [],
-        }
-      }
-
       const id = `line:${index}`
 
       return {
@@ -103,10 +90,10 @@ export function buildSyncedLines(
   return startedLines.map((line, lineIndex) => {
     const endMs = line.endMs ?? startedLines[lineIndex + 1]?.startMs ?? audioDurationMs
 
-    if (isBridgeLine(line)) {
+    if (isInterludeLine(line)) {
       return {
         id: line.id,
-        kind: 'bridge',
+        kind: 'interlude',
         startMs: line.startMs,
         endMs,
         text: '',
@@ -141,14 +128,14 @@ export function createKaraokeFile(
   audioDurationMs: number,
 ): KaraokeFile {
   const completeLines = lines.map((line) => {
-    if (isBridgeLine(line)) {
+    if (isInterludeLine(line)) {
       if (line.endMs === undefined) {
         throw new Error('L’interlude n’est pas entièrement synchronisé.')
       }
 
       return {
         id: line.id,
-        kind: 'bridge' as const,
+        kind: 'interlude' as const,
         startMs: line.startMs,
         endMs: line.endMs,
         text: '',
@@ -223,7 +210,7 @@ function parseLine(value: unknown, index: number): KaraokeFile['lines'][number] 
 
   const { id, kind, text, startMs, endMs, segments } = value
 
-  if (kind === 'bridge') {
+  if (kind === 'interlude') {
     if (
       typeof id !== 'string' ||
       (text !== undefined && typeof text !== 'string') ||
@@ -236,7 +223,7 @@ function parseLine(value: unknown, index: number): KaraokeFile['lines'][number] 
 
     return {
       id,
-      kind: 'bridge',
+      kind: 'interlude',
       startMs,
       endMs,
       text: typeof text === 'string' ? text : '',
@@ -245,7 +232,7 @@ function parseLine(value: unknown, index: number): KaraokeFile['lines'][number] 
 
   if (
     typeof id !== 'string' ||
-    (kind !== undefined && kind !== 'lyrics') ||
+    kind !== 'lyrics' ||
     typeof text !== 'string' ||
     !isNonNegativeInteger(startMs) ||
     !isNonNegativeInteger(endMs) ||

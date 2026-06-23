@@ -7,8 +7,8 @@
   },
   "lines": [
     {
-      "id": "bridge:intro",
-      "kind": "bridge",
+      "id": "interlude:intro",
+      "kind": "interlude",
       "text": "",
       "startMs": 0,
       "endMs": 20081
@@ -61,7 +61,8 @@
           "startMs": 21862,
           "endMs": 22588
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:1",
@@ -123,7 +124,8 @@
           "startMs": 24562,
           "endMs": 25438
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:2",
@@ -179,7 +181,8 @@
           "startMs": 27371,
           "endMs": 27780
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:3",
@@ -235,7 +238,8 @@
           "startMs": 29869,
           "endMs": 30582
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:4",
@@ -279,7 +283,8 @@
           "startMs": 32255,
           "endMs": 33433
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:5",
@@ -329,7 +334,8 @@
           "startMs": 35140,
           "endMs": 35842
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:6",
@@ -373,7 +379,8 @@
           "startMs": 37819,
           "endMs": 38692
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:7",
@@ -423,7 +430,8 @@
           "startMs": 40388,
           "endMs": 41380
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:8",
@@ -485,7 +493,8 @@
           "startMs": 43147,
           "endMs": 44011
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:9",
@@ -535,7 +544,8 @@
           "startMs": 45537,
           "endMs": 46500
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:10",
@@ -585,7 +595,8 @@
           "startMs": 48367,
           "endMs": 49164
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:11",
@@ -629,7 +640,8 @@
           "startMs": 50939,
           "endMs": 52114
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:12",
@@ -679,7 +691,8 @@
           "startMs": 53635,
           "endMs": 54334
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:13",
@@ -729,7 +742,8 @@
           "startMs": 56182,
           "endMs": 57016
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:14",
@@ -791,7 +805,8 @@
           "startMs": 59005,
           "endMs": 59563
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:15",
@@ -853,7 +868,8 @@
           "startMs": 62037,
           "endMs": 62386
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:16",
@@ -909,7 +925,8 @@
           "startMs": 64069,
           "endMs": 64850
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:17",
@@ -959,7 +976,8 @@
           "startMs": 66564,
           "endMs": 67431
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:18",
@@ -1015,7 +1033,8 @@
           "startMs": 69301,
           "endMs": 70538
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:19",
@@ -1071,7 +1090,8 @@
           "startMs": 72564,
           "endMs": 72988
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:20",
@@ -1127,7 +1147,8 @@
           "startMs": 74481,
           "endMs": 75400
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:21",
@@ -1177,7 +1198,8 @@
           "startMs": 77152,
           "endMs": 77997
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:22",
@@ -1233,7 +1255,8 @@
           "startMs": 79787,
           "endMs": 80890
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:23",
@@ -1289,7 +1312,8 @@
           "startMs": 82929,
           "endMs": 83492
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:24",
@@ -1345,7 +1369,8 @@
           "startMs": 85072,
           "endMs": 85957
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:25",
@@ -1395,7 +1420,8 @@
           "startMs": 87587,
           "endMs": 88588
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:26",
@@ -1451,7 +1477,8 @@
           "startMs": 90331,
           "endMs": 91586
         }
-      ]
+      ],
+      "kind": "lyrics"
     },
     {
       "id": "line:27",
@@ -1507,7 +1534,8 @@
           "startMs": 93548,
           "endMs": 94390
         }
-      ]
+      ],
+      "kind": "lyrics"
     }
   ]
 }

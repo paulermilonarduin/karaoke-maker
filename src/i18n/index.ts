@@ -39,8 +39,8 @@ const frMessages = {
   'file.empty': 'Aucun fichier sélectionné',
 
   'generator.audioLabel': 'Musique MP3',
-  'generator.addBridge': 'Interlude',
-  'generator.bridgeBlock': 'Interlude',
+  'generator.addInterlude': 'Interlude',
+  'generator.interludeBlock': 'Interlude',
   'generator.complete': 'Toutes les paroles sont synchronisées.',
   'generator.error.export': 'Impossible de générer le fichier.',
   'generator.error.lineBounds': 'Le marqueur doit rester dans les limites de la ligne.',
@@ -52,7 +52,7 @@ const frMessages = {
   'generator.lyricsLabel': 'Paroles brutes',
   'generator.mark': 'Marquer',
   'generator.markLine': 'Marquer la ligne',
-  'generator.markBridge': 'Marquer l’interlude',
+  'generator.markInterlude': 'Marquer l’interlude',
   'generator.markWord': 'Marquer le mot',
   'generator.newProjectTitle': 'Nouveau karaoké',
   'generator.nextWord': 'Prochain mot :',
@@ -64,7 +64,7 @@ const frMessages = {
   'generator.undo': 'Annuler',
 
   'lyricsDisplay.ariaLabel': 'Aperçu karaoké',
-  'lyricsDisplay.bridgeLabel': 'Interlude',
+  'lyricsDisplay.interludeLabel': 'Interlude',
   'lyricsDisplay.enterFullscreen': 'Passer le lecteur en plein écran',
   'lyricsDisplay.exitFullscreen': 'Quitter le plein écran',
   'lyricsDisplay.placeholder': 'Chargez un MP3 et des paroles brutes pour démarrer.',
@@ -91,7 +91,7 @@ const frMessages = {
   'settings.theme': 'Thème',
 
   'shortcut.action.markerCreate': 'Marquer la ligne ou le mot',
-  'shortcut.action.markerBridge': 'Ajouter un interlude',
+  'shortcut.action.markerInterlude': 'Ajouter un interlude',
   'shortcut.action.markerNudgeBackward': 'Décaler le marqueur de -10 ms',
   'shortcut.action.markerNudgeForward': 'Décaler le marqueur de +10 ms',
   'shortcut.action.markerUndo': 'Annuler le dernier marqueur',
@@ -156,8 +156,8 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'file.empty': 'No file selected',
 
   'generator.audioLabel': 'MP3 music',
-  'generator.addBridge': 'Bridge',
-  'generator.bridgeBlock': 'Bridge',
+  'generator.addInterlude': 'Interlude',
+  'generator.interludeBlock': 'Interlude',
   'generator.complete': 'All lyrics are synchronized.',
   'generator.error.export': 'Unable to generate the file.',
   'generator.error.lineBounds': 'The marker must stay within the line bounds.',
@@ -168,7 +168,7 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'generator.lyricsLabel': 'Raw lyrics',
   'generator.mark': 'Mark',
   'generator.markLine': 'Mark line',
-  'generator.markBridge': 'Mark bridge',
+  'generator.markInterlude': 'Mark interlude',
   'generator.markWord': 'Mark word',
   'generator.newProjectTitle': 'New karaoke',
   'generator.nextWord': 'Next word:',
@@ -180,7 +180,7 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'generator.undo': 'Undo',
 
   'lyricsDisplay.ariaLabel': 'Karaoke preview',
-  'lyricsDisplay.bridgeLabel': 'Bridge',
+  'lyricsDisplay.interludeLabel': 'Interlude',
   'lyricsDisplay.enterFullscreen': 'Enter player fullscreen',
   'lyricsDisplay.exitFullscreen': 'Exit fullscreen',
   'lyricsDisplay.placeholder': 'Load an MP3 and raw lyrics to get started.',
@@ -206,7 +206,7 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'settings.theme': 'Theme',
 
   'shortcut.action.markerCreate': 'Mark line or word',
-  'shortcut.action.markerBridge': 'Add bridge',
+  'shortcut.action.markerInterlude': 'Add interlude',
   'shortcut.action.markerNudgeBackward': 'Nudge marker by -10 ms',
   'shortcut.action.markerNudgeForward': 'Nudge marker by +10 ms',
   'shortcut.action.markerUndo': 'Undo last marker',
@@ -271,14 +271,6 @@ function isLocale(value: unknown): value is Locale {
   return value === 'fr' || value === 'en-US'
 }
 
-function normalizeStoredLocale(value: unknown): Locale | undefined {
-  if (value === 'en') {
-    return 'en-US'
-  }
-
-  return isLocale(value) ? value : undefined
-}
-
 function loadLocale(): Locale {
   if (typeof window === 'undefined') {
     return defaultLocale
@@ -286,7 +278,7 @@ function loadLocale(): Locale {
 
   const storedLocale = window.localStorage.getItem(localeStorageKey)
 
-  return normalizeStoredLocale(storedLocale) ?? defaultLocale
+  return isLocale(storedLocale) ? storedLocale : defaultLocale
 }
 
 function applyDocumentLocale(value: Locale) {

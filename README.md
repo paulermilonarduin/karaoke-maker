@@ -52,7 +52,7 @@ Cette séparation limite les problèmes de droits : le serveur stocke des métad
 
 Le point technique important sera le matching entre un fichier karaoke et un fichier audio local. Une première version peut comparer la durée attendue avec la durée réelle et afficher un avertissement si l'écart est trop grand. Une version plus robuste pourra ajouter une empreinte audio locale, par exemple via Chromaprint/AcoustID ou un mécanisme équivalent, pour détecter les versions compatibles d'un même morceau.
 
-Le traitement audio avancé, comme la séparation voix/instrumental, doit rester local ou privé dans un premier temps. Le flux recommandé est de traiter le MP3 au moment de l'import, générer des stems séparés (`vocals` et `instrumental`), puis laisser le lecteur mixer ces pistes avec des volumes indépendants. Le serveur public ne devrait pas recevoir de MP3 commerciaux pour cette fonctionnalité.
+Le traitement audio avancé, comme la séparation entre la voix et l’accompagnement musical, doit rester local ou privé dans un premier temps. Le flux recommandé est de traiter le MP3 au moment de l'import, générer des stems séparés (`vocals` et `accompaniment`), puis laisser le lecteur mixer ces pistes avec des volumes indépendants. Le serveur public ne devrait pas recevoir de MP3 commerciaux pour cette fonctionnalité.
 
 ## POC actuel
 
@@ -76,11 +76,13 @@ Karaoke Maker utilise un format JSON interne versionné (`*.karaoke.json`). Il r
 
 - Une ligne de paroles complète
 - Plusieurs segments temporels à l'intérieur d'une même ligne
-- Des blocs d’interlude (`kind: "bridge"`) pour les passages instrumentaux ou sans paroles
+- Des blocs d’interlude (`kind: "interlude"`) pour les passages sans paroles
 - Un début et une fin explicites en millisecondes pour chaque mot ou syllabe
 - Les informations audio nécessaires pour valider et rejouer la synchronisation
 
-Dans un fichier de paroles brut, une ligne `[bridge]`, `[instrumental]`, `[break]` ou `[pause]` crée un bloc sans paroles. Le générateur permet aussi d’ajouter un interlude à l’instant courant pendant la synchronisation.
+Les fichiers de paroles bruts sont traités comme du texte simple. Les éventuelles balises présentes dans un `.txt` doivent être nettoyées par l'utilisateur avant la synchronisation.
+
+Les interludes sont ajoutés directement depuis le générateur, à l’instant courant, via le bouton dédié ou son raccourci.
 
 ## Direction technique initiale
 
@@ -162,8 +164,8 @@ Le JSON est la source de vérité unique. Chaque segment conserve son texte exac
   },
   "lines": [
     {
-      "id": "bridge:intro",
-      "kind": "bridge",
+      "id": "interlude:intro",
+      "kind": "interlude",
       "text": "",
       "startMs": 0,
       "endMs": 12400

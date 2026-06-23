@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onBeforeUpdate, onMounted, ref, watch } from 'vue'
 import type { LyricLine, LyricSegment } from '../domain/lyrics'
-import { formatTimestamp, isBridgeLine } from '../domain/lyrics'
+import { formatTimestamp, isInterludeLine } from '../domain/lyrics'
 import { useI18n } from '../i18n'
 
 const props = defineProps<{
@@ -16,7 +16,7 @@ const props = defineProps<{
 
 type DisplayLine = {
   id: string
-  kind?: LyricLine['kind']
+  kind: LyricLine['kind']
   position: 'previous' | 'current' | 'next'
   text: string
   segments?: LyricSegment[]
@@ -55,8 +55,8 @@ const visibleLines = computed<DisplayLine[]>(() => {
       id: props.previousLine.id,
       kind: props.previousLine.kind,
       position: 'previous',
-      text: isBridgeLine(props.previousLine)
-        ? t('lyricsDisplay.bridgeLabel')
+      text: isInterludeLine(props.previousLine)
+        ? t('lyricsDisplay.interludeLabel')
         : props.previousLine.text,
       segments: props.previousLine.segments,
     })
@@ -68,13 +68,14 @@ const visibleLines = computed<DisplayLine[]>(() => {
           id: props.activeLine.id,
           kind: props.activeLine.kind,
           position: 'current',
-          text: isBridgeLine(props.activeLine)
-            ? t('lyricsDisplay.bridgeLabel')
+          text: isInterludeLine(props.activeLine)
+            ? t('lyricsDisplay.interludeLabel')
             : props.activeLine.text,
           segments: props.activeLine.segments,
         }
       : {
           id: 'lyrics-placeholder',
+          kind: 'lyrics',
           position: 'current',
           text: props.placeholder || t('lyricsDisplay.placeholder'),
         },
@@ -85,7 +86,9 @@ const visibleLines = computed<DisplayLine[]>(() => {
       id: props.nextLine.id,
       kind: props.nextLine.kind,
       position: 'next',
-      text: isBridgeLine(props.nextLine) ? t('lyricsDisplay.bridgeLabel') : props.nextLine.text,
+      text: isInterludeLine(props.nextLine)
+        ? t('lyricsDisplay.interludeLabel')
+        : props.nextLine.text,
       segments: props.nextLine.segments,
     })
   }
@@ -188,17 +191,17 @@ onBeforeUnmount(() => {
         :class="`lyrics-display__${line.position}`"
       >
         <span
-          v-if="line.position === 'current' && line.kind === 'bridge'"
-          class="lyrics-display__text lyrics-display__bridge"
-          :style="{ '--bridge-progress': `${activeLineProgress * 100}%` }"
+          v-if="line.position === 'current' && line.kind === 'interlude'"
+          class="lyrics-display__text lyrics-display__interlude"
+          :style="{ '--interlude-progress': `${activeLineProgress * 100}%` }"
           role="progressbar"
-          :aria-label="t('lyricsDisplay.bridgeLabel')"
+          :aria-label="t('lyricsDisplay.interludeLabel')"
           :aria-valuenow="Math.round(activeLineProgress * 100)"
           aria-valuemin="0"
           aria-valuemax="100"
         >
-          <span class="lyrics-display__bridge-track" aria-hidden="true">
-            <span class="lyrics-display__bridge-fill"></span>
+          <span class="lyrics-display__interlude-track" aria-hidden="true">
+            <span class="lyrics-display__interlude-fill"></span>
           </span>
         </span>
         <span

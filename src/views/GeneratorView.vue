@@ -8,7 +8,7 @@ import {
   createKaraokeFile,
   findActiveLine,
   formatTimestamp,
-  isBridgeLine,
+  isInterludeLine,
   parsePlainLyrics,
   serializeKaraokeFile,
   type DraftLyricLine,
@@ -34,7 +34,7 @@ const project = ref<KaraokeProject>({
   title: '',
   draftLines: [],
 })
-const manualBridgeCount = ref(0)
+const manualInterludeCount = ref(0)
 
 const audioUrl = ref<string>()
 const currentTimeMs = ref(0)
@@ -126,14 +126,14 @@ const timelineRegions = computed<WaveformRegionModel[]>(() => {
     regions.push({
       id: `line/${line.id}`,
       kind: 'line',
-      label: isBridgeLine(line) ? `B${lineIndex + 1}` : `L${lineIndex + 1}`,
+      label: isInterludeLine(line) ? `I${lineIndex + 1}` : `L${lineIndex + 1}`,
       startMs: line.startMs,
       endMs: lineEndMs !== undefined && lineEndMs > line.startMs ? lineEndMs : undefined,
       editable: true,
     })
 
     if (
-      isBridgeLine(line) ||
+      isInterludeLine(line) ||
       lineEndMs === undefined ||
       syncPhase.value === 'lines' ||
       lineIndex !== editingLineIndex.value
@@ -198,7 +198,7 @@ function getDraftLineLabel(line?: DraftLyricLine): string | undefined {
     return undefined
   }
 
-  return isBridgeLine(line) ? t('generator.bridgeBlock') : line.text
+  return isInterludeLine(line) ? t('generator.interludeBlock') : line.text
 }
 
 function onAudioFile(file: File) {
@@ -252,7 +252,7 @@ function markNextLine() {
   line.startMs = currentTimeMs.value
   line.endMs = undefined
 
-  if (!isBridgeLine(line)) {
+  if (!isInterludeLine(line)) {
     line.segments[0].startMs = currentTimeMs.value
     line.segments[0].endMs = undefined
   }
@@ -260,7 +260,7 @@ function markNextLine() {
   syncError.value = undefined
 }
 
-function addBridgeBlock() {
+function addInterludeBlock() {
   if (syncPhase.value !== 'lines') {
     return
   }
@@ -289,10 +289,10 @@ function addBridgeBlock() {
     }
   }
 
-  manualBridgeCount.value += 1
+  manualInterludeCount.value += 1
   project.value.draftLines.splice(insertIndex, 0, {
-    id: `bridge:manual:${Date.now()}:${manualBridgeCount.value}`,
-    kind: 'bridge',
+    id: `interlude:manual:${Date.now()}:${manualInterludeCount.value}`,
+    kind: 'interlude',
     text: '',
     startMs: currentTimeMs.value,
     endMs: undefined,
@@ -538,7 +538,7 @@ useGeneratorShortcuts(
   {
     'player.toggle': () => void waveformRef.value?.togglePlayback(),
     'marker.create': markNextMarker,
-    'marker.bridge': addBridgeBlock,
+    'marker.interlude': addInterludeBlock,
     'marker.undo': undoLastMarker,
     'player.seekBackward': () => waveformRef.value?.seekBy(-100),
     'player.seekForward': () => waveformRef.value?.seekBy(100),
@@ -629,9 +629,9 @@ onBeforeUnmount(() => {
               class="button"
               type="button"
               :disabled="!audioUrl"
-              @click="addBridgeBlock"
+              @click="addInterludeBlock"
             >
-              {{ t('generator.addBridge') }}
+              {{ t('generator.addInterlude') }}
             </button>
             <button
               class="button"
