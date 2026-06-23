@@ -2,7 +2,6 @@
 import { computed, onBeforeUnmount, ref } from 'vue'
 import AudioWaveform from '../components/AudioWaveform.vue'
 import FileDropField from '../components/FileDropField.vue'
-import LyricsDisplay from '../components/LyricsDisplay.vue'
 import ShortcutEditor from '../components/ShortcutEditor.vue'
 import {
   buildSyncedLines,
@@ -12,21 +11,25 @@ import {
   parsePlainLyrics,
   serializeKaraokeFile,
   type KaraokeProject,
-  type LyricLine,
 } from '../domain/lyrics'
 import {
   useGeneratorShortcutSettings,
   useGeneratorShortcuts,
 } from '../generator/shortcuts'
 import type { WaveformRegionChange, WaveformRegionModel } from '../generator/timeline'
+import { useI18n } from '../i18n'
 
 type SegmentPosition = {
   lineIndex: number
   segmentIndex: number
 }
 
+defineProps<{
+  accentColor: string
+}>()
+
 const project = ref<KaraokeProject>({
-  title: 'Nouveau karaoké',
+  title: '',
   draftLines: [],
 })
 
@@ -42,6 +45,7 @@ const {
   resetShortcuts,
   setShortcut,
 } = useGeneratorShortcutSettings()
+const { t } = useI18n()
 
 const syncedLines = computed(() =>
   buildSyncedLines(project.value.draftLines, audioDurationMs.value),
@@ -163,8 +167,14 @@ const syncPhase = computed<'lines' | 'segments'>(() =>
 )
 const syncProgress = computed(() =>
   syncPhase.value === 'lines'
-    ? `${syncedLineCount.value} / ${project.value.draftLines.length} lignes`
-    : `${syncedSegmentCount.value} / ${totalSegmentCount.value} mots`,
+    ? t('generator.progressLines', {
+        current: syncedLineCount.value,
+        total: project.value.draftLines.length,
+      })
+    : t('generator.progressWords', {
+        current: syncedSegmentCount.value,
+        total: totalSegmentCount.value,
+      }),
 )
 const canExport = computed(
   () =>
@@ -176,28 +186,6 @@ const canExport = computed(
 )
 
 const activeLine = computed(() => findActiveLine(syncedLines.value, currentTimeMs.value))
-const previousLine = computed<LyricLine | undefined>(() => {
-  const line = activeLine.value
-
-  if (!line) {
-    return undefined
-  }
-
-  const index = syncedLines.value.findIndex((candidate) => candidate.id === line.id)
-
-  return syncedLines.value[index - 1]
-})
-const nextLine = computed<LyricLine | undefined>(() => {
-  const line = activeLine.value
-
-  if (!line) {
-    return syncedLines.value[0]
-  }
-
-  const index = syncedLines.value.findIndex((candidate) => candidate.id === line.id)
-
-  return syncedLines.value[index + 1]
-})
 
 function onAudioFile(file: File) {
   if (audioUrl.value) {
@@ -230,7 +218,7 @@ function markNextLine() {
   const previousStartMs = project.value.draftLines[index - 1]?.startMs
 
   if (previousStartMs !== undefined && currentTimeMs.value <= previousStartMs) {
-    syncError.value = 'Le marqueur doit être placé après celui de la ligne précédente.'
+    syncError.value = t('generator.error.lineOrder')
     return
   }
 
@@ -268,12 +256,12 @@ function markNextSegment() {
     project.value.draftLines[position.lineIndex + 1]?.startMs ?? audioDurationMs.value
 
   if (previousSegment?.startMs !== undefined && currentTimeMs.value <= previousSegment.startMs) {
-    syncError.value = 'Le marqueur doit être placé après celui du mot précédent.'
+    syncError.value = t('generator.error.wordOrder')
     return
   }
 
   if (lineEndMs !== undefined && currentTimeMs.value >= lineEndMs) {
-    syncError.value = 'Le marqueur doit rester dans les limites de la ligne.'
+    syncError.value = t('generator.error.lineBounds')
     return
   }
 
@@ -288,7 +276,7 @@ function markNextSegment() {
 
 function markNextMarker() {
   if (!audioUrl.value) {
-    syncError.value = 'Chargez une piste audio avant de placer des marqueurs.'
+    syncError.value = t('generator.error.missingAudio')
     return
   }
 
@@ -472,7 +460,7 @@ function downloadKaraokeFile() {
     URL.revokeObjectURL(url)
     syncError.value = undefined
   } catch (error) {
-    syncError.value = error instanceof Error ? error.message : 'Impossible de générer le fichier.'
+    syncError.value = error instanceof Error ? error.message : t('generator.error.export')
   }
 }
 
@@ -504,8 +492,8 @@ onBeforeUnmount(() => {
     <div class="workspace-panel">
       <div class="workspace-panel__header">
         <div>
-          <p class="eyebrow">Génération</p>
-          <h2>{{ project.title }}</h2>
+          <p class="eyebrow">{{ t('nav.generator') }}</p>
+          <h2>{{ project.title || t('generator.newProjectTitle') }}</h2>
         </div>
         <p class="line-count">{{ syncProgress }}</p>
       </div>
@@ -513,13 +501,13 @@ onBeforeUnmount(() => {
       <div class="file-grid">
         <FileDropField
           accept="audio/mpeg,audio/mp3,.mp3"
-          label="Musique MP3"
+          :label="t('generator.audioLabel')"
           :value="project.audioFileName"
           @change="onAudioFile"
         />
         <FileDropField
           accept=".txt,text/plain"
-          label="Paroles brutes"
+          :label="t('generator.lyricsLabel')"
           :value="project.lyricsFileName"
           @change="onLyricsFile"
         />
@@ -527,6 +515,7 @@ onBeforeUnmount(() => {
 
       <AudioWaveform
         ref="waveformRef"
+        :accent-color="accentColor"
         :audio-url="audioUrl"
         :regions="timelineRegions"
         @timeupdate="currentTimeMs = $event"
@@ -534,64 +523,58 @@ onBeforeUnmount(() => {
         @regionchange="onRegionChange"
       />
 
-      <div class="sync-panel">
-        <div>
-          <p class="eyebrow">
-            {{ syncPhase === 'lines' ? 'Synchronisation des lignes' : 'Synchronisation des mots' }}
+      <div class="generator-tools">
+        <div class="sync-panel">
+          <div>
+            <p class="eyebrow">
+              {{ syncPhase === 'lines' ? t('generator.phaseLines') : t('generator.phaseWords') }}
+            </p>
+            <p class="sync-panel__time">{{ formatTimestamp(currentTimeMs) }}</p>
+          </div>
+
+          <p class="sync-panel__line">
+            {{
+              nextDraftLine?.text ||
+              nextSegmentLine?.text ||
+              t('generator.complete')
+            }}
           </p>
-          <p class="sync-panel__time">{{ formatTimestamp(currentTimeMs) }}</p>
+          <p v-if="nextSegment" class="sync-panel__hint">
+            {{ t('generator.nextWord') }} <strong>{{ nextSegment.text.trim() }}</strong>
+          </p>
+          <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
+
+          <div class="action-row">
+            <button
+              class="button button--primary"
+              type="button"
+              :disabled="!audioUrl || (!nextDraftLine && !nextSegment)"
+              @click="markNextMarker"
+            >
+              {{ syncPhase === 'lines' ? t('generator.markLine') : t('generator.markWord') }}
+            </button>
+            <button
+              class="button"
+              type="button"
+              :disabled="syncedLineCount === 0"
+              @click="undoLastMarker"
+            >
+              {{ t('generator.undo') }}
+            </button>
+            <button class="button" type="button" :disabled="!canExport" @click="downloadKaraokeFile">
+              {{ t('generator.exportJson') }}
+            </button>
+          </div>
         </div>
 
-        <p class="sync-panel__line">
-          {{
-            nextDraftLine?.text ||
-            nextSegmentLine?.text ||
-            'Toutes les paroles sont synchronisées.'
-          }}
-        </p>
-        <p v-if="nextSegment" class="sync-panel__hint">
-          Prochain mot : <strong>{{ nextSegment.text.trim() }}</strong>
-        </p>
-        <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
-
-        <div class="action-row">
-          <button
-            class="button button--primary"
-            type="button"
-            :disabled="!audioUrl || (!nextDraftLine && !nextSegment)"
-            @click="markNextMarker"
-          >
-            {{ syncPhase === 'lines' ? 'Marquer la ligne' : 'Marquer le mot' }}
-          </button>
-          <button
-            class="button"
-            type="button"
-            :disabled="syncedLineCount === 0"
-            @click="undoLastMarker"
-          >
-            Annuler
-          </button>
-          <button class="button" type="button" :disabled="!canExport" @click="downloadKaraokeFile">
-            Exporter JSON
-          </button>
-        </div>
+        <ShortcutEditor
+          :actions="shortcutActions"
+          :has-custom-shortcuts="hasCustomShortcuts"
+          @capturechange="isCapturingShortcut = $event"
+          @reset="resetShortcuts"
+          @update="setShortcut"
+        />
       </div>
-
-      <ShortcutEditor
-        :actions="shortcutActions"
-        :has-custom-shortcuts="hasCustomShortcuts"
-        @capturechange="isCapturingShortcut = $event"
-        @reset="resetShortcuts"
-        @update="setShortcut"
-      />
     </div>
-
-    <LyricsDisplay
-      :current-time-ms="currentTimeMs"
-      :fallback-end-time-ms="audioDurationMs"
-      :active-line="activeLine"
-      :previous-line="previousLine"
-      :next-line="nextLine"
-    />
   </section>
 </template>

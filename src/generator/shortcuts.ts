@@ -1,4 +1,5 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import type { Locale, TranslationKey } from '../i18n'
 
 export type GeneratorActionId =
   | 'player.toggle'
@@ -21,7 +22,7 @@ export type ShortcutBinding = {
 
 export type GeneratorActionDefinition = {
   id: GeneratorActionId
-  label: string
+  labelKey: TranslationKey
   shortcut: ShortcutBinding
   repeat?: boolean
 }
@@ -29,88 +30,107 @@ export type GeneratorActionDefinition = {
 export const generatorActions: GeneratorActionDefinition[] = [
   {
     id: 'player.toggle',
-    label: 'Lecture / pause',
+    labelKey: 'shortcut.action.playerToggle',
     shortcut: { code: 'Space' },
   },
   {
     id: 'marker.create',
-    label: 'Marquer la ligne ou le mot',
+    labelKey: 'shortcut.action.markerCreate',
     shortcut: { code: 'Enter' },
   },
   {
     id: 'marker.undo',
-    label: 'Annuler le dernier marqueur',
+    labelKey: 'shortcut.action.markerUndo',
     shortcut: { key: 'z', control: true },
   },
   {
     id: 'player.seekBackward',
-    label: 'Reculer de 100 ms',
+    labelKey: 'shortcut.action.playerSeekBackward',
     shortcut: { code: 'ArrowLeft' },
     repeat: true,
   },
   {
     id: 'player.seekForward',
-    label: 'Avancer de 100 ms',
+    labelKey: 'shortcut.action.playerSeekForward',
     shortcut: { code: 'ArrowRight' },
     repeat: true,
   },
   {
     id: 'marker.nudgeBackward',
-    label: 'Décaler le marqueur de -10 ms',
+    labelKey: 'shortcut.action.markerNudgeBackward',
     shortcut: { code: 'ArrowLeft', shift: true },
     repeat: true,
   },
   {
     id: 'marker.nudgeForward',
-    label: 'Décaler le marqueur de +10 ms',
+    labelKey: 'shortcut.action.markerNudgeForward',
     shortcut: { code: 'ArrowRight', shift: true },
     repeat: true,
   },
   {
     id: 'player.slower',
-    label: 'Ralentir',
+    labelKey: 'shortcut.action.playerSlower',
     shortcut: { key: '-' },
   },
   {
     id: 'player.faster',
-    label: 'Accélérer',
+    labelKey: 'shortcut.action.playerFaster',
     shortcut: { key: '+' },
   },
 ]
 
 const shortcutStorageKey = 'karaoke-maker.generator-shortcuts.v1'
 
-const keyLabels: Record<string, string> = {
-  '-': '−',
-  ArrowDown: '↓',
-  ArrowLeft: '←',
-  ArrowRight: '→',
-  ArrowUp: '↑',
-  Backspace: 'Retour arrière',
-  Delete: 'Suppr',
-  End: 'Fin',
-  Enter: 'Entrée',
-  Escape: 'Échap',
-  Home: 'Début',
-  Space: 'Espace',
-  Tab: 'Tab',
+const keyLabels: Record<Locale, Record<string, string>> = {
+  fr: {
+    '-': '−',
+    ArrowDown: '↓',
+    ArrowLeft: '←',
+    ArrowRight: '→',
+    ArrowUp: '↑',
+    Backspace: 'Retour arrière',
+    Delete: 'Suppr',
+    End: 'Fin',
+    Enter: 'Entrée',
+    Escape: 'Échap',
+    Home: 'Début',
+    Space: 'Espace',
+    Tab: 'Tab',
+  },
+  en: {
+    '-': '−',
+    ArrowDown: '↓',
+    ArrowLeft: '←',
+    ArrowRight: '→',
+    ArrowUp: '↑',
+    Backspace: 'Backspace',
+    Delete: 'Delete',
+    End: 'End',
+    Enter: 'Enter',
+    Escape: 'Escape',
+    Home: 'Home',
+    Space: 'Space',
+    Tab: 'Tab',
+  },
 }
 
-export function formatShortcut(binding: ShortcutBinding): string[] {
+export function formatShortcut(binding: ShortcutBinding, locale: Locale = 'fr'): string[] {
   const keys: string[] = []
 
   if (binding.control) keys.push('Ctrl')
   if (binding.alt) keys.push('Alt')
-  if (binding.shift) keys.push('Maj')
+  if (binding.shift) keys.push(locale === 'fr' ? 'Maj' : 'Shift')
 
   const mainKey = binding.key ?? binding.code ?? ''
 
   const fallbackLabel = mainKey
     .replace(/^Key/, '')
     .replace(/^Digit/, '')
-    .replace(/^Numpad/, 'Pavé ')
+    .replace(/^Numpad/, locale === 'fr' ? 'Pavé ' : 'Numpad ')
 
-  keys.push(keyLabels[mainKey] ?? (/^[a-z]$/.test(mainKey) ? mainKey.toUpperCase() : fallbackLabel))
+  keys.push(
+    keyLabels[locale][mainKey] ?? (/^[a-z]$/.test(mainKey) ? mainKey.toUpperCase() : fallbackLabel),
+  )
 
   return keys
 }

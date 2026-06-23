@@ -6,13 +6,16 @@ import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.esm.js'
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.esm.js'
 import { formatTimestamp } from '../domain/lyrics'
 import type { WaveformRegionChange, WaveformRegionModel } from '../generator/timeline'
+import { useI18n } from '../i18n'
 
 const props = withDefaults(
   defineProps<{
+    accentColor?: string
     audioUrl?: string
     regions?: WaveformRegionModel[]
   }>(),
   {
+    accentColor: '#7bd2bd',
     regions: () => [],
   },
 )
@@ -34,10 +37,20 @@ const isPlaying = ref(false)
 const isLoading = ref(false)
 const selectedRegionId = ref<string>()
 const localError = ref<string>()
+const { t } = useI18n()
 
 let wavesurfer: WaveSurfer | undefined
 let regionsPlugin: RegionsPlugin | undefined
 let mounted = false
+
+function withAlpha(color: string, alpha: number): string {
+  const normalized = color.replace('#', '')
+  const red = Number.parseInt(normalized.slice(0, 2), 16)
+  const green = Number.parseInt(normalized.slice(2, 4), 16)
+  const blue = Number.parseInt(normalized.slice(4, 6), 16)
+
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`
+}
 
 function getRegionModel(id: string): WaveformRegionModel | undefined {
   return props.regions.find((region) => region.id === id)
@@ -46,13 +59,13 @@ function getRegionModel(id: string): WaveformRegionModel | undefined {
 function getRegionColor(region: WaveformRegionModel): string {
   if (region.kind === 'line') {
     return region.id === selectedRegionId.value
-      ? 'rgba(44, 122, 104, 0.3)'
-      : 'rgba(44, 122, 104, 0.13)'
+      ? withAlpha(props.accentColor, 0.4)
+      : withAlpha(props.accentColor, 0.2)
   }
 
   return region.id === selectedRegionId.value
-    ? 'rgba(123, 210, 189, 0.48)'
-    : 'rgba(123, 210, 189, 0.25)'
+    ? withAlpha(props.accentColor, 0.58)
+    : withAlpha(props.accentColor, 0.32)
 }
 
 function applyRegionColors() {
@@ -128,9 +141,9 @@ async function setupWaveSurfer(audioUrl?: string) {
     container: waveformElement.value,
     url: audioUrl,
     backend: 'MediaElement',
-    height: 148,
-    waveColor: '#9aaca5',
-    progressColor: '#2c7a68',
+    height: 88,
+    waveColor: '#40504b',
+    progressColor: props.accentColor,
     cursorColor: '#e0a84b',
     cursorWidth: 2,
     barWidth: 2,
@@ -144,13 +157,13 @@ async function setupWaveSurfer(audioUrl?: string) {
     plugins: [
       regionsPlugin,
       TimelinePlugin.create({
-        height: 24,
-        style: { color: '#68716c', fontSize: '11px' },
+        height: 16,
+        style: { color: '#b7c2bd', fontSize: '11px' },
       }),
       MinimapPlugin.create({
-        height: 48,
-        waveColor: '#c4cec9',
-        progressColor: '#7bd2bd',
+        height: 24,
+        waveColor: '#33403c',
+        progressColor: props.accentColor,
         overlayColor: 'rgba(16, 20, 19, 0.12)',
       }),
     ],
@@ -213,7 +226,7 @@ async function togglePlayback() {
   try {
     await wavesurfer.playPause()
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Impossible de lancer la lecture.'
+    const message = error instanceof Error ? error.message : t('audioWaveform.playbackError')
     localError.value = message
     emit('error', message)
   }
@@ -309,11 +322,11 @@ defineExpose({
 </script>
 
 <template>
-  <section class="audio-waveform" aria-label="Éditeur de waveform">
+  <section class="audio-waveform" :aria-label="t('audioWaveform.ariaLabel')">
     <div class="audio-waveform__toolbar">
       <div class="audio-waveform__transport">
         <button class="button" type="button" :disabled="!audioUrl" @click="seekBy(-1000)">
-          −1 s
+          {{ t('audioWaveform.seekBackward') }}
         </button>
         <button
           class="button button--primary audio-waveform__play"
@@ -321,14 +334,14 @@ defineExpose({
           :disabled="!audioUrl"
           @click="togglePlayback"
         >
-          {{ isPlaying ? 'Pause' : 'Lecture' }}
+          {{ isPlaying ? t('audioWaveform.pause') : t('audioWaveform.play') }}
         </button>
         <button class="button" type="button" :disabled="!audioUrl" @click="seekBy(1000)">
-          +1 s
+          {{ t('audioWaveform.seekForward') }}
         </button>
       </div>
 
-      <div class="audio-waveform__rates" aria-label="Vitesse de lecture">
+      <div class="audio-waveform__rates" :aria-label="t('audioWaveform.playbackRate')">
         <button
           v-for="rate in playbackRates"
           :key="rate"
@@ -345,16 +358,16 @@ defineExpose({
 
     <div v-if="audioUrl" class="audio-waveform__canvas" :class="{ 'is-loading': isLoading }">
       <div ref="waveformElement" class="audio-waveform__wave"></div>
-      <p v-if="isLoading" class="audio-waveform__loading">Analyse de la piste audio…</p>
+      <p v-if="isLoading" class="audio-waveform__loading">{{ t('audioWaveform.loading') }}</p>
     </div>
-    <p v-else class="audio-waveform__empty">Chargez un MP3 pour afficher sa waveform.</p>
+    <p v-else class="audio-waveform__empty">{{ t('audioWaveform.empty') }}</p>
 
     <div class="audio-waveform__footer">
       <p class="audio-waveform__clock">
         {{ formatTimestamp(currentTimeMs) }} / {{ formatTimestamp(durationMs) }}
       </p>
       <label class="audio-waveform__zoom">
-        Zoom
+        {{ t('audioWaveform.zoom') }}
         <input
           type="range"
           min="20"

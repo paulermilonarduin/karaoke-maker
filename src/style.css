@@ -1,6 +1,20 @@
 :root {
-  color: #1b1f24;
-  background: #f4f2ec;
+  --color-bg: #101413;
+  --color-surface: #151b19;
+  --color-surface-soft: #1a2320;
+  --color-surface-hover: #22302c;
+  --color-border: var(--color-accent);
+  --color-border-muted: color-mix(in srgb, var(--color-accent) 42%, transparent);
+  --color-text: #fffaf0;
+  --color-text-muted: #b7c2bd;
+  --color-accent: #7bd2bd;
+  --color-on-accent: #101413;
+  --color-warning: #f0c77c;
+  --color-danger: #ff8b80;
+
+  color: var(--color-text);
+  background: var(--color-bg);
+  color-scheme: dark;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-synthesis: none;
@@ -54,6 +68,40 @@ p {
   margin-bottom: 28px;
 }
 
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-button {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-accent);
+  background: var(--color-surface);
+}
+
+.settings-button svg {
+  width: 22px;
+  height: 22px;
+  fill: currentcolor;
+}
+
+.settings-button:hover,
+.settings-button:focus-visible {
+  background: var(--color-surface-hover);
+}
+
+.settings-button--active {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
 .app-brand {
   min-width: 0;
 }
@@ -92,13 +140,6 @@ p {
   padding-right: 0.12em;
 }
 
-.app-tagline {
-  margin-top: 10px;
-  color: #59605b;
-  font-size: clamp(0.82rem, 1.5vw, 1rem);
-  font-weight: 700;
-}
-
 .eyebrow {
   margin-bottom: 8px;
   color: #2c7a68;
@@ -134,8 +175,7 @@ p {
 
 .generator-view {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
-  gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
 }
 
@@ -149,8 +189,8 @@ p {
 
 .workspace-panel {
   display: grid;
-  gap: 18px;
-  padding: 20px;
+  gap: 12px;
+  padding: 16px;
 }
 
 .workspace-panel__header,
@@ -180,14 +220,16 @@ p {
 
 .file-grid {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .file-field {
   display: grid;
-  gap: 8px;
-  min-height: 112px;
-  padding: 16px;
+  grid-template-columns: minmax(120px, 0.35fr) minmax(0, 0.65fr);
+  gap: 5px 12px;
+  min-height: 76px;
+  padding: 10px 12px;
   border: 1px dashed #b6ac9a;
   border-radius: 8px;
   background: #f9f5ec;
@@ -207,6 +249,7 @@ p {
 }
 
 .file-field__input {
+  grid-column: 1 / -1;
   width: 100%;
   color: #323a37;
 }
@@ -227,9 +270,9 @@ p {
 
 .audio-waveform {
   display: grid;
-  gap: 12px;
+  gap: 8px;
   min-width: 0;
-  padding: 14px;
+  padding: 10px 12px;
   border: 1px solid #d8d2c3;
   border-radius: 8px;
   background: #fbf8f1;
@@ -292,7 +335,7 @@ p {
 }
 
 .audio-waveform__canvas.is-loading {
-  min-height: 224px;
+  min-height: 128px;
 }
 
 .audio-waveform__wave {
@@ -300,8 +343,8 @@ p {
 }
 
 .audio-waveform__wave ::part(region) {
-  border-right: 1px solid rgba(44, 122, 104, 0.55);
-  border-left: 1px solid rgba(44, 122, 104, 0.55);
+  border-right: 1px solid color-mix(in srgb, var(--color-accent) 65%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--color-accent) 65%, transparent);
 }
 
 .audio-waveform__loading {
@@ -318,7 +361,7 @@ p {
 
 .audio-waveform__empty {
   display: grid;
-  min-height: 148px;
+  min-height: 92px;
   place-items: center;
   border: 1px dashed #b6ac9a;
   border-radius: 7px;
@@ -349,8 +392,8 @@ p {
 
 .sync-panel {
   display: grid;
-  gap: 14px;
-  padding: 16px;
+  gap: 10px;
+  padding: 12px 14px;
   border: 1px solid #d8d2c3;
   border-radius: 8px;
   background: #fbf8f1;
@@ -364,7 +407,7 @@ p {
 }
 
 .sync-panel__line {
-  min-height: 54px;
+  min-height: 32px;
   color: #323a37;
   font-size: 1.05rem;
   font-weight: 750;
@@ -388,8 +431,8 @@ p {
 
 .shortcut-panel {
   display: grid;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 8px;
+  padding: 12px 14px;
   border: 1px solid #d8d2c3;
   border-radius: 8px;
   background: #f9f5ec;
@@ -402,6 +445,12 @@ p {
   gap: 16px;
 }
 
+.shortcut-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .shortcut-panel__description {
   color: #68716c;
   font-size: 0.82rem;
@@ -409,7 +458,8 @@ p {
 
 .shortcut-list {
   display: grid;
-  gap: 7px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px 8px;
   margin: 0;
 }
 
@@ -417,9 +467,9 @@ p {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   min-width: 0;
-  padding: 7px 8px;
+  padding: 4px 6px;
   border: 1px solid transparent;
   border-radius: 6px;
 }
@@ -467,7 +517,8 @@ p {
 }
 
 .shortcut-list__edit,
-.shortcut-panel__reset {
+.shortcut-panel__reset,
+.shortcut-panel__toggle {
   border: 0;
   border-radius: 5px;
   color: #2c7a68;
@@ -486,8 +537,17 @@ p {
   white-space: nowrap;
 }
 
+.shortcut-panel__toggle {
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid #c9beaa;
+  background: #fffdf7;
+}
+
 .shortcut-list__edit:hover,
-.shortcut-list__edit:focus-visible {
+.shortcut-list__edit:focus-visible,
+.shortcut-panel__toggle:hover,
+.shortcut-panel__toggle:focus-visible {
   background: #d4e9e1;
 }
 
@@ -499,6 +559,13 @@ p {
 .shortcut-panel__error {
   font-size: 0.8rem;
   font-weight: 750;
+}
+
+.generator-tools {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.9fr) minmax(360px, 1.1fr);
+  gap: 12px;
+  align-items: start;
 }
 
 .shortcut-panel__capture {
@@ -541,13 +608,17 @@ p {
   padding: 28px;
   align-content: center;
   background:
-    linear-gradient(90deg, rgba(44, 122, 104, 0.08), transparent 42%),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-accent) 8%, transparent),
+      transparent 42%
+    ),
     #101413;
   color: #fffdf7;
 }
 
 .lyrics-display__time {
-  color: #7bd2bd;
+  color: var(--color-accent);
   font-size: 0.95rem;
   font-weight: 800;
 }
@@ -590,10 +661,10 @@ p {
 
 .text-highlight {
   --highlight-progress: 0%;
-  --highlight-color: #7bd2bd;
+  --highlight-color: var(--color-accent);
   --highlight-rest-color: #fffaf0;
-  --highlight-glow-inner: rgba(123, 210, 189, 0.62);
-  --highlight-glow-outer: rgba(123, 210, 189, 0.18);
+  --highlight-glow-inner: color-mix(in srgb, var(--color-accent) 62%, transparent);
+  --highlight-glow-outer: color-mix(in srgb, var(--color-accent) 18%, transparent);
 
   position: relative;
   display: inline-block;
@@ -697,6 +768,314 @@ p {
   min-height: 360px;
 }
 
+.settings-view {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+
+.settings-view__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.settings-view h2,
+.settings-view h3 {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.settings-view__summary,
+.settings-card__description,
+.settings-preview > p:not(.eyebrow) {
+  color: var(--color-text-muted);
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: 14px;
+}
+
+.settings-card,
+.settings-preview {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface-soft);
+}
+
+.color-picker {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 7px;
+  background: var(--color-bg);
+}
+
+.color-picker__swatch {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--color-text-muted);
+  border-radius: 7px;
+}
+
+.color-picker strong,
+.color-picker code {
+  display: block;
+}
+
+.color-picker code {
+  margin-top: 2px;
+  color: var(--color-text-muted);
+}
+
+.color-picker input[type='color'] {
+  width: 54px;
+  height: 42px;
+  padding: 3px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 6px;
+  background: var(--color-bg);
+}
+
+.language-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 7px;
+  background: var(--color-bg);
+}
+
+.language-picker strong,
+.language-picker small {
+  display: block;
+}
+
+.language-picker small {
+  margin-top: 2px;
+  color: var(--color-text-muted);
+}
+
+.language-picker select {
+  min-width: 130px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.color-presets {
+  display: flex;
+  gap: 10px;
+}
+
+.color-preset {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 3px solid var(--color-surface-soft);
+  border-radius: 50%;
+  background: var(--preset-color);
+  box-shadow: 0 0 0 1px var(--color-border-muted);
+}
+
+.color-preset.is-active {
+  box-shadow:
+    0 0 0 2px var(--color-surface-soft),
+    0 0 0 4px var(--color-accent);
+}
+
+.settings-preview {
+  justify-items: start;
+}
+
+.settings-preview .button {
+  min-width: 180px;
+}
+
+/* Night theme */
+.karaoke-logo {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.view-switcher__button,
+.file-field__value,
+.file-field__input,
+.audio-player--empty,
+.audio-waveform__rate,
+.audio-waveform__loading,
+.audio-waveform__empty,
+.audio-waveform__zoom,
+.sync-panel__hint,
+.shortcut-panel__description,
+.shortcut-list dt,
+.catalog-track__format {
+  color: var(--color-text-muted);
+}
+
+.eyebrow,
+.sync-panel__hint strong,
+.shortcut-list__edit,
+.shortcut-panel__reset,
+.shortcut-panel__toggle,
+.shortcut-panel__capture {
+  color: var(--color-accent);
+}
+
+.workspace-panel,
+.catalog-view,
+.lyrics-display {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+}
+
+.view-switcher,
+.file-field,
+.audio-player--empty,
+.audio-waveform,
+.audio-waveform__canvas,
+.audio-waveform__empty,
+.sync-panel,
+.shortcut-panel,
+.catalog-track {
+  border-color: var(--color-border);
+}
+
+.view-switcher,
+.file-field,
+.audio-player--empty,
+.audio-waveform,
+.sync-panel,
+.shortcut-panel,
+.catalog-track {
+  background: var(--color-surface-soft);
+}
+
+.audio-waveform__canvas,
+.audio-waveform__empty,
+.audio-waveform__rate,
+.button,
+.shortcut-list kbd,
+.shortcut-panel__toggle {
+  background: var(--color-bg);
+}
+
+.workspace-panel h2,
+.catalog-view h2,
+.catalog-player h3,
+.file-field__label,
+.audio-waveform__clock,
+.sync-panel__time,
+.sync-panel__line,
+.button,
+.shortcut-list kbd,
+.catalog-track {
+  color: var(--color-text);
+}
+
+.line-count {
+  color: var(--color-warning);
+  background: rgba(224, 168, 75, 0.14);
+}
+
+.view-switcher__button--active,
+.audio-waveform__rate--active,
+.button--primary {
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.audio-waveform__loading {
+  background: rgba(16, 20, 19, 0.86);
+}
+
+.shortcut-list__item.is-capturing,
+.catalog-track--active {
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 13%, transparent);
+}
+
+.shortcut-list dd {
+  color: var(--color-warning);
+}
+
+.shortcut-list kbd,
+.audio-waveform__rate,
+.button,
+.shortcut-panel__toggle {
+  border-color: var(--color-border-muted);
+}
+
+.shortcut-list__edit:hover,
+.shortcut-list__edit:focus-visible,
+.shortcut-panel__toggle:hover,
+.shortcut-panel__toggle:focus-visible,
+.catalog-track:hover,
+.button:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+}
+
+.button--primary:hover:not(:disabled),
+.view-switcher__button--active:hover,
+.audio-waveform__rate--active:hover:not(:disabled) {
+  color: var(--color-on-accent);
+  background: color-mix(in srgb, var(--color-accent) 82%, white);
+}
+
+.sync-panel__error,
+.shortcut-panel__error {
+  color: var(--color-danger);
+}
+
+.shortcut-panel__reset:disabled {
+  color: #697570;
+}
+
+.file-field__input::file-selector-button {
+  padding: 5px 9px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 5px;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+input[type='range'] {
+  accent-color: var(--color-accent);
+}
+
+@media (max-height: 800px) and (min-width: 781px) {
+  .app-shell {
+    padding: 12px 0;
+  }
+
+  .app-header {
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .karaoke-logo--large {
+    font-size: clamp(1.7rem, 3.5vw, 3rem);
+  }
+}
+
 @media (max-width: 780px) {
   .app-header {
     align-items: stretch;
@@ -707,11 +1086,24 @@ p {
     width: 100%;
   }
 
-  .generator-view {
-    grid-template-columns: 1fr;
+  .app-header__actions {
+    width: 100%;
+  }
+
+  .app-header__actions .view-switcher {
+    flex: 1;
+    width: auto;
   }
 
   .catalog-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-view__header {
+    flex-direction: column;
+  }
+
+  .settings-layout {
     grid-template-columns: 1fr;
   }
 
@@ -721,6 +1113,20 @@ p {
 
   .action-row {
     grid-template-columns: 1fr;
+  }
+
+  .file-grid,
+  .generator-tools,
+  .shortcut-list {
+    grid-template-columns: 1fr;
+  }
+
+  .file-field {
+    grid-template-columns: 1fr;
+  }
+
+  .file-field__input {
+    grid-column: auto;
   }
 
   .shortcut-panel__header {

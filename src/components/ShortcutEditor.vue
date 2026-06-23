@@ -8,6 +8,7 @@ import {
   type GeneratorActionId,
   type ShortcutBinding,
 } from '../generator/shortcuts'
+import { useI18n } from '../i18n'
 
 const props = defineProps<{
   actions: GeneratorActionDefinition[]
@@ -22,6 +23,8 @@ const emit = defineEmits<{
 
 const capturedActionId = ref<GeneratorActionId>()
 const captureError = ref<string>()
+const isExpanded = ref(false)
+const { locale, t } = useI18n()
 
 function stopCapture() {
   capturedActionId.value = undefined
@@ -33,6 +36,14 @@ function startCapture(actionId: GeneratorActionId) {
   capturedActionId.value = actionId
   captureError.value = undefined
   emit('capturechange', true)
+}
+
+function toggleExpanded() {
+  if (isExpanded.value) {
+    stopCapture()
+  }
+
+  isExpanded.value = !isExpanded.value
 }
 
 function onKeyDown(event: KeyboardEvent) {
@@ -54,8 +65,8 @@ function onKeyDown(event: KeyboardEvent) {
 
   if (!shortcut) {
     captureError.value = event.metaKey
-      ? 'La touche Windows ne peut pas être utilisée.'
-      : 'Ajoutez une touche autre que Ctrl, Alt ou Maj.'
+      ? t('shortcut.metaUnsupported')
+      : t('shortcut.modifierOnly')
     return
   }
 
@@ -64,7 +75,9 @@ function onKeyDown(event: KeyboardEvent) {
   )
 
   if (conflictingAction) {
-    captureError.value = `Déjà utilisé pour « ${conflictingAction.label} ».`
+    captureError.value = t('shortcut.conflict', {
+      label: t(conflictingAction.labelKey),
+    })
     return
   }
 
@@ -84,35 +97,53 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <aside class="shortcut-panel" aria-label="Raccourcis du générateur">
+  <aside class="shortcut-panel" :aria-label="t('shortcut.generatorAria')">
     <div class="shortcut-panel__header">
       <div>
-        <p class="eyebrow">Raccourcis</p>
+        <p class="eyebrow">{{ t('shortcut.title') }}</p>
         <p class="shortcut-panel__description">
-          Cliquez sur Modifier puis saisissez la nouvelle combinaison.
+          {{
+            isExpanded
+              ? t('shortcut.descriptionExpanded')
+              : t('shortcut.configuredActions', { count: actions.length })
+          }}
         </p>
       </div>
-      <button
-        class="shortcut-panel__reset"
-        type="button"
-        :disabled="!hasCustomShortcuts"
-        @click="emit('reset')"
-      >
-        Réinitialiser
-      </button>
+      <div class="shortcut-panel__actions">
+        <button
+          v-if="isExpanded"
+          class="shortcut-panel__reset"
+          type="button"
+          :disabled="!hasCustomShortcuts"
+          @click="emit('reset')"
+        >
+          {{ t('shortcut.reset') }}
+        </button>
+        <button
+          class="shortcut-panel__toggle"
+          type="button"
+          :aria-expanded="isExpanded"
+          @click="toggleExpanded"
+        >
+          {{ isExpanded ? t('shortcut.hide') : t('shortcut.configure') }}
+        </button>
+      </div>
     </div>
 
-    <dl class="shortcut-list">
+    <dl v-if="isExpanded" class="shortcut-list">
       <div
         v-for="action in actions"
         :key="action.id"
         class="shortcut-list__item"
         :class="{ 'is-capturing': capturedActionId === action.id }"
       >
-        <dt>{{ action.label }}</dt>
+        <dt>{{ t(action.labelKey) }}</dt>
         <dd>
           <span class="shortcut-list__keys">
-            <template v-for="(key, index) in formatShortcut(action.shortcut)" :key="key">
+            <template
+              v-for="(key, index) in formatShortcut(action.shortcut, locale)"
+              :key="key"
+            >
               <span v-if="index > 0" aria-hidden="true">+</span>
               <kbd>{{ key }}</kbd>
             </template>
@@ -120,21 +151,21 @@ onBeforeUnmount(() => {
           <button
             class="shortcut-list__edit"
             type="button"
-            :aria-label="`Modifier le raccourci : ${action.label}`"
+            :aria-label="t('shortcut.editAria', { label: t(action.labelKey) })"
             @click="
               capturedActionId === action.id ? stopCapture() : startCapture(action.id)
             "
           >
-            {{ capturedActionId === action.id ? 'Annuler' : 'Modifier' }}
+            {{ capturedActionId === action.id ? t('shortcut.cancel') : t('shortcut.edit') }}
           </button>
         </dd>
       </div>
     </dl>
 
-    <p v-if="capturedActionId" class="shortcut-panel__capture" role="status">
-      Appuyez sur la combinaison souhaitée · Échap pour annuler
+    <p v-if="isExpanded && capturedActionId" class="shortcut-panel__capture" role="status">
+      {{ t('shortcut.captureHelp') }}
     </p>
-    <p v-if="captureError" class="shortcut-panel__error" role="alert">
+    <p v-if="isExpanded && captureError" class="shortcut-panel__error" role="alert">
       {{ captureError }}
     </p>
   </aside>

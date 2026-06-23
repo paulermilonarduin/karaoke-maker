@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onBeforeUpdate, onMounted, ref, watch } from 'vue'
 import type { LyricLine, LyricSegment } from '../domain/lyrics'
 import { formatTimestamp } from '../domain/lyrics'
+import { useI18n } from '../i18n'
 
 const props = defineProps<{
   currentTimeMs: number
@@ -21,6 +22,7 @@ type DisplayLine = {
 
 const displayElement = ref<HTMLElement>()
 const lineElements = ref<HTMLElement[]>([])
+const { t } = useI18n()
 let resizeObserver: ResizeObserver | undefined
 
 const activeLineProgress = computed(() => {
@@ -65,7 +67,7 @@ const visibleLines = computed<DisplayLine[]>(() => {
       : {
           id: 'lyrics-placeholder',
           position: 'current',
-          text: props.placeholder || 'Chargez un MP3 et des paroles brutes pour démarrer.',
+          text: props.placeholder || t('lyricsDisplay.placeholder'),
         },
   )
 
@@ -124,7 +126,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section ref="displayElement" class="lyrics-display" aria-label="Aperçu karaoké">
+  <section ref="displayElement" class="lyrics-display" :aria-label="t('lyricsDisplay.ariaLabel')">
     <p class="lyrics-display__time">
       {{ activeLine ? formatTimestamp(activeLine.startMs) : '00:00.000' }}
     </p>

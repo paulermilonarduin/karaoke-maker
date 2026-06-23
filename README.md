@@ -32,6 +32,8 @@ Une première version fonctionnelle peut rester volontairement simple :
 - synchroniser les lignes puis les mots en deux passes ;
 - ajuster les marqueurs directement sur la waveform ;
 - ralentir ou accélérer la lecture en conservant la tonalité ;
+- personnaliser la couleur principale depuis les paramètres ;
+- changer la langue de l’interface depuis les paramètres ;
 - lire la musique dans un lecteur web ;
 - afficher et surligner progressivement les paroles au niveau des mots.
 
@@ -100,6 +102,17 @@ La librairie est surtout utile pour l'édition :
 Les commandes du générateur passent par un registre d'actions central. Les raccourcis peuvent être modifiés directement dans l'interface, les conflits sont détectés et les préférences sont conservées localement dans le navigateur.
 
 Le lecteur karaoké n'a pas besoin de dépendre de `wavesurfer.js`. Pour jouer une musique et afficher les paroles au bon moment, un lecteur audio natif et une boucle de synchronisation suffisent.
+
+## Internationalisation
+
+L’interface utilise une i18n légère côté client, sans dépendance externe pour le moment.
+
+- Les textes d’interface sont centralisés dans `src/i18n/index.ts`.
+- La locale active est conservée dans `localStorage` sous la clé `karaoke-maker.locale.v1`.
+- Les composants utilisent `t('clé')` ou `t('clé', { paramètre })` pour afficher les libellés.
+- Le choix de langue est disponible dans les paramètres.
+
+Cette approche suffit pour le POC et permet de migrer facilement vers une librairie dédiée plus tard si le besoin apparaît.
 
 ## Format interne cible
 

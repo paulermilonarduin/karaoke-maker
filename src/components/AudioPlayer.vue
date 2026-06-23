@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from 'vue'
+import { useI18n } from '../i18n'
 
 defineProps<{
   audioUrl?: string
@@ -11,6 +12,7 @@ const emit = defineEmits<{
 }>()
 
 const audioElement = ref<HTMLAudioElement>()
+const { t } = useI18n()
 let animationFrameId: number | undefined
 
 function emitCurrentTime() {
@@ -62,5 +64,5 @@ onBeforeUnmount(stopLoop)
     @play="startLoop"
     @seeked="emitCurrentTime"
   />
-  <p v-else class="audio-player audio-player--empty">Aucun MP3 chargé</p>
+  <p v-else class="audio-player audio-player--empty">{{ t('audioPlayer.empty') }}</p>
 </template>
