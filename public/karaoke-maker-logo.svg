@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 180" role="img" aria-labelledby="title desc">
+  <title id="title">Karaoke Maker</title>
+  <desc id="desc">Karaoke Maker logo with a dark background, teal outline, tilted text, and a 65 percent highlight.</desc>
+  <defs>
+    <filter id="highlight-glow" x="-15%" y="-35%" width="130%" height="170%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="soft-glow" />
+      <feMerge>
+        <feMergeNode in="soft-glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <clipPath id="highlight-progress">
+      <rect x="34" y="18" width="410" height="82" />
+    </clipPath>
+  </defs>
+  <g transform="translate(56 36) skewX(-5)">
+    <rect x="0" y="0" width="650" height="106" rx="14" fill="#101413" stroke="#7bd2bd" stroke-width="2" />
+    <text
+      x="34"
+      y="75"
+      fill="#fffaf0"
+      font-family="Arial Black, Impact, system-ui, sans-serif"
+      font-size="64"
+      font-weight="950"
+      letter-spacing="-4.5"
+    >KARAOKE MAKER</text>
+    <text
+      x="34"
+      y="75"
+      clip-path="url(#highlight-progress)"
+      fill="#7bd2bd"
+      filter="url(#highlight-glow)"
+      font-family="Arial Black, Impact, system-ui, sans-serif"
+      font-size="64"
+      font-weight="950"
+      letter-spacing="-4.5"
+    >KARAOKE MAKER</text>
+  </g>
+</svg>

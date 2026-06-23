@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/karaoke-maker-logo.svg" alt="Karaoke Maker" width="520">
+</p>
+
 # Karaoke Maker
 
 Karaoke Maker est une interface web permettant de créer et de jouer des karaokés à partir de fichiers simples :
@@ -23,6 +27,34 @@ L'utilisateur devra pouvoir associer facilement les paroles aux bons moments de 
 La partie catalogue permettra de retrouver les musiques déjà préparées et de les jouer directement dans l'application.
 
 Elle servira de bibliothèque de karaokés disponibles, avec un lecteur capable d'afficher les paroles au bon moment pendant la lecture audio.
+
+### Vision communautaire et API
+
+À terme, Karaoke Maker aura probablement besoin d'une API pour partager les fichiers de synchronisation, mais pas les fichiers audio.
+
+L'objectif est de permettre aux utilisateurs de publier et de récupérer des fichiers `*.karaoke.json` synchronisés, sans distribuer les MP3 associés. Chaque utilisateur garde ses musiques localement et peut associer un fichier karaoke téléchargé à son propre fichier audio.
+
+Le découpage cible est donc :
+
+```text
+API publique
+  - comptes utilisateurs
+  - recherche par titre, artiste, langue ou version
+  - upload/download de fichiers karaoke JSON
+  - versions, notes, signalements et validation communautaire
+
+Client local
+  - catalogue de musiques présentes sur la machine
+  - association d'un fichier karaoke JSON avec un MP3 local
+  - lecture et synchronisation hors distribution audio
+  - ajustement d'offset ou resynchronisation si la version audio diffère
+```
+
+Cette séparation limite les problèmes de droits : le serveur stocke des métadonnées et des timings, pas les morceaux eux-mêmes.
+
+Le point technique important sera le matching entre un fichier karaoke et un fichier audio local. Une première version peut comparer la durée attendue avec la durée réelle et afficher un avertissement si l'écart est trop grand. Une version plus robuste pourra ajouter une empreinte audio locale, par exemple via Chromaprint/AcoustID ou un mécanisme équivalent, pour détecter les versions compatibles d'un même morceau.
+
+Le traitement audio avancé, comme la séparation voix/instrumental, doit rester local ou privé dans un premier temps. Le flux recommandé est de traiter le MP3 au moment de l'import, générer des stems séparés (`vocals` et `instrumental`), puis laisser le lecteur mixer ces pistes avec des volumes indépendants. Le serveur public ne devrait pas recevoir de MP3 commerciaux pour cette fonctionnalité.
 
 ## POC actuel
 
