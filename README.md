@@ -1,14 +1,12 @@
 <p align="center">
-  <img src="public/karaoke-maker-logo.svg" alt="Karaoke Maker" width="520">
+  <img src="docs/assets/karaoke-maker-logo.svg" alt="Karaoke Maker" width="520">
 </p>
-
-# Karaoke Maker
 
 Karaoke Maker est une interface web permettant de créer et de jouer des karaokés à partir de fichiers simples :
 
-- un fichier MP3 contenant la musique ;
-- un fichier de paroles ;
-- des marqueurs temporels permettant de synchroniser les paroles avec l'audio.
+- Un fichier MP3 contenant la musique
+- Un fichier de paroles
+- Des marqueurs temporels permettant de synchroniser les paroles avec l'audio
 
 L'objectif est de rendre la création d'un karaoké simple, rapide et accessible, sans obliger l'utilisateur à manipuler directement des formats techniques.
 
@@ -38,16 +36,16 @@ Le découpage cible est donc :
 
 ```text
 API publique
-  - comptes utilisateurs
-  - recherche par titre, artiste, langue ou version
-  - upload/download de fichiers karaoke JSON
-  - versions, notes, signalements et validation communautaire
+  - Comptes utilisateurs
+  - Recherche par titre, artiste, langue ou version
+  - Upload/download de fichiers karaoke JSON
+  - Versions, notes, signalements et validation communautaire
 
 Client local
-  - catalogue de musiques présentes sur la machine
-  - association d'un fichier karaoke JSON avec un MP3 local
-  - lecture et synchronisation hors distribution audio
-  - ajustement d'offset ou resynchronisation si la version audio diffère
+  - Catalogue de musiques présentes sur la machine
+  - Association d'un fichier karaoke JSON avec un MP3 local
+  - Lecture et synchronisation hors distribution audio
+  - Ajustement d'offset ou resynchronisation si la version audio diffère
 ```
 
 Cette séparation limite les problèmes de droits : le serveur stocke des métadonnées et des timings, pas les morceaux eux-mêmes.
@@ -60,15 +58,15 @@ Le traitement audio avancé, comme la séparation voix/instrumental, doit rester
 
 Une première version fonctionnelle peut rester volontairement simple :
 
-- importer ou référencer un MP3 ;
-- synchroniser les lignes puis les mots en deux passes ;
-- ajouter des blocs d’interlude pour les passages sans paroles ;
-- ajuster les marqueurs directement sur la waveform ;
-- ralentir ou accélérer la lecture en conservant la tonalité ;
-- personnaliser la couleur principale depuis les paramètres ;
-- changer la langue de l’interface depuis les paramètres ;
-- lire la musique dans un lecteur web ;
-- afficher et surligner progressivement les paroles au niveau des mots.
+- Importer ou référencer un MP3
+- Synchroniser les lignes puis les mots en deux passes
+- Ajouter des blocs d’interlude pour les passages sans paroles
+- Ajuster les marqueurs directement sur la waveform
+- Ralentir ou accélérer la lecture en conservant la tonalité
+- Personnaliser la couleur principale depuis les paramètres
+- Changer la langue de l’interface depuis les paramètres
+- Lire la musique dans un lecteur web
+- Afficher et surligner progressivement les paroles au niveau des mots
 
 Cette V1 doit surtout valider le flux principal : créer une synchronisation minimale, la sauvegarder, puis la rejouer correctement.
 
@@ -76,11 +74,11 @@ Cette V1 doit surtout valider le flux principal : créer une synchronisation min
 
 Karaoke Maker utilise un format JSON interne versionné (`*.karaoke.json`). Il représente :
 
-- une ligne de paroles complète ;
-- plusieurs segments temporels à l'intérieur d'une même ligne ;
-- des blocs d’interlude (`kind: "bridge"`) pour les passages instrumentaux ou sans paroles ;
-- un début et une fin explicites en millisecondes pour chaque mot ou syllabe ;
-- les informations audio nécessaires pour valider et rejouer la synchronisation.
+- Une ligne de paroles complète
+- Plusieurs segments temporels à l'intérieur d'une même ligne
+- Des blocs d’interlude (`kind: "bridge"`) pour les passages instrumentaux ou sans paroles
+- Un début et une fin explicites en millisecondes pour chaque mot ou syllabe
+- Les informations audio nécessaires pour valider et rejouer la synchronisation
 
 Dans un fichier de paroles brut, une ligne `[bridge]`, `[instrumental]`, `[break]` ou `[pause]` crée un bloc sans paroles. Le générateur permet aussi d’ajouter un interlude à l’instant courant pendant la synchronisation.
 
@@ -101,10 +99,10 @@ Le projet partira sur une application web en Vue 3 avec TypeScript et Vite.
 
 Cette stack permet de rester simple pour le POC tout en utilisant directement les APIs natives du navigateur :
 
-- `HTMLAudioElement` pour lire les MP3 et récupérer le temps courant de lecture ;
-- `requestAnimationFrame` pour synchroniser l'affichage des paroles avec l'audio ;
-- la File API pour charger localement un MP3 et un fichier de paroles ;
-- IndexedDB si un catalogue local est nécessaire dans une première version.
+- `HTMLAudioElement` pour lire les MP3 et récupérer le temps courant de lecture
+- `requestAnimationFrame` pour synchroniser l'affichage des paroles avec l'audio
+- La File API pour charger localement un MP3 et un fichier de paroles
+- IndexedDB si un catalogue local est nécessaire dans une première version
 
 Nuxt n'est pas nécessaire au démarrage : le POC n'a pas besoin de rendu serveur ni de backend intégré.
 
@@ -122,7 +120,7 @@ npm run electron:preview
 npm run package:win
 ```
 
-Les détails de lancement et de debug sont disponibles dans `Vue.md`.
+Les détails de lancement et de debug sont disponibles dans `DEVELOPMENT.md`.
 
 ## Édition audio
 
@@ -130,10 +128,10 @@ La partie génération utilise `wavesurfer.js` pour afficher la forme d'onde du 
 
 La librairie est surtout utile pour l'édition :
 
-- affichage de la waveform ;
-- timeline avec repères de temps ;
-- création et déplacement de zones ou marqueurs ;
-- relecture de passages courts pour ajuster la synchronisation.
+- Affichage de la waveform
+- Timeline avec repères de temps
+- Création et déplacement de zones ou marqueurs
+- Relecture de passages courts pour ajuster la synchronisation
 
 Les commandes du générateur passent par un registre d'actions central. Les raccourcis peuvent être modifiés directement dans l'interface, les conflits sont détectés et les préférences sont conservées localement dans le navigateur.
 
@@ -143,10 +141,10 @@ Le lecteur karaoké n'a pas besoin de dépendre de `wavesurfer.js`. Pour jouer u
 
 L’interface utilise une i18n légère côté client, sans dépendance externe pour le moment.
 
-- Les textes d’interface sont centralisés dans `src/i18n/index.ts`.
-- La locale active est conservée dans `localStorage` sous la clé `karaoke-maker.locale.v1`.
-- Les composants utilisent `t('clé')` ou `t('clé', { paramètre })` pour afficher les libellés.
-- Le choix de langue est disponible dans les paramètres.
+- Les textes d’interface sont centralisés dans `src/i18n/index.ts`
+- La locale active est conservée dans `localStorage` sous la clé `karaoke-maker.locale.v1`
+- Les composants utilisent `t('clé')` ou `t('clé', { paramètre })` pour afficher les libellés
+- Le choix de langue est disponible dans les paramètres
 
 Cette approche suffit pour le POC et permet de migrer facilement vers une librairie dédiée plus tard si le besoin apparaît.
 
