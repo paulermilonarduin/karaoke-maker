@@ -48,9 +48,8 @@ function selectTrack(track: CatalogTrack) {
     <div class="catalog-view__header">
       <div>
         <p class="eyebrow">{{ t('catalog.eyebrow') }}</p>
-        <h2>{{ t('catalog.title') }}</h2>
+        <p class="line-count">{{ t('catalog.count', { count: catalogTracks.length }) }}</p>
       </div>
-      <p class="line-count">{{ t('catalog.count', { count: catalogTracks.length }) }}</p>
     </div>
 
     <div class="catalog-layout">
@@ -69,16 +68,6 @@ function selectTrack(track: CatalogTrack) {
       </aside>
 
       <div class="catalog-player">
-        <div>
-          <p class="eyebrow">{{ t('catalog.playback') }}</p>
-          <h3>{{ selectedTrack.title }}</h3>
-        </div>
-        <AudioPlayer
-          :key="selectedTrack.id"
-          :audio-url="selectedTrack.audioUrl"
-          @timeupdate="currentTimeMs = $event"
-          @durationchange="audioDurationMs = $event"
-        />
         <LyricsDisplay
           :current-time-ms="currentTimeMs"
           :fallback-end-time-ms="audioDurationMs"
@@ -86,7 +75,17 @@ function selectTrack(track: CatalogTrack) {
           :previous-line="previousLine"
           :next-line="nextLine"
           :placeholder="t('catalog.placeholder')"
-        />
+          :title="selectedTrack.title"
+        >
+          <template #footer>
+            <AudioPlayer
+              :key="selectedTrack.id"
+              :audio-url="selectedTrack.audioUrl"
+              @timeupdate="currentTimeMs = $event"
+              @durationchange="audioDurationMs = $event"
+            />
+          </template>
+        </LyricsDisplay>
       </div>
     </div>
   </section>

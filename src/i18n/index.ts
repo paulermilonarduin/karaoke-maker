@@ -8,6 +8,10 @@ const frMessages = {
   'nav.settings': 'Paramètres',
 
   'audioPlayer.empty': 'Aucun MP3 chargé',
+  'audioPlayer.pause': 'Mettre en pause',
+  'audioPlayer.play': 'Lancer la lecture',
+  'audioPlayer.seek': 'Position de lecture',
+  'audioPlayer.volume': 'Volume',
 
   'audioWaveform.ariaLabel': 'Éditeur de waveform',
   'audioWaveform.empty': 'Chargez un MP3 pour afficher sa waveform.',
@@ -115,6 +119,10 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'nav.settings': 'Settings',
 
   'audioPlayer.empty': 'No MP3 loaded',
+  'audioPlayer.pause': 'Pause playback',
+  'audioPlayer.play': 'Start playback',
+  'audioPlayer.seek': 'Playback position',
+  'audioPlayer.volume': 'Volume',
 
   'audioWaveform.ariaLabel': 'Waveform editor',
   'audioWaveform.empty': 'Load an MP3 to display its waveform.',

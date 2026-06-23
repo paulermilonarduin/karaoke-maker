@@ -15,7 +15,7 @@ const { locale, setLocale, t } = useI18n()
 </script>
 
 <template>
-  <main class="app-shell">
+  <main class="app-shell" :class="`app-shell--${activeView}`">
     <header class="app-header">
       <div class="app-brand">
         <h1 class="app-brand__title">

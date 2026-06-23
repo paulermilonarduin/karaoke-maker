@@ -11,6 +11,7 @@ const props = defineProps<{
   previousLine?: LyricLine
   nextLine?: LyricLine
   placeholder?: string
+  title?: string
 }>()
 
 type DisplayLine = {
@@ -135,6 +136,7 @@ onBeforeUnmount(() => {
 
 <template>
   <section ref="displayElement" class="lyrics-display" :aria-label="t('lyricsDisplay.ariaLabel')">
+    <p v-if="title" class="lyrics-display__title">{{ title }}</p>
     <p class="lyrics-display__time">
       {{ activeLine ? formatTimestamp(activeLine.startMs) : '00:00.000' }}
     </p>
@@ -184,6 +186,9 @@ onBeforeUnmount(() => {
           {{ line.text }}
         </span>
       </p>
+    </div>
+    <div v-if="$slots.footer" class="lyrics-display__footer">
+      <slot name="footer"></slot>
     </div>
   </section>
 </template>
