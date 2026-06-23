@@ -9,10 +9,21 @@ import { useI18n } from '../i18n'
 const selectedTrack = ref<CatalogTrack>(catalogTracks[0])
 const currentTimeMs = ref(0)
 const audioDurationMs = ref<number>()
+const trackSearchQuery = ref('')
 const karaokeFile = computed(() => parseKaraokeFile(selectedTrack.value.karaokeContent))
 const lyrics = computed(() => karaokeFile.value.lines)
 const activeLine = computed(() => findActiveLine(lyrics.value, currentTimeMs.value))
 const { t } = useI18n()
+const normalizedTrackSearchQuery = computed(() => normalizeTrackSearch(trackSearchQuery.value))
+const filteredTracks = computed(() => {
+  const query = normalizedTrackSearchQuery.value
+
+  if (!query) {
+    return catalogTracks
+  }
+
+  return catalogTracks.filter((track) => normalizeTrackSearch(track.title).includes(query))
+})
 const previousLine = computed<LyricLine | undefined>(() => {
   const line = activeLine.value
 
@@ -36,6 +47,14 @@ const nextLine = computed<LyricLine | undefined>(() => {
   return lyrics.value[index + 1]
 })
 
+function normalizeTrackSearch(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .trim()
+}
+
 function selectTrack(track: CatalogTrack) {
   selectedTrack.value = track
   currentTimeMs.value = 0
@@ -53,18 +72,49 @@ function selectTrack(track: CatalogTrack) {
     </div>
 
     <div class="catalog-layout">
-      <aside class="catalog-list" :aria-label="t('catalog.availableTracks')">
-        <button
-          v-for="track in catalogTracks"
-          :key="track.id"
-          class="catalog-track"
-          :class="{ 'catalog-track--active': selectedTrack.id === track.id }"
-          type="button"
-          @click="selectTrack(track)"
-        >
-          <span>{{ track.title }}</span>
-          <span class="catalog-track__format">{{ t('catalog.format') }}</span>
-        </button>
+      <aside class="catalog-panel" :aria-label="t('catalog.availableTracks')">
+        <label class="catalog-search">
+          <svg class="catalog-search__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M10.8 18.1a7.3 7.3 0 1 1 5.15-2.14l4.14 4.13-1.41 1.41-4.14-4.13a7.25 7.25 0 0 1-3.74 1.03Zm0-2a5.3 5.3 0 1 0 0-10.6 5.3 5.3 0 0 0 0 10.6Z"
+            />
+          </svg>
+          <span class="sr-only">{{ t('catalog.searchLabel') }}</span>
+          <input
+            v-model="trackSearchQuery"
+            type="search"
+            :placeholder="t('catalog.searchPlaceholder')"
+            :aria-label="t('catalog.searchLabel')"
+          />
+        </label>
+
+        <p class="catalog-search__meta">
+          {{
+            t('catalog.searchResults', {
+              count: filteredTracks.length,
+              total: catalogTracks.length,
+            })
+          }}
+        </p>
+
+        <div class="catalog-list" role="list">
+          <button
+            v-for="track in filteredTracks"
+            :key="track.id"
+            class="catalog-track"
+            :class="{ 'catalog-track--active': selectedTrack.id === track.id }"
+            type="button"
+            role="listitem"
+            @click="selectTrack(track)"
+          >
+            <span>{{ track.title }}</span>
+            <span class="catalog-track__format">{{ t('catalog.format') }}</span>
+          </button>
+
+          <p v-if="filteredTracks.length === 0" class="catalog-empty">
+            {{ t('catalog.emptySearch') }}
+          </p>
+        </div>
       </aside>
 
       <div class="catalog-player">

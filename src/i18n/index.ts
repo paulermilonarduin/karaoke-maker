@@ -26,10 +26,14 @@ const frMessages = {
 
   'catalog.availableTracks': 'Titres disponibles',
   'catalog.count': '{count} titre(s)',
+  'catalog.emptySearch': 'Aucun titre ne correspond à cette recherche.',
   'catalog.eyebrow': 'Catalogue',
   'catalog.format': 'MP3 + JSON',
   'catalog.playback': 'Lecture',
   'catalog.placeholder': 'Lancez la lecture pour démarrer le karaoké.',
+  'catalog.searchLabel': 'Rechercher un titre',
+  'catalog.searchPlaceholder': 'Rechercher…',
+  'catalog.searchResults': '{count} / {total} titre(s)',
   'catalog.title': 'Musiques préparées',
 
   'file.empty': 'Aucun fichier sélectionné',
@@ -61,6 +65,8 @@ const frMessages = {
 
   'lyricsDisplay.ariaLabel': 'Aperçu karaoké',
   'lyricsDisplay.bridgeLabel': 'Interlude',
+  'lyricsDisplay.enterFullscreen': 'Passer le lecteur en plein écran',
+  'lyricsDisplay.exitFullscreen': 'Quitter le plein écran',
   'lyricsDisplay.placeholder': 'Chargez un MP3 et des paroles brutes pour démarrer.',
 
   'settings.accentColorAria': 'Couleur principale',
@@ -137,10 +143,14 @@ const enMessages: Record<keyof typeof frMessages, string> = {
 
   'catalog.availableTracks': 'Available tracks',
   'catalog.count': '{count} track(s)',
+  'catalog.emptySearch': 'No track matches this search.',
   'catalog.eyebrow': 'Catalog',
   'catalog.format': 'MP3 + JSON',
   'catalog.playback': 'Playback',
   'catalog.placeholder': 'Start playback to begin the karaoke.',
+  'catalog.searchLabel': 'Search tracks',
+  'catalog.searchPlaceholder': 'Search…',
+  'catalog.searchResults': '{count} / {total} track(s)',
   'catalog.title': 'Prepared songs',
 
   'file.empty': 'No file selected',
@@ -171,6 +181,8 @@ const enMessages: Record<keyof typeof frMessages, string> = {
 
   'lyricsDisplay.ariaLabel': 'Karaoke preview',
   'lyricsDisplay.bridgeLabel': 'Bridge',
+  'lyricsDisplay.enterFullscreen': 'Enter player fullscreen',
+  'lyricsDisplay.exitFullscreen': 'Exit fullscreen',
   'lyricsDisplay.placeholder': 'Load an MP3 and raw lyrics to get started.',
 
   'settings.accentColorAria': 'Primary color',
@@ -219,7 +231,7 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'shortcut.title': 'Shortcuts',
 }
 
-export type Locale = 'fr' | 'en'
+export type Locale = 'fr' | 'en-US'
 export type TranslationKey = keyof typeof frMessages
 
 export const localeOptions: {
@@ -234,16 +246,16 @@ export const localeOptions: {
     flag: '🇫🇷',
     countryLabel: {
       fr: 'France',
-      en: 'France',
+      'en-US': 'France',
     },
   },
   {
-    value: 'en',
+    value: 'en-US',
     label: 'English',
-    flag: '🇬🇧',
+    flag: '🇺🇸',
     countryLabel: {
-      fr: 'Royaume-Uni',
-      en: 'United Kingdom',
+      fr: 'États-Unis',
+      'en-US': 'United States',
     },
   },
 ]
@@ -252,11 +264,19 @@ const localeStorageKey = 'karaoke-maker.locale.v1'
 const defaultLocale: Locale = 'fr'
 const messages: Record<Locale, Record<TranslationKey, string>> = {
   fr: frMessages,
-  en: enMessages,
+  'en-US': enMessages,
 }
 
 function isLocale(value: unknown): value is Locale {
-  return value === 'fr' || value === 'en'
+  return value === 'fr' || value === 'en-US'
+}
+
+function normalizeStoredLocale(value: unknown): Locale | undefined {
+  if (value === 'en') {
+    return 'en-US'
+  }
+
+  return isLocale(value) ? value : undefined
 }
 
 function loadLocale(): Locale {
@@ -266,7 +286,7 @@ function loadLocale(): Locale {
 
   const storedLocale = window.localStorage.getItem(localeStorageKey)
 
-  return isLocale(storedLocale) ? storedLocale : defaultLocale
+  return normalizeStoredLocale(storedLocale) ?? defaultLocale
 }
 
 function applyDocumentLocale(value: Locale) {

@@ -24,6 +24,7 @@ type DisplayLine = {
 
 const displayElement = ref<HTMLElement>()
 const lineElements = ref<HTMLElement[]>([])
+const isFullscreen = ref(false)
 const { t } = useI18n()
 let resizeObserver: ResizeObserver | undefined
 
@@ -110,6 +111,29 @@ async function fitLyrics() {
   lineElements.value.forEach((element) => fitLine(element))
 }
 
+function syncFullscreenState() {
+  isFullscreen.value = document.fullscreenElement === displayElement.value
+  void fitLyrics()
+}
+
+async function toggleFullscreen() {
+  const element = displayElement.value
+
+  if (!element) {
+    return
+  }
+
+  try {
+    if (document.fullscreenElement === element) {
+      await document.exitFullscreen()
+    } else {
+      await element.requestFullscreen()
+    }
+  } catch {
+    // Browser fullscreen can be denied outside user gestures. The button remains available.
+  }
+}
+
 watch(
   () => visibleLines.value.map((line) => `${line.id}:${line.position}:${line.text}`).join('|'),
   () => void fitLyrics(),
@@ -126,16 +150,31 @@ onMounted(() => {
     resizeObserver.observe(displayElement.value)
   }
 
+  document.addEventListener('fullscreenchange', syncFullscreenState)
   void fitLyrics()
 })
 
 onBeforeUnmount(() => {
+  document.removeEventListener('fullscreenchange', syncFullscreenState)
   resizeObserver?.disconnect()
 })
 </script>
 
 <template>
   <section ref="displayElement" class="lyrics-display" :aria-label="t('lyricsDisplay.ariaLabel')">
+    <button
+      class="lyrics-display__fullscreen"
+      type="button"
+      :aria-label="
+        isFullscreen ? t('lyricsDisplay.exitFullscreen') : t('lyricsDisplay.enterFullscreen')
+      "
+      :title="
+        isFullscreen ? t('lyricsDisplay.exitFullscreen') : t('lyricsDisplay.enterFullscreen')
+      "
+      @click="toggleFullscreen"
+    >
+      <span aria-hidden="true">{{ isFullscreen ? '×' : '⛶' }}</span>
+    </button>
     <p v-if="title" class="lyrics-display__title">{{ title }}</p>
     <p class="lyrics-display__time">
       {{ activeLine ? formatTimestamp(activeLine.startMs) : '00:00.000' }}

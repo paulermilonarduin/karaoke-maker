@@ -103,7 +103,7 @@ const keyLabels: Record<Locale, Record<string, string>> = {
     Space: 'Espace',
     Tab: 'Tab',
   },
-  en: {
+  'en-US': {
     '-': '−',
     ArrowDown: '↓',
     ArrowLeft: '←',
