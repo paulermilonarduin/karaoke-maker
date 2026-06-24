@@ -14,6 +14,9 @@
     "build": "vue-tsc -b && vite build",
     "build:electron": "tsc -p tsconfig.electron.json",
     "build:desktop": "npm run build && npm run build:electron",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
     "preview": "vite preview",
     "electron:preview": "npm run build:desktop && electron .",
     "package:win": "npm run build:desktop && electron-builder --win"
@@ -23,6 +26,7 @@
     "wavesurfer.js": "^7.12.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@types/node": "^24.12.3",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/tsconfig": "^0.9.1",
@@ -32,6 +36,7 @@
     "electron-builder": "^26.15.2",
     "typescript": "~6.0.2",
     "vite": "^8.0.12",
+    "vitest": "^4.1.9",
     "vue-tsc": "^3.2.8",
     "wait-on": "^9.0.10"
   },

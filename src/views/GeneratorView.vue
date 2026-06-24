@@ -19,6 +19,7 @@ import {
   useGeneratorShortcutSettings,
   useGeneratorShortcuts,
 } from '../generator/shortcuts'
+import { validateDraftTimeline } from '../generator/timelineValidation'
 import { useI18n } from '../i18n'
 
 type DragMode =
@@ -95,6 +96,9 @@ const { t } = useI18n()
 const syncedLines = computed(() =>
   buildSyncedLines(project.value.draftLines, audioDurationMs.value),
 )
+const timelineValidationIssues = computed(() =>
+  validateDraftTimeline(project.value.draftLines, audioDurationMs.value),
+)
 const timelineWidthPx = computed(() => {
   const durationMs = audioDurationMs.value ?? 0
 
@@ -109,6 +113,7 @@ const hasTimeline = computed(
 const canExport = computed(
   () =>
     hasTimeline.value &&
+    timelineValidationIssues.value.length === 0 &&
     syncedLines.value.length === project.value.draftLines.length &&
     syncedLines.value.every((line) => line.endMs !== undefined),
 )
