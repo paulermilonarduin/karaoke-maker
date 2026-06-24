@@ -1,0 +1,7223 @@
+{
+  "schemaVersion": 1,
+  "title": "1995 - La Source",
+  "audio": {
+    "fileName": "1995 - La Source.mp3",
+    "durationMs": 317115
+  },
+  "lines": [
+    {
+      "id": "bridge:0",
+      "kind": "bridge",
+      "startMs": 0,
+      "endMs": 1,
+      "text": ""
+    },
+    {
+      "id": "line:1",
+      "kind": "lyrics",
+      "text": "Yo, un Double Neuf Cinq pour un, retour à la source",
+      "startMs": 1,
+      "endMs": 13342,
+      "segments": [
+        {
+          "id": "line:1:segment:0",
+          "text": "Yo, ",
+          "startMs": 1,
+          "endMs": 11262
+        },
+        {
+          "id": "line:1:segment:1",
+          "text": "un ",
+          "startMs": 11322,
+          "endMs": 11382
+        },
+        {
+          "id": "line:1:segment:2",
+          "text": "Double ",
+          "startMs": 11422,
+          "endMs": 11722
+        },
+        {
+          "id": "line:1:segment:3",
+          "text": "Neuf ",
+          "startMs": 11742,
+          "endMs": 11882
+        },
+        {
+          "id": "line:1:segment:4",
+          "text": "Cinq ",
+          "startMs": 11902,
+          "endMs": 12062
+        },
+        {
+          "id": "line:1:segment:5",
+          "text": "pour ",
+          "startMs": 12102,
+          "endMs": 12222
+        },
+        {
+          "id": "line:1:segment:6",
+          "text": "un, ",
+          "startMs": 12262,
+          "endMs": 12542
+        },
+        {
+          "id": "line:1:segment:7",
+          "text": "retour ",
+          "startMs": 12562,
+          "endMs": 12802
+        },
+        {
+          "id": "line:1:segment:8",
+          "text": "à ",
+          "startMs": 12902,
+          "endMs": 12922
+        },
+        {
+          "id": "line:1:segment:9",
+          "text": "la ",
+          "startMs": 12962,
+          "endMs": 13042
+        },
+        {
+          "id": "line:1:segment:10",
+          "text": "source",
+          "startMs": 13122,
+          "endMs": 13342
+        }
+      ]
+    },
+    {
+      "id": "line:2",
+      "kind": "lyrics",
+      "text": "Décollage imminent, cool-al, joint",
+      "startMs": 13381,
+      "endMs": 15241,
+      "segments": [
+        {
+          "id": "line:2:segment:0",
+          "text": "Décollage ",
+          "startMs": 13381,
+          "endMs": 13761
+        },
+        {
+          "id": "line:2:segment:1",
+          "text": "imminent, ",
+          "startMs": 13801,
+          "endMs": 14461
+        },
+        {
+          "id": "line:2:segment:2",
+          "text": "cool-al, ",
+          "startMs": 14481,
+          "endMs": 14901
+        },
+        {
+          "id": "line:2:segment:3",
+          "text": "joint",
+          "startMs": 14921,
+          "endMs": 15241
+        }
+      ]
+    },
+    {
+      "id": "line:3",
+      "kind": "lyrics",
+      "text": "Les gars de mon posse supportent le mouvement",
+      "startMs": 15261,
+      "endMs": 16841,
+      "segments": [
+        {
+          "id": "line:3:segment:0",
+          "text": "Les ",
+          "startMs": 15261,
+          "endMs": 15321
+        },
+        {
+          "id": "line:3:segment:1",
+          "text": "gars ",
+          "startMs": 15341,
+          "endMs": 15481
+        },
+        {
+          "id": "line:3:segment:2",
+          "text": "de ",
+          "startMs": 15501,
+          "endMs": 15581
+        },
+        {
+          "id": "line:3:segment:3",
+          "text": "mon ",
+          "startMs": 15601,
+          "endMs": 15721
+        },
+        {
+          "id": "line:3:segment:4",
+          "text": "posse ",
+          "startMs": 15741,
+          "endMs": 15941
+        },
+        {
+          "id": "line:3:segment:5",
+          "text": "supportent ",
+          "startMs": 15961,
+          "endMs": 16341
+        },
+        {
+          "id": "line:3:segment:6",
+          "text": "le ",
+          "startMs": 16361,
+          "endMs": 16461
+        },
+        {
+          "id": "line:3:segment:7",
+          "text": "mouvement",
+          "startMs": 16481,
+          "endMs": 16841
+        }
+      ]
+    },
+    {
+      "id": "line:4",
+      "kind": "lyrics",
+      "text": "J'dis \"fuck\" et fous le camp car le Rap",
+      "startMs": 16861,
+      "endMs": 18381,
+      "segments": [
+        {
+          "id": "line:4:segment:0",
+          "text": "J'dis ",
+          "startMs": 16861,
+          "endMs": 17081
+        },
+        {
+          "id": "line:4:segment:1",
+          "text": "\"fuck\" ",
+          "startMs": 17101,
+          "endMs": 17341
+        },
+        {
+          "id": "line:4:segment:2",
+          "text": "et ",
+          "startMs": 17381,
+          "endMs": 17481
+        },
+        {
+          "id": "line:4:segment:3",
+          "text": "fous ",
+          "startMs": 17501,
+          "endMs": 17621
+        },
+        {
+          "id": "line:4:segment:4",
+          "text": "le ",
+          "startMs": 17661,
+          "endMs": 17741
+        },
+        {
+          "id": "line:4:segment:5",
+          "text": "camp ",
+          "startMs": 17761,
+          "endMs": 17921
+        },
+        {
+          "id": "line:4:segment:6",
+          "text": "car ",
+          "startMs": 17961,
+          "endMs": 18101
+        },
+        {
+          "id": "line:4:segment:7",
+          "text": "le ",
+          "startMs": 18121,
+          "endMs": 18181
+        },
+        {
+          "id": "line:4:segment:8",
+          "text": "Rap",
+          "startMs": 18221,
+          "endMs": 18381
+        }
+      ]
+    },
+    {
+      "id": "line:5",
+      "kind": "lyrics",
+      "text": "C'est froc baissé tout le temps puis reviens réglo",
+      "startMs": 18401,
+      "endMs": 20641,
+      "segments": [
+        {
+          "id": "line:5:segment:0",
+          "text": "C'est ",
+          "startMs": 18401,
+          "endMs": 18541
+        },
+        {
+          "id": "line:5:segment:1",
+          "text": "froc ",
+          "startMs": 18581,
+          "endMs": 18801
+        },
+        {
+          "id": "line:5:segment:2",
+          "text": "baissé ",
+          "startMs": 18821,
+          "endMs": 19101
+        },
+        {
+          "id": "line:5:segment:3",
+          "text": "tout ",
+          "startMs": 19141,
+          "endMs": 19261
+        },
+        {
+          "id": "line:5:segment:4",
+          "text": "le ",
+          "startMs": 19281,
+          "endMs": 19361
+        },
+        {
+          "id": "line:5:segment:5",
+          "text": "temps ",
+          "startMs": 19381,
+          "endMs": 19601
+        },
+        {
+          "id": "line:5:segment:6",
+          "text": "puis ",
+          "startMs": 19641,
+          "endMs": 19741
+        },
+        {
+          "id": "line:5:segment:7",
+          "text": "reviens ",
+          "startMs": 19761,
+          "endMs": 20081
+        },
+        {
+          "id": "line:5:segment:8",
+          "text": "réglo",
+          "startMs": 20121,
+          "endMs": 20641
+        }
+      ]
+    },
+    {
+      "id": "line:6",
+      "kind": "lyrics",
+      "text": "Chacun de mes flows choque les petits, les grands",
+      "startMs": 20661,
+      "endMs": 22361,
+      "segments": [
+        {
+          "id": "line:6:segment:0",
+          "text": "Chacun ",
+          "startMs": 20661,
+          "endMs": 20901
+        },
+        {
+          "id": "line:6:segment:1",
+          "text": "de ",
+          "startMs": 20941,
+          "endMs": 21001
+        },
+        {
+          "id": "line:6:segment:2",
+          "text": "mes ",
+          "startMs": 21041,
+          "endMs": 21161
+        },
+        {
+          "id": "line:6:segment:3",
+          "text": "flows ",
+          "startMs": 21201,
+          "endMs": 21421
+        },
+        {
+          "id": "line:6:segment:4",
+          "text": "choque ",
+          "startMs": 21461,
+          "endMs": 21661
+        },
+        {
+          "id": "line:6:segment:5",
+          "text": "les ",
+          "startMs": 21681,
+          "endMs": 21781
+        },
+        {
+          "id": "line:6:segment:6",
+          "text": "petits, ",
+          "startMs": 21801,
+          "endMs": 21961
+        },
+        {
+          "id": "line:6:segment:7",
+          "text": "les ",
+          "startMs": 21981,
+          "endMs": 22061
+        },
+        {
+          "id": "line:6:segment:8",
+          "text": "grands",
+          "startMs": 22081,
+          "endMs": 22361
+        }
+      ]
+    },
+    {
+      "id": "line:7",
+      "kind": "lyrics",
+      "text": "Alors sort d'la dilettante, voilà l'équipe qui sort du lot",
+      "startMs": 22401,
+      "endMs": 25041,
+      "segments": [
+        {
+          "id": "line:7:segment:0",
+          "text": "Alors ",
+          "startMs": 22401,
+          "endMs": 22721
+        },
+        {
+          "id": "line:7:segment:1",
+          "text": "sort ",
+          "startMs": 22761,
+          "endMs": 22921
+        },
+        {
+          "id": "line:7:segment:2",
+          "text": "d'la ",
+          "startMs": 22941,
+          "endMs": 23101
+        },
+        {
+          "id": "line:7:segment:3",
+          "text": "dilettante, ",
+          "startMs": 23141,
+          "endMs": 23781
+        },
+        {
+          "id": "line:7:segment:4",
+          "text": "voilà ",
+          "startMs": 23801,
+          "endMs": 24001
+        },
+        {
+          "id": "line:7:segment:5",
+          "text": "l'équipe ",
+          "startMs": 24021,
+          "endMs": 24321
+        },
+        {
+          "id": "line:7:segment:6",
+          "text": "qui ",
+          "startMs": 24341,
+          "endMs": 24461
+        },
+        {
+          "id": "line:7:segment:7",
+          "text": "sort ",
+          "startMs": 24501,
+          "endMs": 24701
+        },
+        {
+          "id": "line:7:segment:8",
+          "text": "du ",
+          "startMs": 24721,
+          "endMs": 24801
+        },
+        {
+          "id": "line:7:segment:9",
+          "text": "lot",
+          "startMs": 24821,
+          "endMs": 25041
+        }
+      ]
+    },
+    {
+      "id": "line:8",
+      "kind": "lyrics",
+      "text": "Un cinq majeur bien efficace ambiancé par l'homme DJ lo'",
+      "startMs": 25081,
+      "endMs": 27701,
+      "segments": [
+        {
+          "id": "line:8:segment:0",
+          "text": "Un ",
+          "startMs": 25081,
+          "endMs": 25181
+        },
+        {
+          "id": "line:8:segment:1",
+          "text": "cinq ",
+          "startMs": 25201,
+          "endMs": 25421
+        },
+        {
+          "id": "line:8:segment:2",
+          "text": "majeur ",
+          "startMs": 25441,
+          "endMs": 25721
+        },
+        {
+          "id": "line:8:segment:3",
+          "text": "bien ",
+          "startMs": 25741,
+          "endMs": 25861
+        },
+        {
+          "id": "line:8:segment:4",
+          "text": "efficace ",
+          "startMs": 25921,
+          "endMs": 26361
+        },
+        {
+          "id": "line:8:segment:5",
+          "text": "ambiancé ",
+          "startMs": 26401,
+          "endMs": 26841
+        },
+        {
+          "id": "line:8:segment:6",
+          "text": "par ",
+          "startMs": 26861,
+          "endMs": 26941
+        },
+        {
+          "id": "line:8:segment:7",
+          "text": "l'homme ",
+          "startMs": 26961,
+          "endMs": 27161
+        },
+        {
+          "id": "line:8:segment:8",
+          "text": "DJ ",
+          "startMs": 27301,
+          "endMs": 27501
+        },
+        {
+          "id": "line:8:segment:9",
+          "text": "lo'",
+          "startMs": 27521,
+          "endMs": 27701
+        }
+      ]
+    },
+    {
+      "id": "line:9",
+      "kind": "lyrics",
+      "text": "Ouais, les types sont carrés, frère, avec des rimes qui t'percutent",
+      "startMs": 27741,
+      "endMs": 30401,
+      "segments": [
+        {
+          "id": "line:9:segment:0",
+          "text": "Ouais, ",
+          "startMs": 27741,
+          "endMs": 27901
+        },
+        {
+          "id": "line:9:segment:1",
+          "text": "les ",
+          "startMs": 27921,
+          "endMs": 28201
+        },
+        {
+          "id": "line:9:segment:2",
+          "text": "types ",
+          "startMs": 28221,
+          "endMs": 28401
+        },
+        {
+          "id": "line:9:segment:3",
+          "text": "sont ",
+          "startMs": 28421,
+          "endMs": 28541
+        },
+        {
+          "id": "line:9:segment:4",
+          "text": "carrés, ",
+          "startMs": 28561,
+          "endMs": 28861
+        },
+        {
+          "id": "line:9:segment:5",
+          "text": "frère, ",
+          "startMs": 28881,
+          "endMs": 29081
+        },
+        {
+          "id": "line:9:segment:6",
+          "text": "avec ",
+          "startMs": 29121,
+          "endMs": 29401
+        },
+        {
+          "id": "line:9:segment:7",
+          "text": "des ",
+          "startMs": 29421,
+          "endMs": 29501
+        },
+        {
+          "id": "line:9:segment:8",
+          "text": "rimes ",
+          "startMs": 29521,
+          "endMs": 29681
+        },
+        {
+          "id": "line:9:segment:9",
+          "text": "qui ",
+          "startMs": 29721,
+          "endMs": 29821
+        },
+        {
+          "id": "line:9:segment:10",
+          "text": "t'percutent",
+          "startMs": 29841,
+          "endMs": 30401
+        }
+      ]
+    },
+    {
+      "id": "line:10",
+      "kind": "lyrics",
+      "text": "Une horde de zoulous derrière et deux-trois gadjis qui les scrutent",
+      "startMs": 30441,
+      "endMs": 32842,
+      "segments": [
+        {
+          "id": "line:10:segment:0",
+          "text": "Une ",
+          "startMs": 30441,
+          "endMs": 30621
+        },
+        {
+          "id": "line:10:segment:1",
+          "text": "horde ",
+          "startMs": 30661,
+          "endMs": 30881
+        },
+        {
+          "id": "line:10:segment:2",
+          "text": "de ",
+          "startMs": 30921,
+          "endMs": 31001
+        },
+        {
+          "id": "line:10:segment:3",
+          "text": "zoulous ",
+          "startMs": 31041,
+          "endMs": 31321
+        },
+        {
+          "id": "line:10:segment:4",
+          "text": "derrière ",
+          "startMs": 31341,
+          "endMs": 31682
+        },
+        {
+          "id": "line:10:segment:5",
+          "text": "et ",
+          "startMs": 31722,
+          "endMs": 31822
+        },
+        {
+          "id": "line:10:segment:6",
+          "text": "deux-trois ",
+          "startMs": 31862,
+          "endMs": 32142
+        },
+        {
+          "id": "line:10:segment:7",
+          "text": "gadjis ",
+          "startMs": 32162,
+          "endMs": 32362
+        },
+        {
+          "id": "line:10:segment:8",
+          "text": "qui ",
+          "startMs": 32382,
+          "endMs": 32462
+        },
+        {
+          "id": "line:10:segment:9",
+          "text": "les ",
+          "startMs": 32482,
+          "endMs": 32542
+        },
+        {
+          "id": "line:10:segment:10",
+          "text": "scrutent",
+          "startMs": 32602,
+          "endMs": 32842
+        }
+      ]
+    },
+    {
+      "id": "line:11",
+      "kind": "lyrics",
+      "text": "Mes parents s'doutent de rien",
+      "startMs": 32882,
+      "endMs": 34022,
+      "segments": [
+        {
+          "id": "line:11:segment:0",
+          "text": "Mes ",
+          "startMs": 32882,
+          "endMs": 32962
+        },
+        {
+          "id": "line:11:segment:1",
+          "text": "parents ",
+          "startMs": 32982,
+          "endMs": 33202
+        },
+        {
+          "id": "line:11:segment:2",
+          "text": "s'doutent ",
+          "startMs": 33222,
+          "endMs": 33462
+        },
+        {
+          "id": "line:11:segment:3",
+          "text": "de ",
+          "startMs": 33502,
+          "endMs": 33602
+        },
+        {
+          "id": "line:11:segment:4",
+          "text": "rien",
+          "startMs": 33622,
+          "endMs": 34022
+        }
+      ]
+    },
+    {
+      "id": "line:12",
+      "kind": "lyrics",
+      "text": "Pensent que la school me tient par les couilles",
+      "startMs": 34042,
+      "endMs": 35682,
+      "segments": [
+        {
+          "id": "line:12:segment:0",
+          "text": "Pensent ",
+          "startMs": 34042,
+          "endMs": 34222
+        },
+        {
+          "id": "line:12:segment:1",
+          "text": "que ",
+          "startMs": 34242,
+          "endMs": 34362
+        },
+        {
+          "id": "line:12:segment:2",
+          "text": "la ",
+          "startMs": 34402,
+          "endMs": 34462
+        },
+        {
+          "id": "line:12:segment:3",
+          "text": "school ",
+          "startMs": 34482,
+          "endMs": 34842
+        },
+        {
+          "id": "line:12:segment:4",
+          "text": "me ",
+          "startMs": 34882,
+          "endMs": 34962
+        },
+        {
+          "id": "line:12:segment:5",
+          "text": "tient ",
+          "startMs": 34982,
+          "endMs": 35162
+        },
+        {
+          "id": "line:12:segment:6",
+          "text": "par ",
+          "startMs": 35202,
+          "endMs": 35342
+        },
+        {
+          "id": "line:12:segment:7",
+          "text": "les ",
+          "startMs": 35362,
+          "endMs": 35462
+        },
+        {
+          "id": "line:12:segment:8",
+          "text": "couilles",
+          "startMs": 35482,
+          "endMs": 35682
+        }
+      ]
+    },
+    {
+      "id": "line:13",
+      "kind": "lyrics",
+      "text": "Donc j'taffe la née-jour et le soir devient l'idole des foules",
+      "startMs": 35702,
+      "endMs": 38562,
+      "segments": [
+        {
+          "id": "line:13:segment:0",
+          "text": "Donc ",
+          "startMs": 35702,
+          "endMs": 35862
+        },
+        {
+          "id": "line:13:segment:1",
+          "text": "j'taffe ",
+          "startMs": 35882,
+          "endMs": 36202
+        },
+        {
+          "id": "line:13:segment:2",
+          "text": "la ",
+          "startMs": 36242,
+          "endMs": 36382
+        },
+        {
+          "id": "line:13:segment:3",
+          "text": "née-jour ",
+          "startMs": 36402,
+          "endMs": 36862
+        },
+        {
+          "id": "line:13:segment:4",
+          "text": "et ",
+          "startMs": 36922,
+          "endMs": 37022
+        },
+        {
+          "id": "line:13:segment:5",
+          "text": "le ",
+          "startMs": 37042,
+          "endMs": 37122
+        },
+        {
+          "id": "line:13:segment:6",
+          "text": "soir ",
+          "startMs": 37162,
+          "endMs": 37422
+        },
+        {
+          "id": "line:13:segment:7",
+          "text": "devient ",
+          "startMs": 37442,
+          "endMs": 37722
+        },
+        {
+          "id": "line:13:segment:8",
+          "text": "l'idole ",
+          "startMs": 37742,
+          "endMs": 38082
+        },
+        {
+          "id": "line:13:segment:9",
+          "text": "des ",
+          "startMs": 38102,
+          "endMs": 38202
+        },
+        {
+          "id": "line:13:segment:10",
+          "text": "foules",
+          "startMs": 38262,
+          "endMs": 38562
+        }
+      ]
+    },
+    {
+      "id": "line:14",
+      "kind": "lyrics",
+      "text": "Ouais, et la capitale bouge la tête, l'Hip-Hop",
+      "startMs": 38882,
+      "endMs": 41502,
+      "segments": [
+        {
+          "id": "line:14:segment:0",
+          "text": "Ouais, ",
+          "startMs": 38882,
+          "endMs": 39502
+        },
+        {
+          "id": "line:14:segment:1",
+          "text": "et ",
+          "startMs": 39542,
+          "endMs": 39662
+        },
+        {
+          "id": "line:14:segment:2",
+          "text": "la ",
+          "startMs": 39682,
+          "endMs": 39742
+        },
+        {
+          "id": "line:14:segment:3",
+          "text": "capitale ",
+          "startMs": 39802,
+          "endMs": 40242
+        },
+        {
+          "id": "line:14:segment:4",
+          "text": "bouge ",
+          "startMs": 40262,
+          "endMs": 40502
+        },
+        {
+          "id": "line:14:segment:5",
+          "text": "la ",
+          "startMs": 40522,
+          "endMs": 40622
+        },
+        {
+          "id": "line:14:segment:6",
+          "text": "tête, ",
+          "startMs": 40662,
+          "endMs": 40882
+        },
+        {
+          "id": "line:14:segment:7",
+          "text": "l'Hip-Hop",
+          "startMs": 40902,
+          "endMs": 41502
+        }
+      ]
+    },
+    {
+      "id": "line:15",
+      "kind": "lyrics",
+      "text": "De nouveau prend de l'ampleur",
+      "startMs": 41522,
+      "endMs": 42382,
+      "segments": [
+        {
+          "id": "line:15:segment:0",
+          "text": "De ",
+          "startMs": 41522,
+          "endMs": 41602
+        },
+        {
+          "id": "line:15:segment:1",
+          "text": "nouveau ",
+          "startMs": 41642,
+          "endMs": 41842
+        },
+        {
+          "id": "line:15:segment:2",
+          "text": "prend ",
+          "startMs": 41862,
+          "endMs": 42002
+        },
+        {
+          "id": "line:15:segment:3",
+          "text": "de ",
+          "startMs": 42022,
+          "endMs": 42082
+        },
+        {
+          "id": "line:15:segment:4",
+          "text": "l'ampleur",
+          "startMs": 42102,
+          "endMs": 42382
+        }
+      ]
+    },
+    {
+      "id": "line:16",
+      "kind": "lyrics",
+      "text": "J'lui chante mon envie de conquête",
+      "startMs": 42402,
+      "endMs": 44262,
+      "segments": [
+        {
+          "id": "line:16:segment:0",
+          "text": "J'lui ",
+          "startMs": 42402,
+          "endMs": 42542
+        },
+        {
+          "id": "line:16:segment:1",
+          "text": "chante ",
+          "startMs": 42582,
+          "endMs": 42782
+        },
+        {
+          "id": "line:16:segment:2",
+          "text": "mon ",
+          "startMs": 42802,
+          "endMs": 42882
+        },
+        {
+          "id": "line:16:segment:3",
+          "text": "envie ",
+          "startMs": 42922,
+          "endMs": 43242
+        },
+        {
+          "id": "line:16:segment:4",
+          "text": "de ",
+          "startMs": 43262,
+          "endMs": 43362
+        },
+        {
+          "id": "line:16:segment:5",
+          "text": "conquête",
+          "startMs": 43382,
+          "endMs": 44262
+        }
+      ]
+    },
+    {
+      "id": "line:17",
+      "kind": "lyrics",
+      "text": "La musique, ma source, et les loux-ja s'taisent",
+      "startMs": 44302,
+      "endMs": 46262,
+      "segments": [
+        {
+          "id": "line:17:segment:0",
+          "text": "La ",
+          "startMs": 44302,
+          "endMs": 44382
+        },
+        {
+          "id": "line:17:segment:1",
+          "text": "musique, ",
+          "startMs": 44422,
+          "endMs": 44742
+        },
+        {
+          "id": "line:17:segment:2",
+          "text": "ma ",
+          "startMs": 44762,
+          "endMs": 44942
+        },
+        {
+          "id": "line:17:segment:3",
+          "text": "source, ",
+          "startMs": 45022,
+          "endMs": 45242
+        },
+        {
+          "id": "line:17:segment:4",
+          "text": "et ",
+          "startMs": 45302,
+          "endMs": 45402
+        },
+        {
+          "id": "line:17:segment:5",
+          "text": "les ",
+          "startMs": 45422,
+          "endMs": 45522
+        },
+        {
+          "id": "line:17:segment:6",
+          "text": "loux-ja ",
+          "startMs": 45562,
+          "endMs": 45822
+        },
+        {
+          "id": "line:17:segment:7",
+          "text": "s'taisent",
+          "startMs": 45842,
+          "endMs": 46262
+        }
+      ]
+    },
+    {
+      "id": "line:18",
+      "kind": "lyrics",
+      "text": "T'hallucines car ma troupe à le groove dans les veines",
+      "startMs": 46282,
+      "endMs": 48942,
+      "segments": [
+        {
+          "id": "line:18:segment:0",
+          "text": "T'hallucines ",
+          "startMs": 46282,
+          "endMs": 46882
+        },
+        {
+          "id": "line:18:segment:1",
+          "text": "car ",
+          "startMs": 46902,
+          "endMs": 47102
+        },
+        {
+          "id": "line:18:segment:2",
+          "text": "ma ",
+          "startMs": 47142,
+          "endMs": 47282
+        },
+        {
+          "id": "line:18:segment:3",
+          "text": "troupe ",
+          "startMs": 47322,
+          "endMs": 47562
+        },
+        {
+          "id": "line:18:segment:4",
+          "text": "à ",
+          "startMs": 47662,
+          "endMs": 47762
+        },
+        {
+          "id": "line:18:segment:5",
+          "text": "le ",
+          "startMs": 47782,
+          "endMs": 47922
+        },
+        {
+          "id": "line:18:segment:6",
+          "text": "groove ",
+          "startMs": 47962,
+          "endMs": 48282
+        },
+        {
+          "id": "line:18:segment:7",
+          "text": "dans ",
+          "startMs": 48302,
+          "endMs": 48442
+        },
+        {
+          "id": "line:18:segment:8",
+          "text": "les ",
+          "startMs": 48462,
+          "endMs": 48582
+        },
+        {
+          "id": "line:18:segment:9",
+          "text": "veines",
+          "startMs": 48622,
+          "endMs": 48942
+        }
+      ]
+    },
+    {
+      "id": "line:19",
+      "kind": "lyrics",
+      "text": "On prend l'Rap à la source, rime, sample et flow",
+      "startMs": 49002,
+      "endMs": 51502,
+      "segments": [
+        {
+          "id": "line:19:segment:0",
+          "text": "On ",
+          "startMs": 49002,
+          "endMs": 49102
+        },
+        {
+          "id": "line:19:segment:1",
+          "text": "prend ",
+          "startMs": 49122,
+          "endMs": 49382
+        },
+        {
+          "id": "line:19:segment:2",
+          "text": "l'Rap ",
+          "startMs": 49402,
+          "endMs": 49602
+        },
+        {
+          "id": "line:19:segment:3",
+          "text": "à ",
+          "startMs": 49782,
+          "endMs": 49802
+        },
+        {
+          "id": "line:19:segment:4",
+          "text": "la ",
+          "startMs": 49842,
+          "endMs": 49962
+        },
+        {
+          "id": "line:19:segment:5",
+          "text": "source, ",
+          "startMs": 50002,
+          "endMs": 50602
+        },
+        {
+          "id": "line:19:segment:6",
+          "text": "rime, ",
+          "startMs": 50662,
+          "endMs": 50882
+        },
+        {
+          "id": "line:19:segment:7",
+          "text": "sample ",
+          "startMs": 50922,
+          "endMs": 51242
+        },
+        {
+          "id": "line:19:segment:8",
+          "text": "et ",
+          "startMs": 51282,
+          "endMs": 51342
+        },
+        {
+          "id": "line:19:segment:9",
+          "text": "flow",
+          "startMs": 51382,
+          "endMs": 51502
+        }
+      ]
+    },
+    {
+      "id": "line:20",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, l'équipe qui t'met des gifles au micro",
+      "startMs": 51542,
+      "endMs": 54183,
+      "segments": [
+        {
+          "id": "line:20:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 51542,
+          "endMs": 52442
+        },
+        {
+          "id": "line:20:segment:1",
+          "text": "l'équipe ",
+          "startMs": 52462,
+          "endMs": 52743
+        },
+        {
+          "id": "line:20:segment:2",
+          "text": "qui ",
+          "startMs": 52783,
+          "endMs": 52863
+        },
+        {
+          "id": "line:20:segment:3",
+          "text": "t'met ",
+          "startMs": 52883,
+          "endMs": 53143
+        },
+        {
+          "id": "line:20:segment:4",
+          "text": "des ",
+          "startMs": 53163,
+          "endMs": 53263
+        },
+        {
+          "id": "line:20:segment:5",
+          "text": "gifles ",
+          "startMs": 53303,
+          "endMs": 53543
+        },
+        {
+          "id": "line:20:segment:6",
+          "text": "au ",
+          "startMs": 53563,
+          "endMs": 53643
+        },
+        {
+          "id": "line:20:segment:7",
+          "text": "micro",
+          "startMs": 53663,
+          "endMs": 54183
+        }
+      ]
+    },
+    {
+      "id": "line:21",
+      "kind": "lyrics",
+      "text": "En deux-zéro-double-un, on rentre dans l'jeu",
+      "startMs": 54223,
+      "endMs": 56203,
+      "segments": [
+        {
+          "id": "line:21:segment:0",
+          "text": "En ",
+          "startMs": 54223,
+          "endMs": 54403
+        },
+        {
+          "id": "line:21:segment:1",
+          "text": "deux-zéro-double-un, ",
+          "startMs": 54443,
+          "endMs": 55443
+        },
+        {
+          "id": "line:21:segment:2",
+          "text": "on ",
+          "startMs": 55503,
+          "endMs": 55563
+        },
+        {
+          "id": "line:21:segment:3",
+          "text": "rentre ",
+          "startMs": 55603,
+          "endMs": 55783
+        },
+        {
+          "id": "line:21:segment:4",
+          "text": "dans ",
+          "startMs": 55803,
+          "endMs": 55923
+        },
+        {
+          "id": "line:21:segment:5",
+          "text": "l'jeu",
+          "startMs": 55943,
+          "endMs": 56203
+        }
+      ]
+    },
+    {
+      "id": "line:22",
+      "kind": "lyrics",
+      "text": "Et les cartes changent de mains donc lève les tiennes",
+      "startMs": 56223,
+      "endMs": 58183,
+      "segments": [
+        {
+          "id": "line:22:segment:0",
+          "text": "Et ",
+          "startMs": 56223,
+          "endMs": 56323
+        },
+        {
+          "id": "line:22:segment:1",
+          "text": "les ",
+          "startMs": 56343,
+          "endMs": 56443
+        },
+        {
+          "id": "line:22:segment:2",
+          "text": "cartes ",
+          "startMs": 56463,
+          "endMs": 56663
+        },
+        {
+          "id": "line:22:segment:3",
+          "text": "changent ",
+          "startMs": 56683,
+          "endMs": 56903
+        },
+        {
+          "id": "line:22:segment:4",
+          "text": "de ",
+          "startMs": 56923,
+          "endMs": 56983
+        },
+        {
+          "id": "line:22:segment:5",
+          "text": "mains ",
+          "startMs": 57003,
+          "endMs": 57143
+        },
+        {
+          "id": "line:22:segment:6",
+          "text": "donc ",
+          "startMs": 57163,
+          "endMs": 57343
+        },
+        {
+          "id": "line:22:segment:7",
+          "text": "lève ",
+          "startMs": 57363,
+          "endMs": 57523
+        },
+        {
+          "id": "line:22:segment:8",
+          "text": "les ",
+          "startMs": 57563,
+          "endMs": 57643
+        },
+        {
+          "id": "line:22:segment:9",
+          "text": "tiennes",
+          "startMs": 57703,
+          "endMs": 58183
+        }
+      ]
+    },
+    {
+      "id": "line:23",
+      "kind": "lyrics",
+      "text": "On kicke sec aujourd'hui comme demain",
+      "startMs": 58243,
+      "endMs": 59783,
+      "segments": [
+        {
+          "id": "line:23:segment:0",
+          "text": "On ",
+          "startMs": 58243,
+          "endMs": 58383
+        },
+        {
+          "id": "line:23:segment:1",
+          "text": "kicke ",
+          "startMs": 58403,
+          "endMs": 58663
+        },
+        {
+          "id": "line:23:segment:2",
+          "text": "sec ",
+          "startMs": 58683,
+          "endMs": 58923
+        },
+        {
+          "id": "line:23:segment:3",
+          "text": "aujourd'hui ",
+          "startMs": 58963,
+          "endMs": 59323
+        },
+        {
+          "id": "line:23:segment:4",
+          "text": "comme ",
+          "startMs": 59343,
+          "endMs": 59563
+        },
+        {
+          "id": "line:23:segment:5",
+          "text": "demain",
+          "startMs": 59583,
+          "endMs": 59783
+        }
+      ]
+    },
+    {
+      "id": "line:24",
+      "kind": "lyrics",
+      "text": "On prend l'Rap à la source, rime, sample et flow",
+      "startMs": 59803,
+      "endMs": 62223,
+      "segments": [
+        {
+          "id": "line:24:segment:0",
+          "text": "On ",
+          "startMs": 59803,
+          "endMs": 59843
+        },
+        {
+          "id": "line:24:segment:1",
+          "text": "prend ",
+          "startMs": 59863,
+          "endMs": 60103
+        },
+        {
+          "id": "line:24:segment:2",
+          "text": "l'Rap ",
+          "startMs": 60123,
+          "endMs": 60323
+        },
+        {
+          "id": "line:24:segment:3",
+          "text": "à ",
+          "startMs": 60503,
+          "endMs": 60523
+        },
+        {
+          "id": "line:24:segment:4",
+          "text": "la ",
+          "startMs": 60563,
+          "endMs": 60683
+        },
+        {
+          "id": "line:24:segment:5",
+          "text": "source, ",
+          "startMs": 60743,
+          "endMs": 61323
+        },
+        {
+          "id": "line:24:segment:6",
+          "text": "rime, ",
+          "startMs": 61383,
+          "endMs": 61603
+        },
+        {
+          "id": "line:24:segment:7",
+          "text": "sample ",
+          "startMs": 61623,
+          "endMs": 61963
+        },
+        {
+          "id": "line:24:segment:8",
+          "text": "et ",
+          "startMs": 62003,
+          "endMs": 62043
+        },
+        {
+          "id": "line:24:segment:9",
+          "text": "flow",
+          "startMs": 62083,
+          "endMs": 62223
+        }
+      ]
+    },
+    {
+      "id": "line:25",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, l'équipe qui t'met des gifles au micro",
+      "startMs": 62263,
+      "endMs": 64903,
+      "segments": [
+        {
+          "id": "line:25:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 62263,
+          "endMs": 63163
+        },
+        {
+          "id": "line:25:segment:1",
+          "text": "l'équipe ",
+          "startMs": 63183,
+          "endMs": 63463
+        },
+        {
+          "id": "line:25:segment:2",
+          "text": "qui ",
+          "startMs": 63503,
+          "endMs": 63583
+        },
+        {
+          "id": "line:25:segment:3",
+          "text": "t'met ",
+          "startMs": 63603,
+          "endMs": 63863
+        },
+        {
+          "id": "line:25:segment:4",
+          "text": "des ",
+          "startMs": 63883,
+          "endMs": 63983
+        },
+        {
+          "id": "line:25:segment:5",
+          "text": "gifles ",
+          "startMs": 64023,
+          "endMs": 64263
+        },
+        {
+          "id": "line:25:segment:6",
+          "text": "au ",
+          "startMs": 64283,
+          "endMs": 64343
+        },
+        {
+          "id": "line:25:segment:7",
+          "text": "micro",
+          "startMs": 64383,
+          "endMs": 64903
+        }
+      ]
+    },
+    {
+      "id": "line:26",
+      "kind": "lyrics",
+      "text": "En deux-zéro-double-un, on rentre dans l'jeu",
+      "startMs": 64943,
+      "endMs": 66923,
+      "segments": [
+        {
+          "id": "line:26:segment:0",
+          "text": "En ",
+          "startMs": 64943,
+          "endMs": 65143
+        },
+        {
+          "id": "line:26:segment:1",
+          "text": "deux-zéro-double-un, ",
+          "startMs": 65163,
+          "endMs": 66183
+        },
+        {
+          "id": "line:26:segment:2",
+          "text": "on ",
+          "startMs": 66243,
+          "endMs": 66303
+        },
+        {
+          "id": "line:26:segment:3",
+          "text": "rentre ",
+          "startMs": 66323,
+          "endMs": 66503
+        },
+        {
+          "id": "line:26:segment:4",
+          "text": "dans ",
+          "startMs": 66543,
+          "endMs": 66643
+        },
+        {
+          "id": "line:26:segment:5",
+          "text": "l'jeu",
+          "startMs": 66663,
+          "endMs": 66923
+        }
+      ]
+    },
+    {
+      "id": "line:27",
+      "kind": "lyrics",
+      "text": "Et les cartes changent de mains donc lève les tiennes",
+      "startMs": 66963,
+      "endMs": 68903,
+      "segments": [
+        {
+          "id": "line:27:segment:0",
+          "text": "Et ",
+          "startMs": 66963,
+          "endMs": 67043
+        },
+        {
+          "id": "line:27:segment:1",
+          "text": "les ",
+          "startMs": 67063,
+          "endMs": 67163
+        },
+        {
+          "id": "line:27:segment:2",
+          "text": "cartes ",
+          "startMs": 67183,
+          "endMs": 67383
+        },
+        {
+          "id": "line:27:segment:3",
+          "text": "changent ",
+          "startMs": 67403,
+          "endMs": 67623
+        },
+        {
+          "id": "line:27:segment:4",
+          "text": "de ",
+          "startMs": 67643,
+          "endMs": 67703
+        },
+        {
+          "id": "line:27:segment:5",
+          "text": "mains ",
+          "startMs": 67743,
+          "endMs": 67863
+        },
+        {
+          "id": "line:27:segment:6",
+          "text": "donc ",
+          "startMs": 67903,
+          "endMs": 68063
+        },
+        {
+          "id": "line:27:segment:7",
+          "text": "lève ",
+          "startMs": 68083,
+          "endMs": 68263
+        },
+        {
+          "id": "line:27:segment:8",
+          "text": "les ",
+          "startMs": 68283,
+          "endMs": 68363
+        },
+        {
+          "id": "line:27:segment:9",
+          "text": "tiennes",
+          "startMs": 68443,
+          "endMs": 68903
+        }
+      ]
+    },
+    {
+      "id": "line:28",
+      "kind": "lyrics",
+      "text": "On kicke sec aujourd'hui comme demain",
+      "startMs": 68963,
+      "endMs": 70863,
+      "segments": [
+        {
+          "id": "line:28:segment:0",
+          "text": "On ",
+          "startMs": 68963,
+          "endMs": 69103
+        },
+        {
+          "id": "line:28:segment:1",
+          "text": "kicke ",
+          "startMs": 69123,
+          "endMs": 69383
+        },
+        {
+          "id": "line:28:segment:2",
+          "text": "sec ",
+          "startMs": 69423,
+          "endMs": 69643
+        },
+        {
+          "id": "line:28:segment:3",
+          "text": "aujourd'hui ",
+          "startMs": 69683,
+          "endMs": 70043
+        },
+        {
+          "id": "line:28:segment:4",
+          "text": "comme ",
+          "startMs": 70083,
+          "endMs": 70303
+        },
+        {
+          "id": "line:28:segment:5",
+          "text": "demain",
+          "startMs": 70323,
+          "endMs": 70863
+        }
+      ]
+    },
+    {
+      "id": "line:29",
+      "kind": "lyrics",
+      "text": "J'suis sur ma partition, y'a pas de limites",
+      "startMs": 70883,
+      "endMs": 73323,
+      "segments": [
+        {
+          "id": "line:29:segment:0",
+          "text": "J'suis ",
+          "startMs": 70883,
+          "endMs": 71043
+        },
+        {
+          "id": "line:29:segment:1",
+          "text": "sur ",
+          "startMs": 71083,
+          "endMs": 71263
+        },
+        {
+          "id": "line:29:segment:2",
+          "text": "ma ",
+          "startMs": 71303,
+          "endMs": 71463
+        },
+        {
+          "id": "line:29:segment:3",
+          "text": "partition, ",
+          "startMs": 71483,
+          "endMs": 72363
+        },
+        {
+          "id": "line:29:segment:4",
+          "text": "y'a ",
+          "startMs": 72403,
+          "endMs": 72583
+        },
+        {
+          "id": "line:29:segment:5",
+          "text": "pas ",
+          "startMs": 72623,
+          "endMs": 72723
+        },
+        {
+          "id": "line:29:segment:6",
+          "text": "de ",
+          "startMs": 72763,
+          "endMs": 72863
+        },
+        {
+          "id": "line:29:segment:7",
+          "text": "limites",
+          "startMs": 72903,
+          "endMs": 73323
+        }
+      ]
+    },
+    {
+      "id": "line:30",
+      "kind": "lyrics",
+      "text": "Dans la rythmique contrairement à la religion",
+      "startMs": 73343,
+      "endMs": 75924,
+      "segments": [
+        {
+          "id": "line:30:segment:0",
+          "text": "Dans ",
+          "startMs": 73343,
+          "endMs": 73563
+        },
+        {
+          "id": "line:30:segment:1",
+          "text": "la ",
+          "startMs": 73583,
+          "endMs": 73803
+        },
+        {
+          "id": "line:30:segment:2",
+          "text": "rythmique ",
+          "startMs": 73844,
+          "endMs": 74504
+        },
+        {
+          "id": "line:30:segment:3",
+          "text": "contrairement ",
+          "startMs": 74524,
+          "endMs": 75004
+        },
+        {
+          "id": "line:30:segment:4",
+          "text": "à ",
+          "startMs": 75064,
+          "endMs": 75184
+        },
+        {
+          "id": "line:30:segment:5",
+          "text": "la ",
+          "startMs": 75224,
+          "endMs": 75324
+        },
+        {
+          "id": "line:30:segment:6",
+          "text": "religion",
+          "startMs": 75364,
+          "endMs": 75924
+        }
+      ]
+    },
+    {
+      "id": "line:31",
+      "kind": "lyrics",
+      "text": "Mais ma3lich, le Rap est la force, cette voie me rend fort",
+      "startMs": 75944,
+      "endMs": 78584,
+      "segments": [
+        {
+          "id": "line:31:segment:0",
+          "text": "Mais ",
+          "startMs": 75944,
+          "endMs": 76104
+        },
+        {
+          "id": "line:31:segment:1",
+          "text": "ma3lich, ",
+          "startMs": 76144,
+          "endMs": 76664
+        },
+        {
+          "id": "line:31:segment:2",
+          "text": "le ",
+          "startMs": 76684,
+          "endMs": 76764
+        },
+        {
+          "id": "line:31:segment:3",
+          "text": "Rap ",
+          "startMs": 76784,
+          "endMs": 76924
+        },
+        {
+          "id": "line:31:segment:4",
+          "text": "est ",
+          "startMs": 76984,
+          "endMs": 77124
+        },
+        {
+          "id": "line:31:segment:5",
+          "text": "la ",
+          "startMs": 77164,
+          "endMs": 77264
+        },
+        {
+          "id": "line:31:segment:6",
+          "text": "force, ",
+          "startMs": 77304,
+          "endMs": 77584
+        },
+        {
+          "id": "line:31:segment:7",
+          "text": "cette ",
+          "startMs": 77604,
+          "endMs": 77744
+        },
+        {
+          "id": "line:31:segment:8",
+          "text": "voie ",
+          "startMs": 77764,
+          "endMs": 77984
+        },
+        {
+          "id": "line:31:segment:9",
+          "text": "me ",
+          "startMs": 78004,
+          "endMs": 78104
+        },
+        {
+          "id": "line:31:segment:10",
+          "text": "rend ",
+          "startMs": 78124,
+          "endMs": 78264
+        },
+        {
+          "id": "line:31:segment:11",
+          "text": "fort",
+          "startMs": 78304,
+          "endMs": 78584
+        }
+      ]
+    },
+    {
+      "id": "line:32",
+      "kind": "lyrics",
+      "text": "Que vois-je? Le Diable nous fait danser, dans la boîte de Pandore",
+      "startMs": 78604,
+      "endMs": 81644,
+      "segments": [
+        {
+          "id": "line:32:segment:0",
+          "text": "Que ",
+          "startMs": 78604,
+          "endMs": 78704
+        },
+        {
+          "id": "line:32:segment:1",
+          "text": "vois-je? ",
+          "startMs": 78724,
+          "endMs": 78944
+        },
+        {
+          "id": "line:32:segment:2",
+          "text": "Le ",
+          "startMs": 78964,
+          "endMs": 79044
+        },
+        {
+          "id": "line:32:segment:3",
+          "text": "Diable ",
+          "startMs": 79064,
+          "endMs": 79244
+        },
+        {
+          "id": "line:32:segment:4",
+          "text": "nous ",
+          "startMs": 79264,
+          "endMs": 79364
+        },
+        {
+          "id": "line:32:segment:5",
+          "text": "fait ",
+          "startMs": 79404,
+          "endMs": 79564
+        },
+        {
+          "id": "line:32:segment:6",
+          "text": "danser, ",
+          "startMs": 79604,
+          "endMs": 80104
+        },
+        {
+          "id": "line:32:segment:7",
+          "text": "dans ",
+          "startMs": 80124,
+          "endMs": 80264
+        },
+        {
+          "id": "line:32:segment:8",
+          "text": "la ",
+          "startMs": 80304,
+          "endMs": 80384
+        },
+        {
+          "id": "line:32:segment:9",
+          "text": "boîte ",
+          "startMs": 80404,
+          "endMs": 80644
+        },
+        {
+          "id": "line:32:segment:10",
+          "text": "de ",
+          "startMs": 80684,
+          "endMs": 80784
+        },
+        {
+          "id": "line:32:segment:11",
+          "text": "Pandore",
+          "startMs": 80824,
+          "endMs": 81644
+        }
+      ]
+    },
+    {
+      "id": "line:33",
+      "kind": "lyrics",
+      "text": "Ici pour vivre du son, on te fiste le fion",
+      "startMs": 81704,
+      "endMs": 83904,
+      "segments": [
+        {
+          "id": "line:33:segment:0",
+          "text": "Ici ",
+          "startMs": 81704,
+          "endMs": 81904
+        },
+        {
+          "id": "line:33:segment:1",
+          "text": "pour ",
+          "startMs": 81944,
+          "endMs": 82104
+        },
+        {
+          "id": "line:33:segment:2",
+          "text": "vivre ",
+          "startMs": 82144,
+          "endMs": 82424
+        },
+        {
+          "id": "line:33:segment:3",
+          "text": "du ",
+          "startMs": 82464,
+          "endMs": 82564
+        },
+        {
+          "id": "line:33:segment:4",
+          "text": "son, ",
+          "startMs": 82604,
+          "endMs": 82944
+        },
+        {
+          "id": "line:33:segment:5",
+          "text": "on ",
+          "startMs": 82964,
+          "endMs": 83024
+        },
+        {
+          "id": "line:33:segment:6",
+          "text": "te ",
+          "startMs": 83044,
+          "endMs": 83104
+        },
+        {
+          "id": "line:33:segment:7",
+          "text": "fiste ",
+          "startMs": 83124,
+          "endMs": 83444
+        },
+        {
+          "id": "line:33:segment:8",
+          "text": "le ",
+          "startMs": 83484,
+          "endMs": 83584
+        },
+        {
+          "id": "line:33:segment:9",
+          "text": "fion",
+          "startMs": 83604,
+          "endMs": 83904
+        }
+      ]
+    },
+    {
+      "id": "line:34",
+      "kind": "lyrics",
+      "text": "Donc j'glisse, je chill car je rime pour dealer du bon",
+      "startMs": 83944,
+      "endMs": 86684,
+      "segments": [
+        {
+          "id": "line:34:segment:0",
+          "text": "Donc ",
+          "startMs": 83944,
+          "endMs": 84064
+        },
+        {
+          "id": "line:34:segment:1",
+          "text": "j'glisse, ",
+          "startMs": 84084,
+          "endMs": 84444
+        },
+        {
+          "id": "line:34:segment:2",
+          "text": "je ",
+          "startMs": 84484,
+          "endMs": 84664
+        },
+        {
+          "id": "line:34:segment:3",
+          "text": "chill ",
+          "startMs": 84684,
+          "endMs": 85124
+        },
+        {
+          "id": "line:34:segment:4",
+          "text": "car ",
+          "startMs": 85144,
+          "endMs": 85324
+        },
+        {
+          "id": "line:34:segment:5",
+          "text": "je ",
+          "startMs": 85344,
+          "endMs": 85444
+        },
+        {
+          "id": "line:34:segment:6",
+          "text": "rime ",
+          "startMs": 85464,
+          "endMs": 85624
+        },
+        {
+          "id": "line:34:segment:7",
+          "text": "pour ",
+          "startMs": 85664,
+          "endMs": 85804
+        },
+        {
+          "id": "line:34:segment:8",
+          "text": "dealer ",
+          "startMs": 85844,
+          "endMs": 86124
+        },
+        {
+          "id": "line:34:segment:9",
+          "text": "du ",
+          "startMs": 86164,
+          "endMs": 86284
+        },
+        {
+          "id": "line:34:segment:10",
+          "text": "bon",
+          "startMs": 86324,
+          "endMs": 86684
+        }
+      ]
+    },
+    {
+      "id": "line:35",
+      "kind": "lyrics",
+      "text": "J'ai la maîtrise du don, de savoir n'faire qu'ça",
+      "startMs": 86704,
+      "endMs": 89144,
+      "segments": [
+        {
+          "id": "line:35:segment:0",
+          "text": "J'ai ",
+          "startMs": 86704,
+          "endMs": 86824
+        },
+        {
+          "id": "line:35:segment:1",
+          "text": "la ",
+          "startMs": 86844,
+          "endMs": 86964
+        },
+        {
+          "id": "line:35:segment:2",
+          "text": "maîtrise ",
+          "startMs": 87004,
+          "endMs": 87444
+        },
+        {
+          "id": "line:35:segment:3",
+          "text": "du ",
+          "startMs": 87464,
+          "endMs": 87604
+        },
+        {
+          "id": "line:35:segment:4",
+          "text": "don, ",
+          "startMs": 87644,
+          "endMs": 88004
+        },
+        {
+          "id": "line:35:segment:5",
+          "text": "de ",
+          "startMs": 88024,
+          "endMs": 88104
+        },
+        {
+          "id": "line:35:segment:6",
+          "text": "savoir ",
+          "startMs": 88144,
+          "endMs": 88464
+        },
+        {
+          "id": "line:35:segment:7",
+          "text": "n'faire ",
+          "startMs": 88504,
+          "endMs": 88824
+        },
+        {
+          "id": "line:35:segment:8",
+          "text": "qu'ça",
+          "startMs": 88844,
+          "endMs": 89144
+        }
+      ]
+    },
+    {
+      "id": "line:36",
+      "kind": "lyrics",
+      "text": "Mes potes sont pas des Saint-Bernards mais ils flairent ça",
+      "startMs": 89184,
+      "endMs": 92004,
+      "segments": [
+        {
+          "id": "line:36:segment:0",
+          "text": "Mes ",
+          "startMs": 89184,
+          "endMs": 89344
+        },
+        {
+          "id": "line:36:segment:1",
+          "text": "potes ",
+          "startMs": 89364,
+          "endMs": 89664
+        },
+        {
+          "id": "line:36:segment:2",
+          "text": "sont ",
+          "startMs": 89684,
+          "endMs": 89824
+        },
+        {
+          "id": "line:36:segment:3",
+          "text": "pas ",
+          "startMs": 89864,
+          "endMs": 89964
+        },
+        {
+          "id": "line:36:segment:4",
+          "text": "des ",
+          "startMs": 90004,
+          "endMs": 90104
+        },
+        {
+          "id": "line:36:segment:5",
+          "text": "Saint-Bernards ",
+          "startMs": 90144,
+          "endMs": 90864
+        },
+        {
+          "id": "line:36:segment:6",
+          "text": "mais ",
+          "startMs": 90904,
+          "endMs": 91004
+        },
+        {
+          "id": "line:36:segment:7",
+          "text": "ils ",
+          "startMs": 91064,
+          "endMs": 91184
+        },
+        {
+          "id": "line:36:segment:8",
+          "text": "flairent ",
+          "startMs": 91204,
+          "endMs": 91564
+        },
+        {
+          "id": "line:36:segment:9",
+          "text": "ça",
+          "startMs": 91584,
+          "endMs": 92004
+        }
+      ]
+    },
+    {
+      "id": "line:37",
+      "kind": "lyrics",
+      "text": "Les Nikes, je sais mettre ça, les flows, je sais faire ça",
+      "startMs": 92044,
+      "endMs": 94784,
+      "segments": [
+        {
+          "id": "line:37:segment:0",
+          "text": "Les ",
+          "startMs": 92044,
+          "endMs": 92144
+        },
+        {
+          "id": "line:37:segment:1",
+          "text": "Nikes, ",
+          "startMs": 92184,
+          "endMs": 92544
+        },
+        {
+          "id": "line:37:segment:2",
+          "text": "je ",
+          "startMs": 92564,
+          "endMs": 92664
+        },
+        {
+          "id": "line:37:segment:3",
+          "text": "sais ",
+          "startMs": 92704,
+          "endMs": 92884
+        },
+        {
+          "id": "line:37:segment:4",
+          "text": "mettre ",
+          "startMs": 92924,
+          "endMs": 93164
+        },
+        {
+          "id": "line:37:segment:5",
+          "text": "ça, ",
+          "startMs": 93184,
+          "endMs": 93384
+        },
+        {
+          "id": "line:37:segment:6",
+          "text": "les ",
+          "startMs": 93424,
+          "endMs": 93544
+        },
+        {
+          "id": "line:37:segment:7",
+          "text": "flows, ",
+          "startMs": 93584,
+          "endMs": 93864
+        },
+        {
+          "id": "line:37:segment:8",
+          "text": "je ",
+          "startMs": 93884,
+          "endMs": 93984
+        },
+        {
+          "id": "line:37:segment:9",
+          "text": "sais ",
+          "startMs": 94024,
+          "endMs": 94204
+        },
+        {
+          "id": "line:37:segment:10",
+          "text": "faire ",
+          "startMs": 94244,
+          "endMs": 94484
+        },
+        {
+          "id": "line:37:segment:11",
+          "text": "ça",
+          "startMs": 94524,
+          "endMs": 94784
+        }
+      ]
+    },
+    {
+      "id": "line:38",
+      "kind": "lyrics",
+      "text": "Osmose 'vec le crom' doré, faut qu'tu guettes ça",
+      "startMs": 94844,
+      "endMs": 97345,
+      "segments": [
+        {
+          "id": "line:38:segment:0",
+          "text": "Osmose ",
+          "startMs": 94844,
+          "endMs": 95185
+        },
+        {
+          "id": "line:38:segment:1",
+          "text": "'vec ",
+          "startMs": 95205,
+          "endMs": 95425
+        },
+        {
+          "id": "line:38:segment:2",
+          "text": "le ",
+          "startMs": 95465,
+          "endMs": 95545
+        },
+        {
+          "id": "line:38:segment:3",
+          "text": "crom' ",
+          "startMs": 95585,
+          "endMs": 95845
+        },
+        {
+          "id": "line:38:segment:4",
+          "text": "doré, ",
+          "startMs": 95865,
+          "endMs": 96165
+        },
+        {
+          "id": "line:38:segment:5",
+          "text": "faut ",
+          "startMs": 96185,
+          "endMs": 96305
+        },
+        {
+          "id": "line:38:segment:6",
+          "text": "qu'tu ",
+          "startMs": 96325,
+          "endMs": 96525
+        },
+        {
+          "id": "line:38:segment:7",
+          "text": "guettes ",
+          "startMs": 96545,
+          "endMs": 96865
+        },
+        {
+          "id": "line:38:segment:8",
+          "text": "ça",
+          "startMs": 96905,
+          "endMs": 97345
+        }
+      ]
+    },
+    {
+      "id": "line:39",
+      "kind": "lyrics",
+      "text": "Des sources j'en ai des tas, des dizaines, Nas et Big L",
+      "startMs": 97365,
+      "endMs": 100225,
+      "segments": [
+        {
+          "id": "line:39:segment:0",
+          "text": "Des ",
+          "startMs": 97365,
+          "endMs": 97505
+        },
+        {
+          "id": "line:39:segment:1",
+          "text": "sources ",
+          "startMs": 97545,
+          "endMs": 97725
+        },
+        {
+          "id": "line:39:segment:2",
+          "text": "j'en ",
+          "startMs": 97745,
+          "endMs": 97885
+        },
+        {
+          "id": "line:39:segment:3",
+          "text": "ai ",
+          "startMs": 97945,
+          "endMs": 98045
+        },
+        {
+          "id": "line:39:segment:4",
+          "text": "des ",
+          "startMs": 98085,
+          "endMs": 98185
+        },
+        {
+          "id": "line:39:segment:5",
+          "text": "tas, ",
+          "startMs": 98205,
+          "endMs": 98425
+        },
+        {
+          "id": "line:39:segment:6",
+          "text": "des ",
+          "startMs": 98465,
+          "endMs": 98565
+        },
+        {
+          "id": "line:39:segment:7",
+          "text": "dizaines, ",
+          "startMs": 98585,
+          "endMs": 99205
+        },
+        {
+          "id": "line:39:segment:8",
+          "text": "Nas ",
+          "startMs": 99225,
+          "endMs": 99425
+        },
+        {
+          "id": "line:39:segment:9",
+          "text": "et ",
+          "startMs": 99485,
+          "endMs": 99585
+        },
+        {
+          "id": "line:39:segment:10",
+          "text": "Big ",
+          "startMs": 99625,
+          "endMs": 99885
+        },
+        {
+          "id": "line:39:segment:11",
+          "text": "L",
+          "startMs": 99905,
+          "endMs": 100225
+        }
+      ]
+    },
+    {
+      "id": "line:40",
+      "kind": "lyrics",
+      "text": "Jay-Z, AZ, bref, les flows qui glacent l'épiderme",
+      "startMs": 100245,
+      "endMs": 103105,
+      "segments": [
+        {
+          "id": "line:40:segment:0",
+          "text": "Jay-Z, ",
+          "startMs": 100245,
+          "endMs": 100705
+        },
+        {
+          "id": "line:40:segment:1",
+          "text": "AZ, ",
+          "startMs": 100765,
+          "endMs": 101125
+        },
+        {
+          "id": "line:40:segment:2",
+          "text": "bref, ",
+          "startMs": 101145,
+          "endMs": 101385
+        },
+        {
+          "id": "line:40:segment:3",
+          "text": "les ",
+          "startMs": 101405,
+          "endMs": 101525
+        },
+        {
+          "id": "line:40:segment:4",
+          "text": "flows ",
+          "startMs": 101565,
+          "endMs": 101725
+        },
+        {
+          "id": "line:40:segment:5",
+          "text": "qui ",
+          "startMs": 101745,
+          "endMs": 101865
+        },
+        {
+          "id": "line:40:segment:6",
+          "text": "glacent ",
+          "startMs": 101905,
+          "endMs": 102145
+        },
+        {
+          "id": "line:40:segment:7",
+          "text": "l'épiderme",
+          "startMs": 102165,
+          "endMs": 103105
+        }
+      ]
+    },
+    {
+      "id": "line:41",
+      "kind": "lyrics",
+      "text": "Le flow est une des sources comme mon père et le village du bled",
+      "startMs": 103125,
+      "endMs": 105885,
+      "segments": [
+        {
+          "id": "line:41:segment:0",
+          "text": "Le ",
+          "startMs": 103125,
+          "endMs": 103205
+        },
+        {
+          "id": "line:41:segment:1",
+          "text": "flow ",
+          "startMs": 103245,
+          "endMs": 103405
+        },
+        {
+          "id": "line:41:segment:2",
+          "text": "est ",
+          "startMs": 103445,
+          "endMs": 103545
+        },
+        {
+          "id": "line:41:segment:3",
+          "text": "une ",
+          "startMs": 103605,
+          "endMs": 103705
+        },
+        {
+          "id": "line:41:segment:4",
+          "text": "des ",
+          "startMs": 103725,
+          "endMs": 103905
+        },
+        {
+          "id": "line:41:segment:5",
+          "text": "sources ",
+          "startMs": 103945,
+          "endMs": 104205
+        },
+        {
+          "id": "line:41:segment:6",
+          "text": "comme ",
+          "startMs": 104225,
+          "endMs": 104385
+        },
+        {
+          "id": "line:41:segment:7",
+          "text": "mon ",
+          "startMs": 104405,
+          "endMs": 104545
+        },
+        {
+          "id": "line:41:segment:8",
+          "text": "père ",
+          "startMs": 104585,
+          "endMs": 104705
+        },
+        {
+          "id": "line:41:segment:9",
+          "text": "et ",
+          "startMs": 104745,
+          "endMs": 104805
+        },
+        {
+          "id": "line:41:segment:10",
+          "text": "le ",
+          "startMs": 104825,
+          "endMs": 104885
+        },
+        {
+          "id": "line:41:segment:11",
+          "text": "village ",
+          "startMs": 104925,
+          "endMs": 105225
+        },
+        {
+          "id": "line:41:segment:12",
+          "text": "du ",
+          "startMs": 105245,
+          "endMs": 105385
+        },
+        {
+          "id": "line:41:segment:13",
+          "text": "bled",
+          "startMs": 105425,
+          "endMs": 105885
+        }
+      ]
+    },
+    {
+      "id": "line:42",
+      "kind": "lyrics",
+      "text": "Fragile, nostalgique, \"Phaal mais quel chiard tu fais?\"",
+      "startMs": 105925,
+      "endMs": 108425,
+      "segments": [
+        {
+          "id": "line:42:segment:0",
+          "text": "Fragile, ",
+          "startMs": 105925,
+          "endMs": 106285
+        },
+        {
+          "id": "line:42:segment:1",
+          "text": "nostalgique, ",
+          "startMs": 106325,
+          "endMs": 106885
+        },
+        {
+          "id": "line:42:segment:2",
+          "text": "\"Phaal ",
+          "startMs": 106905,
+          "endMs": 107105
+        },
+        {
+          "id": "line:42:segment:3",
+          "text": "mais ",
+          "startMs": 107125,
+          "endMs": 107225
+        },
+        {
+          "id": "line:42:segment:4",
+          "text": "quel ",
+          "startMs": 107245,
+          "endMs": 107545
+        },
+        {
+          "id": "line:42:segment:5",
+          "text": "chiard ",
+          "startMs": 107565,
+          "endMs": 107885
+        },
+        {
+          "id": "line:42:segment:6",
+          "text": "tu ",
+          "startMs": 107905,
+          "endMs": 108065
+        },
+        {
+          "id": "line:42:segment:7",
+          "text": "fais?\"",
+          "startMs": 108105,
+          "endMs": 108425
+        }
+      ]
+    },
+    {
+      "id": "line:43",
+      "kind": "lyrics",
+      "text": "J'esquive tempête, pour vivre dans l'rêve",
+      "startMs": 108465,
+      "endMs": 110545,
+      "segments": [
+        {
+          "id": "line:43:segment:0",
+          "text": "J'esquive ",
+          "startMs": 108465,
+          "endMs": 108925
+        },
+        {
+          "id": "line:43:segment:1",
+          "text": "tempête, ",
+          "startMs": 108965,
+          "endMs": 109485
+        },
+        {
+          "id": "line:43:segment:2",
+          "text": "pour ",
+          "startMs": 109505,
+          "endMs": 109705
+        },
+        {
+          "id": "line:43:segment:3",
+          "text": "vivre ",
+          "startMs": 109745,
+          "endMs": 109985
+        },
+        {
+          "id": "line:43:segment:4",
+          "text": "dans ",
+          "startMs": 110005,
+          "endMs": 110125
+        },
+        {
+          "id": "line:43:segment:5",
+          "text": "l'rêve",
+          "startMs": 110145,
+          "endMs": 110545
+        }
+      ]
+    },
+    {
+      "id": "line:44",
+      "kind": "lyrics",
+      "text": "Y'a pas de fric, mais je rime sans cesse 'vec ma team dans l'16",
+      "startMs": 110585,
+      "endMs": 113405,
+      "segments": [
+        {
+          "id": "line:44:segment:0",
+          "text": "Y'a ",
+          "startMs": 110585,
+          "endMs": 110745
+        },
+        {
+          "id": "line:44:segment:1",
+          "text": "pas ",
+          "startMs": 110785,
+          "endMs": 110865
+        },
+        {
+          "id": "line:44:segment:2",
+          "text": "de ",
+          "startMs": 110905,
+          "endMs": 110985
+        },
+        {
+          "id": "line:44:segment:3",
+          "text": "fric, ",
+          "startMs": 111025,
+          "endMs": 111325
+        },
+        {
+          "id": "line:44:segment:4",
+          "text": "mais ",
+          "startMs": 111365,
+          "endMs": 111545
+        },
+        {
+          "id": "line:44:segment:5",
+          "text": "je ",
+          "startMs": 111565,
+          "endMs": 111685
+        },
+        {
+          "id": "line:44:segment:6",
+          "text": "rime ",
+          "startMs": 111725,
+          "endMs": 111965
+        },
+        {
+          "id": "line:44:segment:7",
+          "text": "sans ",
+          "startMs": 111985,
+          "endMs": 112125
+        },
+        {
+          "id": "line:44:segment:8",
+          "text": "cesse ",
+          "startMs": 112145,
+          "endMs": 112305
+        },
+        {
+          "id": "line:44:segment:9",
+          "text": "'vec ",
+          "startMs": 112325,
+          "endMs": 112525
+        },
+        {
+          "id": "line:44:segment:10",
+          "text": "ma ",
+          "startMs": 112545,
+          "endMs": 112665
+        },
+        {
+          "id": "line:44:segment:11",
+          "text": "team ",
+          "startMs": 112685,
+          "endMs": 113045
+        },
+        {
+          "id": "line:44:segment:12",
+          "text": "dans ",
+          "startMs": 113085,
+          "endMs": 113265
+        },
+        {
+          "id": "line:44:segment:13",
+          "text": "l'16",
+          "startMs": 113305,
+          "endMs": 113405
+        }
+      ]
+    },
+    {
+      "id": "line:45",
+      "kind": "lyrics",
+      "text": "On prend l'Rap à la source, rime, sample et flow",
+      "startMs": 113445,
+      "endMs": 115845,
+      "segments": [
+        {
+          "id": "line:45:segment:0",
+          "text": "On ",
+          "startMs": 113445,
+          "endMs": 113485
+        },
+        {
+          "id": "line:45:segment:1",
+          "text": "prend ",
+          "startMs": 113505,
+          "endMs": 113745
+        },
+        {
+          "id": "line:45:segment:2",
+          "text": "l'Rap ",
+          "startMs": 113765,
+          "endMs": 114125
+        },
+        {
+          "id": "line:45:segment:3",
+          "text": "à ",
+          "startMs": 114145,
+          "endMs": 114165
+        },
+        {
+          "id": "line:45:segment:4",
+          "text": "la ",
+          "startMs": 114185,
+          "endMs": 114305
+        },
+        {
+          "id": "line:45:segment:5",
+          "text": "source, ",
+          "startMs": 114365,
+          "endMs": 114965
+        },
+        {
+          "id": "line:45:segment:6",
+          "text": "rime, ",
+          "startMs": 115025,
+          "endMs": 115245
+        },
+        {
+          "id": "line:45:segment:7",
+          "text": "sample ",
+          "startMs": 115285,
+          "endMs": 115605
+        },
+        {
+          "id": "line:45:segment:8",
+          "text": "et ",
+          "startMs": 115645,
+          "endMs": 115685
+        },
+        {
+          "id": "line:45:segment:9",
+          "text": "flow",
+          "startMs": 115745,
+          "endMs": 115845
+        }
+      ]
+    },
+    {
+      "id": "line:46",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, l'équipe qui t'met des gifles au micro",
+      "startMs": 115905,
+      "endMs": 118546,
+      "segments": [
+        {
+          "id": "line:46:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 115905,
+          "endMs": 116806
+        },
+        {
+          "id": "line:46:segment:1",
+          "text": "l'équipe ",
+          "startMs": 116826,
+          "endMs": 117106
+        },
+        {
+          "id": "line:46:segment:2",
+          "text": "qui ",
+          "startMs": 117126,
+          "endMs": 117226
+        },
+        {
+          "id": "line:46:segment:3",
+          "text": "t'met ",
+          "startMs": 117246,
+          "endMs": 117506
+        },
+        {
+          "id": "line:46:segment:4",
+          "text": "des ",
+          "startMs": 117526,
+          "endMs": 117626
+        },
+        {
+          "id": "line:46:segment:5",
+          "text": "gifles ",
+          "startMs": 117646,
+          "endMs": 117906
+        },
+        {
+          "id": "line:46:segment:6",
+          "text": "au ",
+          "startMs": 117926,
+          "endMs": 118006
+        },
+        {
+          "id": "line:46:segment:7",
+          "text": "micro",
+          "startMs": 118026,
+          "endMs": 118546
+        }
+      ]
+    },
+    {
+      "id": "line:47",
+      "kind": "lyrics",
+      "text": "En deux-zéro-double-un, on rentre dans l'jeu",
+      "startMs": 118586,
+      "endMs": 120566,
+      "segments": [
+        {
+          "id": "line:47:segment:0",
+          "text": "En ",
+          "startMs": 118586,
+          "endMs": 118766
+        },
+        {
+          "id": "line:47:segment:1",
+          "text": "deux-zéro-double-un, ",
+          "startMs": 118806,
+          "endMs": 119806
+        },
+        {
+          "id": "line:47:segment:2",
+          "text": "on ",
+          "startMs": 119866,
+          "endMs": 119926
+        },
+        {
+          "id": "line:47:segment:3",
+          "text": "rentre ",
+          "startMs": 119966,
+          "endMs": 120146
+        },
+        {
+          "id": "line:47:segment:4",
+          "text": "dans ",
+          "startMs": 120166,
+          "endMs": 120286
+        },
+        {
+          "id": "line:47:segment:5",
+          "text": "l'jeu",
+          "startMs": 120306,
+          "endMs": 120566
+        }
+      ]
+    },
+    {
+      "id": "line:48",
+      "kind": "lyrics",
+      "text": "Et les cartes changent de mains donc lève les tiennes",
+      "startMs": 120586,
+      "endMs": 122546,
+      "segments": [
+        {
+          "id": "line:48:segment:0",
+          "text": "Et ",
+          "startMs": 120586,
+          "endMs": 120686
+        },
+        {
+          "id": "line:48:segment:1",
+          "text": "les ",
+          "startMs": 120706,
+          "endMs": 120786
+        },
+        {
+          "id": "line:48:segment:2",
+          "text": "cartes ",
+          "startMs": 120826,
+          "endMs": 121026
+        },
+        {
+          "id": "line:48:segment:3",
+          "text": "changent ",
+          "startMs": 121046,
+          "endMs": 121266
+        },
+        {
+          "id": "line:48:segment:4",
+          "text": "de ",
+          "startMs": 121286,
+          "endMs": 121346
+        },
+        {
+          "id": "line:48:segment:5",
+          "text": "mains ",
+          "startMs": 121366,
+          "endMs": 121506
+        },
+        {
+          "id": "line:48:segment:6",
+          "text": "donc ",
+          "startMs": 121526,
+          "endMs": 121706
+        },
+        {
+          "id": "line:48:segment:7",
+          "text": "lève ",
+          "startMs": 121726,
+          "endMs": 121886
+        },
+        {
+          "id": "line:48:segment:8",
+          "text": "les ",
+          "startMs": 121926,
+          "endMs": 122006
+        },
+        {
+          "id": "line:48:segment:9",
+          "text": "tiennes",
+          "startMs": 122066,
+          "endMs": 122546
+        }
+      ]
+    },
+    {
+      "id": "line:49",
+      "kind": "lyrics",
+      "text": "On kicke sec aujourd'hui comme demain",
+      "startMs": 122586,
+      "endMs": 124146,
+      "segments": [
+        {
+          "id": "line:49:segment:0",
+          "text": "On ",
+          "startMs": 122586,
+          "endMs": 122726
+        },
+        {
+          "id": "line:49:segment:1",
+          "text": "kicke ",
+          "startMs": 122766,
+          "endMs": 123026
+        },
+        {
+          "id": "line:49:segment:2",
+          "text": "sec ",
+          "startMs": 123046,
+          "endMs": 123286
+        },
+        {
+          "id": "line:49:segment:3",
+          "text": "aujourd'hui ",
+          "startMs": 123326,
+          "endMs": 123686
+        },
+        {
+          "id": "line:49:segment:4",
+          "text": "comme ",
+          "startMs": 123706,
+          "endMs": 123926
+        },
+        {
+          "id": "line:49:segment:5",
+          "text": "demain",
+          "startMs": 123946,
+          "endMs": 124146
+        }
+      ]
+    },
+    {
+      "id": "line:50",
+      "kind": "lyrics",
+      "text": "On prend l'Rap à la source, rime, sample et flow",
+      "startMs": 124166,
+      "endMs": 126566,
+      "segments": [
+        {
+          "id": "line:50:segment:0",
+          "text": "On ",
+          "startMs": 124166,
+          "endMs": 124206
+        },
+        {
+          "id": "line:50:segment:1",
+          "text": "prend ",
+          "startMs": 124226,
+          "endMs": 124466
+        },
+        {
+          "id": "line:50:segment:2",
+          "text": "l'Rap ",
+          "startMs": 124486,
+          "endMs": 124686
+        },
+        {
+          "id": "line:50:segment:3",
+          "text": "à ",
+          "startMs": 124866,
+          "endMs": 124886
+        },
+        {
+          "id": "line:50:segment:4",
+          "text": "la ",
+          "startMs": 124926,
+          "endMs": 125046
+        },
+        {
+          "id": "line:50:segment:5",
+          "text": "source, ",
+          "startMs": 125086,
+          "endMs": 125686
+        },
+        {
+          "id": "line:50:segment:6",
+          "text": "rime, ",
+          "startMs": 125746,
+          "endMs": 125966
+        },
+        {
+          "id": "line:50:segment:7",
+          "text": "sample ",
+          "startMs": 125986,
+          "endMs": 126326
+        },
+        {
+          "id": "line:50:segment:8",
+          "text": "et ",
+          "startMs": 126366,
+          "endMs": 126406
+        },
+        {
+          "id": "line:50:segment:9",
+          "text": "flow",
+          "startMs": 126446,
+          "endMs": 126566
+        }
+      ]
+    },
+    {
+      "id": "line:51",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, l'équipe qui t'met des gifles au micro",
+      "startMs": 126626,
+      "endMs": 129266,
+      "segments": [
+        {
+          "id": "line:51:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 126626,
+          "endMs": 127526
+        },
+        {
+          "id": "line:51:segment:1",
+          "text": "l'équipe ",
+          "startMs": 127546,
+          "endMs": 127826
+        },
+        {
+          "id": "line:51:segment:2",
+          "text": "qui ",
+          "startMs": 127866,
+          "endMs": 127946
+        },
+        {
+          "id": "line:51:segment:3",
+          "text": "t'met ",
+          "startMs": 127966,
+          "endMs": 128226
+        },
+        {
+          "id": "line:51:segment:4",
+          "text": "des ",
+          "startMs": 128246,
+          "endMs": 128346
+        },
+        {
+          "id": "line:51:segment:5",
+          "text": "gifles ",
+          "startMs": 128386,
+          "endMs": 128626
+        },
+        {
+          "id": "line:51:segment:6",
+          "text": "au ",
+          "startMs": 128646,
+          "endMs": 128706
+        },
+        {
+          "id": "line:51:segment:7",
+          "text": "micro",
+          "startMs": 128746,
+          "endMs": 129266
+        }
+      ]
+    },
+    {
+      "id": "line:52",
+      "kind": "lyrics",
+      "text": "En deux-zéro-double-un, on rentre dans l'jeu",
+      "startMs": 129306,
+      "endMs": 131286,
+      "segments": [
+        {
+          "id": "line:52:segment:0",
+          "text": "En ",
+          "startMs": 129306,
+          "endMs": 129486
+        },
+        {
+          "id": "line:52:segment:1",
+          "text": "deux-zéro-double-un, ",
+          "startMs": 129526,
+          "endMs": 130546
+        },
+        {
+          "id": "line:52:segment:2",
+          "text": "on ",
+          "startMs": 130586,
+          "endMs": 130666
+        },
+        {
+          "id": "line:52:segment:3",
+          "text": "rentre ",
+          "startMs": 130686,
+          "endMs": 130866
+        },
+        {
+          "id": "line:52:segment:4",
+          "text": "dans ",
+          "startMs": 130886,
+          "endMs": 131006
+        },
+        {
+          "id": "line:52:segment:5",
+          "text": "l'jeu",
+          "startMs": 131026,
+          "endMs": 131286
+        }
+      ]
+    },
+    {
+      "id": "line:53",
+      "kind": "lyrics",
+      "text": "Et les cartes changent de mains donc lève les tiennes",
+      "startMs": 131326,
+      "endMs": 133266,
+      "segments": [
+        {
+          "id": "line:53:segment:0",
+          "text": "Et ",
+          "startMs": 131326,
+          "endMs": 131406
+        },
+        {
+          "id": "line:53:segment:1",
+          "text": "les ",
+          "startMs": 131426,
+          "endMs": 131526
+        },
+        {
+          "id": "line:53:segment:2",
+          "text": "cartes ",
+          "startMs": 131546,
+          "endMs": 131746
+        },
+        {
+          "id": "line:53:segment:3",
+          "text": "changent ",
+          "startMs": 131766,
+          "endMs": 131986
+        },
+        {
+          "id": "line:53:segment:4",
+          "text": "de ",
+          "startMs": 132006,
+          "endMs": 132066
+        },
+        {
+          "id": "line:53:segment:5",
+          "text": "mains ",
+          "startMs": 132106,
+          "endMs": 132226
+        },
+        {
+          "id": "line:53:segment:6",
+          "text": "donc ",
+          "startMs": 132246,
+          "endMs": 132426
+        },
+        {
+          "id": "line:53:segment:7",
+          "text": "lève ",
+          "startMs": 132446,
+          "endMs": 132626
+        },
+        {
+          "id": "line:53:segment:8",
+          "text": "les ",
+          "startMs": 132646,
+          "endMs": 132726
+        },
+        {
+          "id": "line:53:segment:9",
+          "text": "tiennes",
+          "startMs": 132786,
+          "endMs": 133266
+        }
+      ]
+    },
+    {
+      "id": "line:54",
+      "kind": "lyrics",
+      "text": "On kicke sec aujourd'hui comme demain",
+      "startMs": 133326,
+      "endMs": 134926,
+      "segments": [
+        {
+          "id": "line:54:segment:0",
+          "text": "On ",
+          "startMs": 133326,
+          "endMs": 133466
+        },
+        {
+          "id": "line:54:segment:1",
+          "text": "kicke ",
+          "startMs": 133486,
+          "endMs": 133746
+        },
+        {
+          "id": "line:54:segment:2",
+          "text": "sec ",
+          "startMs": 133786,
+          "endMs": 134006
+        },
+        {
+          "id": "line:54:segment:3",
+          "text": "aujourd'hui ",
+          "startMs": 134046,
+          "endMs": 134386
+        },
+        {
+          "id": "line:54:segment:4",
+          "text": "comme ",
+          "startMs": 134426,
+          "endMs": 134646
+        },
+        {
+          "id": "line:54:segment:5",
+          "text": "demain",
+          "startMs": 134666,
+          "endMs": 134926
+        }
+      ]
+    },
+    {
+      "id": "line:55",
+      "kind": "lyrics",
+      "text": "Le Rap était mieux demain, donc laisse nous faire",
+      "startMs": 134966,
+      "endMs": 137267,
+      "segments": [
+        {
+          "id": "line:55:segment:0",
+          "text": "Le ",
+          "startMs": 134966,
+          "endMs": 135066
+        },
+        {
+          "id": "line:55:segment:1",
+          "text": "Rap ",
+          "startMs": 135106,
+          "endMs": 135366
+        },
+        {
+          "id": "line:55:segment:2",
+          "text": "était ",
+          "startMs": 135466,
+          "endMs": 135706
+        },
+        {
+          "id": "line:55:segment:3",
+          "text": "mieux ",
+          "startMs": 135746,
+          "endMs": 135926
+        },
+        {
+          "id": "line:55:segment:4",
+          "text": "demain, ",
+          "startMs": 135966,
+          "endMs": 136246
+        },
+        {
+          "id": "line:55:segment:5",
+          "text": "donc ",
+          "startMs": 136266,
+          "endMs": 136446
+        },
+        {
+          "id": "line:55:segment:6",
+          "text": "laisse ",
+          "startMs": 136506,
+          "endMs": 136746
+        },
+        {
+          "id": "line:55:segment:7",
+          "text": "nous ",
+          "startMs": 136766,
+          "endMs": 136926
+        },
+        {
+          "id": "line:55:segment:8",
+          "text": "faire",
+          "startMs": 136946,
+          "endMs": 137267
+        }
+      ]
+    },
+    {
+      "id": "line:56",
+      "kind": "lyrics",
+      "text": "On vient barrer le passé pour tracer une ère nouvelle",
+      "startMs": 137307,
+      "endMs": 140127,
+      "segments": [
+        {
+          "id": "line:56:segment:0",
+          "text": "On ",
+          "startMs": 137307,
+          "endMs": 137367
+        },
+        {
+          "id": "line:56:segment:1",
+          "text": "vient ",
+          "startMs": 137447,
+          "endMs": 137627
+        },
+        {
+          "id": "line:56:segment:2",
+          "text": "barrer ",
+          "startMs": 137667,
+          "endMs": 137927
+        },
+        {
+          "id": "line:56:segment:3",
+          "text": "le ",
+          "startMs": 137967,
+          "endMs": 138067
+        },
+        {
+          "id": "line:56:segment:4",
+          "text": "passé ",
+          "startMs": 138107,
+          "endMs": 138407
+        },
+        {
+          "id": "line:56:segment:5",
+          "text": "pour ",
+          "startMs": 138427,
+          "endMs": 138587
+        },
+        {
+          "id": "line:56:segment:6",
+          "text": "tracer ",
+          "startMs": 138607,
+          "endMs": 138967
+        },
+        {
+          "id": "line:56:segment:7",
+          "text": "une ",
+          "startMs": 139027,
+          "endMs": 139107
+        },
+        {
+          "id": "line:56:segment:8",
+          "text": "ère ",
+          "startMs": 139187,
+          "endMs": 139427
+        },
+        {
+          "id": "line:56:segment:9",
+          "text": "nouvelle",
+          "startMs": 139447,
+          "endMs": 140127
+        }
+      ]
+    },
+    {
+      "id": "line:57",
+      "kind": "lyrics",
+      "text": "Ambiance petite frappe dans la ville, je zigzague sans la tise",
+      "startMs": 140167,
+      "endMs": 142967,
+      "segments": [
+        {
+          "id": "line:57:segment:0",
+          "text": "Ambiance ",
+          "startMs": 140167,
+          "endMs": 140527
+        },
+        {
+          "id": "line:57:segment:1",
+          "text": "petite ",
+          "startMs": 140547,
+          "endMs": 140827
+        },
+        {
+          "id": "line:57:segment:2",
+          "text": "frappe ",
+          "startMs": 140867,
+          "endMs": 141127
+        },
+        {
+          "id": "line:57:segment:3",
+          "text": "dans ",
+          "startMs": 141147,
+          "endMs": 141307
+        },
+        {
+          "id": "line:57:segment:4",
+          "text": "la ",
+          "startMs": 141347,
+          "endMs": 141427
+        },
+        {
+          "id": "line:57:segment:5",
+          "text": "ville, ",
+          "startMs": 141467,
+          "endMs": 141687
+        },
+        {
+          "id": "line:57:segment:6",
+          "text": "je ",
+          "startMs": 141707,
+          "endMs": 141847
+        },
+        {
+          "id": "line:57:segment:7",
+          "text": "zigzague ",
+          "startMs": 141887,
+          "endMs": 142467
+        },
+        {
+          "id": "line:57:segment:8",
+          "text": "sans ",
+          "startMs": 142487,
+          "endMs": 142647
+        },
+        {
+          "id": "line:57:segment:9",
+          "text": "la ",
+          "startMs": 142667,
+          "endMs": 142747
+        },
+        {
+          "id": "line:57:segment:10",
+          "text": "tise",
+          "startMs": 142787,
+          "endMs": 142967
+        }
+      ]
+    },
+    {
+      "id": "line:58",
+      "kind": "lyrics",
+      "text": "Tu kiffes ça, j'laisse des stigmates sur ta figure",
+      "startMs": 143007,
+      "endMs": 145847,
+      "segments": [
+        {
+          "id": "line:58:segment:0",
+          "text": "Tu ",
+          "startMs": 143007,
+          "endMs": 143127
+        },
+        {
+          "id": "line:58:segment:1",
+          "text": "kiffes ",
+          "startMs": 143167,
+          "endMs": 143427
+        },
+        {
+          "id": "line:58:segment:2",
+          "text": "ça, ",
+          "startMs": 143447,
+          "endMs": 143607
+        },
+        {
+          "id": "line:58:segment:3",
+          "text": "j'laisse ",
+          "startMs": 143787,
+          "endMs": 144087
+        },
+        {
+          "id": "line:58:segment:4",
+          "text": "des ",
+          "startMs": 144127,
+          "endMs": 144207
+        },
+        {
+          "id": "line:58:segment:5",
+          "text": "stigmates ",
+          "startMs": 144227,
+          "endMs": 144807
+        },
+        {
+          "id": "line:58:segment:6",
+          "text": "sur ",
+          "startMs": 144827,
+          "endMs": 144987
+        },
+        {
+          "id": "line:58:segment:7",
+          "text": "ta ",
+          "startMs": 145027,
+          "endMs": 145087
+        },
+        {
+          "id": "line:58:segment:8",
+          "text": "figure",
+          "startMs": 145167,
+          "endMs": 145847
+        }
+      ]
+    },
+    {
+      "id": "line:59",
+      "kind": "lyrics",
+      "text": "Comme une fuite d'eau, j'avoue, j'me la coule douce",
+      "startMs": 145867,
+      "endMs": 148487,
+      "segments": [
+        {
+          "id": "line:59:segment:0",
+          "text": "Comme ",
+          "startMs": 145867,
+          "endMs": 146047
+        },
+        {
+          "id": "line:59:segment:1",
+          "text": "une ",
+          "startMs": 146087,
+          "endMs": 146207
+        },
+        {
+          "id": "line:59:segment:2",
+          "text": "fuite ",
+          "startMs": 146227,
+          "endMs": 146507
+        },
+        {
+          "id": "line:59:segment:3",
+          "text": "d'eau, ",
+          "startMs": 146547,
+          "endMs": 146867
+        },
+        {
+          "id": "line:59:segment:4",
+          "text": "j'avoue, ",
+          "startMs": 146887,
+          "endMs": 147127
+        },
+        {
+          "id": "line:59:segment:5",
+          "text": "j'me ",
+          "startMs": 147147,
+          "endMs": 147367
+        },
+        {
+          "id": "line:59:segment:6",
+          "text": "la ",
+          "startMs": 147407,
+          "endMs": 147487
+        },
+        {
+          "id": "line:59:segment:7",
+          "text": "coule ",
+          "startMs": 147507,
+          "endMs": 147827
+        },
+        {
+          "id": "line:59:segment:8",
+          "text": "douce",
+          "startMs": 147847,
+          "endMs": 148487
+        }
+      ]
+    },
+    {
+      "id": "line:60",
+      "kind": "lyrics",
+      "text": "J'prends pas de cuite, kho, j'affronte tous mes coups d'blues",
+      "startMs": 148507,
+      "endMs": 150847,
+      "segments": [
+        {
+          "id": "line:60:segment:0",
+          "text": "J'prends ",
+          "startMs": 148507,
+          "endMs": 148747
+        },
+        {
+          "id": "line:60:segment:1",
+          "text": "pas ",
+          "startMs": 148767,
+          "endMs": 148827
+        },
+        {
+          "id": "line:60:segment:2",
+          "text": "de ",
+          "startMs": 148847,
+          "endMs": 148887
+        },
+        {
+          "id": "line:60:segment:3",
+          "text": "cuite, ",
+          "startMs": 148927,
+          "endMs": 149167
+        },
+        {
+          "id": "line:60:segment:4",
+          "text": "kho, ",
+          "startMs": 149187,
+          "endMs": 149547
+        },
+        {
+          "id": "line:60:segment:5",
+          "text": "j'affronte ",
+          "startMs": 149567,
+          "endMs": 149867
+        },
+        {
+          "id": "line:60:segment:6",
+          "text": "tous ",
+          "startMs": 149887,
+          "endMs": 150027
+        },
+        {
+          "id": "line:60:segment:7",
+          "text": "mes ",
+          "startMs": 150047,
+          "endMs": 150147
+        },
+        {
+          "id": "line:60:segment:8",
+          "text": "coups ",
+          "startMs": 150167,
+          "endMs": 150327
+        },
+        {
+          "id": "line:60:segment:9",
+          "text": "d'blues",
+          "startMs": 150347,
+          "endMs": 150847
+        }
+      ]
+    },
+    {
+      "id": "line:61",
+      "kind": "lyrics",
+      "text": "Les mecs sont vifs, font kiffer, poto, qu'est-ce qu'on dit?",
+      "startMs": 150887,
+      "endMs": 153567,
+      "segments": [
+        {
+          "id": "line:61:segment:0",
+          "text": "Les ",
+          "startMs": 150887,
+          "endMs": 150987
+        },
+        {
+          "id": "line:61:segment:1",
+          "text": "mecs ",
+          "startMs": 151007,
+          "endMs": 151167
+        },
+        {
+          "id": "line:61:segment:2",
+          "text": "sont ",
+          "startMs": 151187,
+          "endMs": 151367
+        },
+        {
+          "id": "line:61:segment:3",
+          "text": "vifs, ",
+          "startMs": 151407,
+          "endMs": 151727
+        },
+        {
+          "id": "line:61:segment:4",
+          "text": "font ",
+          "startMs": 151747,
+          "endMs": 151887
+        },
+        {
+          "id": "line:61:segment:5",
+          "text": "kiffer, ",
+          "startMs": 151907,
+          "endMs": 152227
+        },
+        {
+          "id": "line:61:segment:6",
+          "text": "poto, ",
+          "startMs": 152247,
+          "endMs": 152527
+        },
+        {
+          "id": "line:61:segment:7",
+          "text": "qu'est-ce ",
+          "startMs": 152567,
+          "endMs": 152827
+        },
+        {
+          "id": "line:61:segment:8",
+          "text": "qu'on ",
+          "startMs": 152847,
+          "endMs": 153067
+        },
+        {
+          "id": "line:61:segment:9",
+          "text": "dit?",
+          "startMs": 153107,
+          "endMs": 153567
+        }
+      ]
+    },
+    {
+      "id": "line:62",
+      "kind": "lyrics",
+      "text": "Mate, c'est d'la rime fat et pas de la cess' qu'on deale",
+      "startMs": 153587,
+      "endMs": 156087,
+      "segments": [
+        {
+          "id": "line:62:segment:0",
+          "text": "Mate, ",
+          "startMs": 153587,
+          "endMs": 154047
+        },
+        {
+          "id": "line:62:segment:1",
+          "text": "c'est ",
+          "startMs": 154067,
+          "endMs": 154167
+        },
+        {
+          "id": "line:62:segment:2",
+          "text": "d'la ",
+          "startMs": 154207,
+          "endMs": 154347
+        },
+        {
+          "id": "line:62:segment:3",
+          "text": "rime ",
+          "startMs": 154387,
+          "endMs": 154567
+        },
+        {
+          "id": "line:62:segment:4",
+          "text": "fat ",
+          "startMs": 154607,
+          "endMs": 154727
+        },
+        {
+          "id": "line:62:segment:5",
+          "text": "et ",
+          "startMs": 154787,
+          "endMs": 154887
+        },
+        {
+          "id": "line:62:segment:6",
+          "text": "pas ",
+          "startMs": 154907,
+          "endMs": 155007
+        },
+        {
+          "id": "line:62:segment:7",
+          "text": "de ",
+          "startMs": 155027,
+          "endMs": 155087
+        },
+        {
+          "id": "line:62:segment:8",
+          "text": "la ",
+          "startMs": 155127,
+          "endMs": 155207
+        },
+        {
+          "id": "line:62:segment:9",
+          "text": "cess' ",
+          "startMs": 155267,
+          "endMs": 155507
+        },
+        {
+          "id": "line:62:segment:10",
+          "text": "qu'on ",
+          "startMs": 155527,
+          "endMs": 155727
+        },
+        {
+          "id": "line:62:segment:11",
+          "text": "deale",
+          "startMs": 155747,
+          "endMs": 156087
+        }
+      ]
+    },
+    {
+      "id": "line:63",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq dans le game, l'impression qu'ça fait des lustres",
+      "startMs": 156127,
+      "endMs": 158808,
+      "segments": [
+        {
+          "id": "line:63:segment:0",
+          "text": "Un-neuf-neuf-cinq ",
+          "startMs": 156127,
+          "endMs": 156867
+        },
+        {
+          "id": "line:63:segment:1",
+          "text": "dans ",
+          "startMs": 156907,
+          "endMs": 157027
+        },
+        {
+          "id": "line:63:segment:2",
+          "text": "le ",
+          "startMs": 157067,
+          "endMs": 157167
+        },
+        {
+          "id": "line:63:segment:3",
+          "text": "game, ",
+          "startMs": 157187,
+          "endMs": 157447
+        },
+        {
+          "id": "line:63:segment:4",
+          "text": "l'impression ",
+          "startMs": 157467,
+          "endMs": 157807
+        },
+        {
+          "id": "line:63:segment:5",
+          "text": "qu'ça ",
+          "startMs": 157827,
+          "endMs": 158067
+        },
+        {
+          "id": "line:63:segment:6",
+          "text": "fait ",
+          "startMs": 158087,
+          "endMs": 158227
+        },
+        {
+          "id": "line:63:segment:7",
+          "text": "des ",
+          "startMs": 158247,
+          "endMs": 158347
+        },
+        {
+          "id": "line:63:segment:8",
+          "text": "lustres",
+          "startMs": 158388,
+          "endMs": 158808
+        }
+      ]
+    },
+    {
+      "id": "line:64",
+      "kind": "lyrics",
+      "text": "Demande à Jaz, il te dira qu'il en a graffé des rues",
+      "startMs": 158828,
+      "endMs": 161508,
+      "segments": [
+        {
+          "id": "line:64:segment:0",
+          "text": "Demande ",
+          "startMs": 158828,
+          "endMs": 159108
+        },
+        {
+          "id": "line:64:segment:1",
+          "text": "à ",
+          "startMs": 159148,
+          "endMs": 159248
+        },
+        {
+          "id": "line:64:segment:2",
+          "text": "Jaz, ",
+          "startMs": 159268,
+          "endMs": 159408
+        },
+        {
+          "id": "line:64:segment:3",
+          "text": "il ",
+          "startMs": 159468,
+          "endMs": 159548
+        },
+        {
+          "id": "line:64:segment:4",
+          "text": "te ",
+          "startMs": 159568,
+          "endMs": 159748
+        },
+        {
+          "id": "line:64:segment:5",
+          "text": "dira ",
+          "startMs": 159768,
+          "endMs": 160088
+        },
+        {
+          "id": "line:64:segment:6",
+          "text": "qu'il ",
+          "startMs": 160108,
+          "endMs": 160248
+        },
+        {
+          "id": "line:64:segment:7",
+          "text": "en ",
+          "startMs": 160288,
+          "endMs": 160408
+        },
+        {
+          "id": "line:64:segment:8",
+          "text": "a ",
+          "startMs": 160468,
+          "endMs": 160548
+        },
+        {
+          "id": "line:64:segment:9",
+          "text": "graffé ",
+          "startMs": 160588,
+          "endMs": 160928
+        },
+        {
+          "id": "line:64:segment:10",
+          "text": "des ",
+          "startMs": 160968,
+          "endMs": 161068
+        },
+        {
+          "id": "line:64:segment:11",
+          "text": "rues",
+          "startMs": 161128,
+          "endMs": 161508
+        }
+      ]
+    },
+    {
+      "id": "line:65",
+      "kind": "lyrics",
+      "text": "Vrai, j'ai niqué des marqueurs mais j'ai dit qu'j'étais rappeur",
+      "startMs": 161528,
+      "endMs": 164188,
+      "segments": [
+        {
+          "id": "line:65:segment:0",
+          "text": "Vrai, ",
+          "startMs": 161528,
+          "endMs": 161788
+        },
+        {
+          "id": "line:65:segment:1",
+          "text": "j'ai ",
+          "startMs": 161808,
+          "endMs": 161928
+        },
+        {
+          "id": "line:65:segment:2",
+          "text": "niqué ",
+          "startMs": 161948,
+          "endMs": 162268
+        },
+        {
+          "id": "line:65:segment:3",
+          "text": "des ",
+          "startMs": 162308,
+          "endMs": 162428
+        },
+        {
+          "id": "line:65:segment:4",
+          "text": "marqueurs ",
+          "startMs": 162468,
+          "endMs": 162928
+        },
+        {
+          "id": "line:65:segment:5",
+          "text": "mais ",
+          "startMs": 162948,
+          "endMs": 163068
+        },
+        {
+          "id": "line:65:segment:6",
+          "text": "j'ai ",
+          "startMs": 163088,
+          "endMs": 163208
+        },
+        {
+          "id": "line:65:segment:7",
+          "text": "dit ",
+          "startMs": 163248,
+          "endMs": 163328
+        },
+        {
+          "id": "line:65:segment:8",
+          "text": "qu'j'étais ",
+          "startMs": 163348,
+          "endMs": 163788
+        },
+        {
+          "id": "line:65:segment:9",
+          "text": "rappeur",
+          "startMs": 163848,
+          "endMs": 164188
+        }
+      ]
+    },
+    {
+      "id": "line:66",
+      "kind": "lyrics",
+      "text": "Donc j'prends l'mic, fédérateur, et j'vais l'kicker 'vec ardeur",
+      "startMs": 164228,
+      "endMs": 166868,
+      "segments": [
+        {
+          "id": "line:66:segment:0",
+          "text": "Donc ",
+          "startMs": 164228,
+          "endMs": 164308
+        },
+        {
+          "id": "line:66:segment:1",
+          "text": "j'prends ",
+          "startMs": 164328,
+          "endMs": 164528
+        },
+        {
+          "id": "line:66:segment:2",
+          "text": "l'mic, ",
+          "startMs": 164548,
+          "endMs": 164788
+        },
+        {
+          "id": "line:66:segment:3",
+          "text": "fédérateur, ",
+          "startMs": 164808,
+          "endMs": 165588
+        },
+        {
+          "id": "line:66:segment:4",
+          "text": "et ",
+          "startMs": 165608,
+          "endMs": 165668
+        },
+        {
+          "id": "line:66:segment:5",
+          "text": "j'vais ",
+          "startMs": 165688,
+          "endMs": 165828
+        },
+        {
+          "id": "line:66:segment:6",
+          "text": "l'kicker ",
+          "startMs": 165848,
+          "endMs": 166248
+        },
+        {
+          "id": "line:66:segment:7",
+          "text": "'vec ",
+          "startMs": 166268,
+          "endMs": 166428
+        },
+        {
+          "id": "line:66:segment:8",
+          "text": "ardeur",
+          "startMs": 166528,
+          "endMs": 166868
+        }
+      ]
+    },
+    {
+      "id": "line:67",
+      "kind": "lyrics",
+      "text": "J'crée un disque et les crétins disent \"ce gars-là se goure\"",
+      "startMs": 166888,
+      "endMs": 169628,
+      "segments": [
+        {
+          "id": "line:67:segment:0",
+          "text": "J'crée ",
+          "startMs": 166888,
+          "endMs": 167128
+        },
+        {
+          "id": "line:67:segment:1",
+          "text": "un ",
+          "startMs": 167168,
+          "endMs": 167288
+        },
+        {
+          "id": "line:67:segment:2",
+          "text": "disque ",
+          "startMs": 167328,
+          "endMs": 167668
+        },
+        {
+          "id": "line:67:segment:3",
+          "text": "et ",
+          "startMs": 167688,
+          "endMs": 167728
+        },
+        {
+          "id": "line:67:segment:4",
+          "text": "les ",
+          "startMs": 167748,
+          "endMs": 167848
+        },
+        {
+          "id": "line:67:segment:5",
+          "text": "crétins ",
+          "startMs": 167868,
+          "endMs": 168248
+        },
+        {
+          "id": "line:67:segment:6",
+          "text": "disent ",
+          "startMs": 168288,
+          "endMs": 168468
+        },
+        {
+          "id": "line:67:segment:7",
+          "text": "\"ce ",
+          "startMs": 168488,
+          "endMs": 168628
+        },
+        {
+          "id": "line:67:segment:8",
+          "text": "gars-là ",
+          "startMs": 168648,
+          "endMs": 168948
+        },
+        {
+          "id": "line:67:segment:9",
+          "text": "se ",
+          "startMs": 168968,
+          "endMs": 169088
+        },
+        {
+          "id": "line:67:segment:10",
+          "text": "goure\"",
+          "startMs": 169128,
+          "endMs": 169628
+        }
+      ]
+    },
+    {
+      "id": "line:68",
+      "kind": "lyrics",
+      "text": "Mais nique les vieux détours, j'veux r'ner-tour à la ce-sour",
+      "startMs": 169648,
+      "endMs": 172348,
+      "segments": [
+        {
+          "id": "line:68:segment:0",
+          "text": "Mais ",
+          "startMs": 169648,
+          "endMs": 169748
+        },
+        {
+          "id": "line:68:segment:1",
+          "text": "nique ",
+          "startMs": 169788,
+          "endMs": 169968
+        },
+        {
+          "id": "line:68:segment:2",
+          "text": "les ",
+          "startMs": 169988,
+          "endMs": 170128
+        },
+        {
+          "id": "line:68:segment:3",
+          "text": "vieux ",
+          "startMs": 170148,
+          "endMs": 170348
+        },
+        {
+          "id": "line:68:segment:4",
+          "text": "détours, ",
+          "startMs": 170388,
+          "endMs": 170748
+        },
+        {
+          "id": "line:68:segment:5",
+          "text": "j'veux ",
+          "startMs": 170768,
+          "endMs": 170928
+        },
+        {
+          "id": "line:68:segment:6",
+          "text": "r'ner-tour ",
+          "startMs": 170948,
+          "endMs": 171328
+        },
+        {
+          "id": "line:68:segment:7",
+          "text": "à ",
+          "startMs": 171368,
+          "endMs": 171508
+        },
+        {
+          "id": "line:68:segment:8",
+          "text": "la ",
+          "startMs": 171528,
+          "endMs": 171608
+        },
+        {
+          "id": "line:68:segment:9",
+          "text": "ce-sour",
+          "startMs": 171628,
+          "endMs": 172348
+        }
+      ]
+    },
+    {
+      "id": "line:69",
+      "kind": "lyrics",
+      "text": "Donc j'la recherche comme la fraîche",
+      "startMs": 172368,
+      "endMs": 173988,
+      "segments": [
+        {
+          "id": "line:69:segment:0",
+          "text": "Donc ",
+          "startMs": 172368,
+          "endMs": 172588
+        },
+        {
+          "id": "line:69:segment:1",
+          "text": "j'la ",
+          "startMs": 172608,
+          "endMs": 172808
+        },
+        {
+          "id": "line:69:segment:2",
+          "text": "recherche ",
+          "startMs": 172828,
+          "endMs": 173188
+        },
+        {
+          "id": "line:69:segment:3",
+          "text": "comme ",
+          "startMs": 173208,
+          "endMs": 173408
+        },
+        {
+          "id": "line:69:segment:4",
+          "text": "la ",
+          "startMs": 173448,
+          "endMs": 173628
+        },
+        {
+          "id": "line:69:segment:5",
+          "text": "fraîche",
+          "startMs": 173668,
+          "endMs": 173988
+        }
+      ]
+    },
+    {
+      "id": "line:70",
+      "kind": "lyrics",
+      "text": "Les mains dans les poches, tard, mais à part",
+      "startMs": 174028,
+      "endMs": 175728,
+      "segments": [
+        {
+          "id": "line:70:segment:0",
+          "text": "Les ",
+          "startMs": 174028,
+          "endMs": 174128
+        },
+        {
+          "id": "line:70:segment:1",
+          "text": "mains ",
+          "startMs": 174168,
+          "endMs": 174308
+        },
+        {
+          "id": "line:70:segment:2",
+          "text": "dans ",
+          "startMs": 174348,
+          "endMs": 174488
+        },
+        {
+          "id": "line:70:segment:3",
+          "text": "les ",
+          "startMs": 174508,
+          "endMs": 174628
+        },
+        {
+          "id": "line:70:segment:4",
+          "text": "poches, ",
+          "startMs": 174688,
+          "endMs": 174968
+        },
+        {
+          "id": "line:70:segment:5",
+          "text": "tard, ",
+          "startMs": 174988,
+          "endMs": 175208
+        },
+        {
+          "id": "line:70:segment:6",
+          "text": "mais ",
+          "startMs": 175228,
+          "endMs": 175368
+        },
+        {
+          "id": "line:70:segment:7",
+          "text": "à ",
+          "startMs": 175408,
+          "endMs": 175488
+        },
+        {
+          "id": "line:70:segment:8",
+          "text": "part",
+          "startMs": 175548,
+          "endMs": 175728
+        }
+      ]
+    },
+    {
+      "id": "line:71",
+      "kind": "lyrics",
+      "text": "Mes poings, j'ai rien que des joints dans mes pochetars",
+      "startMs": 175768,
+      "endMs": 177748,
+      "segments": [
+        {
+          "id": "line:71:segment:0",
+          "text": "Mes ",
+          "startMs": 175768,
+          "endMs": 175968
+        },
+        {
+          "id": "line:71:segment:1",
+          "text": "poings, ",
+          "startMs": 176008,
+          "endMs": 176168
+        },
+        {
+          "id": "line:71:segment:2",
+          "text": "j'ai ",
+          "startMs": 176188,
+          "endMs": 176268
+        },
+        {
+          "id": "line:71:segment:3",
+          "text": "rien ",
+          "startMs": 176308,
+          "endMs": 176488
+        },
+        {
+          "id": "line:71:segment:4",
+          "text": "que ",
+          "startMs": 176508,
+          "endMs": 176648
+        },
+        {
+          "id": "line:71:segment:5",
+          "text": "des ",
+          "startMs": 176668,
+          "endMs": 176768
+        },
+        {
+          "id": "line:71:segment:6",
+          "text": "joints ",
+          "startMs": 176788,
+          "endMs": 176988
+        },
+        {
+          "id": "line:71:segment:7",
+          "text": "dans ",
+          "startMs": 177008,
+          "endMs": 177148
+        },
+        {
+          "id": "line:71:segment:8",
+          "text": "mes ",
+          "startMs": 177188,
+          "endMs": 177288
+        },
+        {
+          "id": "line:71:segment:9",
+          "text": "pochetars",
+          "startMs": 177348,
+          "endMs": 177748
+        }
+      ]
+    },
+    {
+      "id": "line:72",
+      "kind": "lyrics",
+      "text": "Même si l'hash est chère, j'la che-cher dans ton quartier",
+      "startMs": 177768,
+      "endMs": 180249,
+      "segments": [
+        {
+          "id": "line:72:segment:0",
+          "text": "Même ",
+          "startMs": 177768,
+          "endMs": 177868
+        },
+        {
+          "id": "line:72:segment:1",
+          "text": "si ",
+          "startMs": 177988,
+          "endMs": 178028
+        },
+        {
+          "id": "line:72:segment:2",
+          "text": "l'hash ",
+          "startMs": 178048,
+          "endMs": 178228
+        },
+        {
+          "id": "line:72:segment:3",
+          "text": "est ",
+          "startMs": 178248,
+          "endMs": 178368
+        },
+        {
+          "id": "line:72:segment:4",
+          "text": "chère, ",
+          "startMs": 178408,
+          "endMs": 178708
+        },
+        {
+          "id": "line:72:segment:5",
+          "text": "j'la ",
+          "startMs": 178728,
+          "endMs": 178848
+        },
+        {
+          "id": "line:72:segment:6",
+          "text": "che-cher ",
+          "startMs": 178888,
+          "endMs": 179328
+        },
+        {
+          "id": "line:72:segment:7",
+          "text": "dans ",
+          "startMs": 179368,
+          "endMs": 179488
+        },
+        {
+          "id": "line:72:segment:8",
+          "text": "ton ",
+          "startMs": 179508,
+          "endMs": 179669
+        },
+        {
+          "id": "line:72:segment:9",
+          "text": "quartier",
+          "startMs": 179689,
+          "endMs": 180249
+        }
+      ]
+    },
+    {
+      "id": "line:73",
+      "kind": "lyrics",
+      "text": "Pendant qu'des fonblards font de l'art",
+      "startMs": 180289,
+      "endMs": 181589,
+      "segments": [
+        {
+          "id": "line:73:segment:0",
+          "text": "Pendant ",
+          "startMs": 180289,
+          "endMs": 180489
+        },
+        {
+          "id": "line:73:segment:1",
+          "text": "qu'des ",
+          "startMs": 180509,
+          "endMs": 180709
+        },
+        {
+          "id": "line:73:segment:2",
+          "text": "fonblards ",
+          "startMs": 180729,
+          "endMs": 181129
+        },
+        {
+          "id": "line:73:segment:3",
+          "text": "font ",
+          "startMs": 181149,
+          "endMs": 181329
+        },
+        {
+          "id": "line:73:segment:4",
+          "text": "de ",
+          "startMs": 181349,
+          "endMs": 181429
+        },
+        {
+          "id": "line:73:segment:5",
+          "text": "l'art",
+          "startMs": 181469,
+          "endMs": 181589
+        }
+      ]
+    },
+    {
+      "id": "line:74",
+      "kind": "lyrics",
+      "text": "J'lâche des vers devant ton car grillé",
+      "startMs": 181609,
+      "endMs": 183169,
+      "segments": [
+        {
+          "id": "line:74:segment:0",
+          "text": "J'lâche ",
+          "startMs": 181609,
+          "endMs": 181909
+        },
+        {
+          "id": "line:74:segment:1",
+          "text": "des ",
+          "startMs": 181949,
+          "endMs": 182089
+        },
+        {
+          "id": "line:74:segment:2",
+          "text": "vers ",
+          "startMs": 182129,
+          "endMs": 182289
+        },
+        {
+          "id": "line:74:segment:3",
+          "text": "devant ",
+          "startMs": 182309,
+          "endMs": 182549
+        },
+        {
+          "id": "line:74:segment:4",
+          "text": "ton ",
+          "startMs": 182589,
+          "endMs": 182709
+        },
+        {
+          "id": "line:74:segment:5",
+          "text": "car ",
+          "startMs": 182729,
+          "endMs": 182929
+        },
+        {
+          "id": "line:74:segment:6",
+          "text": "grillé",
+          "startMs": 182949,
+          "endMs": 183169
+        }
+      ]
+    },
+    {
+      "id": "line:75",
+      "kind": "lyrics",
+      "text": "On prend l'Rap à la source, rime, sample et flow",
+      "startMs": 183189,
+      "endMs": 185569,
+      "segments": [
+        {
+          "id": "line:75:segment:0",
+          "text": "On ",
+          "startMs": 183189,
+          "endMs": 183229
+        },
+        {
+          "id": "line:75:segment:1",
+          "text": "prend ",
+          "startMs": 183249,
+          "endMs": 183469
+        },
+        {
+          "id": "line:75:segment:2",
+          "text": "l'Rap ",
+          "startMs": 183489,
+          "endMs": 183849
+        },
+        {
+          "id": "line:75:segment:3",
+          "text": "à ",
+          "startMs": 183869,
+          "endMs": 183889
+        },
+        {
+          "id": "line:75:segment:4",
+          "text": "la ",
+          "startMs": 183909,
+          "endMs": 184049
+        },
+        {
+          "id": "line:75:segment:5",
+          "text": "source, ",
+          "startMs": 184089,
+          "endMs": 184689
+        },
+        {
+          "id": "line:75:segment:6",
+          "text": "rime, ",
+          "startMs": 184749,
+          "endMs": 184969
+        },
+        {
+          "id": "line:75:segment:7",
+          "text": "sample ",
+          "startMs": 185009,
+          "endMs": 185329
+        },
+        {
+          "id": "line:75:segment:8",
+          "text": "et ",
+          "startMs": 185369,
+          "endMs": 185429
+        },
+        {
+          "id": "line:75:segment:9",
+          "text": "flow",
+          "startMs": 185469,
+          "endMs": 185569
+        }
+      ]
+    },
+    {
+      "id": "line:76",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, l'équipe qui t'met des gifles au micro",
+      "startMs": 185629,
+      "endMs": 188269,
+      "segments": [
+        {
+          "id": "line:76:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 185629,
+          "endMs": 186529
+        },
+        {
+          "id": "line:76:segment:1",
+          "text": "l'équipe ",
+          "startMs": 186549,
+          "endMs": 186829
+        },
+        {
+          "id": "line:76:segment:2",
+          "text": "qui ",
+          "startMs": 186849,
+          "endMs": 186949
+        },
+        {
+          "id": "line:76:segment:3",
+          "text": "t'met ",
+          "startMs": 186969,
+          "endMs": 187229
+        },
+        {
+          "id": "line:76:segment:4",
+          "text": "des ",
+          "startMs": 187249,
+          "endMs": 187349
+        },
+        {
+          "id": "line:76:segment:5",
+          "text": "gifles ",
+          "startMs": 187369,
+          "endMs": 187629
+        },
+        {
+          "id": "line:76:segment:6",
+          "text": "au ",
+          "startMs": 187649,
+          "endMs": 187709
+        },
+        {
+          "id": "line:76:segment:7",
+          "text": "micro",
+          "startMs": 187749,
+          "endMs": 188269
+        }
+      ]
+    },
+    {
+      "id": "line:77",
+      "kind": "lyrics",
+      "text": "En deux-zéro-double-un, on rentre dans l'jeu",
+      "startMs": 188309,
+      "endMs": 190289,
+      "segments": [
+        {
+          "id": "line:77:segment:0",
+          "text": "En ",
+          "startMs": 188309,
+          "endMs": 188489
+        },
+        {
+          "id": "line:77:segment:1",
+          "text": "deux-zéro-double-un, ",
+          "startMs": 188529,
+          "endMs": 189529
+        },
+        {
+          "id": "line:77:segment:2",
+          "text": "on ",
+          "startMs": 189589,
+          "endMs": 189649
+        },
+        {
+          "id": "line:77:segment:3",
+          "text": "rentre ",
+          "startMs": 189689,
+          "endMs": 189869
+        },
+        {
+          "id": "line:77:segment:4",
+          "text": "dans ",
+          "startMs": 189889,
+          "endMs": 190009
+        },
+        {
+          "id": "line:77:segment:5",
+          "text": "l'jeu",
+          "startMs": 190029,
+          "endMs": 190289
+        }
+      ]
+    },
+    {
+      "id": "line:78",
+      "kind": "lyrics",
+      "text": "Et les cartes changent de mains donc lève les tiennes",
+      "startMs": 190309,
+      "endMs": 192269,
+      "segments": [
+        {
+          "id": "line:78:segment:0",
+          "text": "Et ",
+          "startMs": 190309,
+          "endMs": 190409
+        },
+        {
+          "id": "line:78:segment:1",
+          "text": "les ",
+          "startMs": 190429,
+          "endMs": 190509
+        },
+        {
+          "id": "line:78:segment:2",
+          "text": "cartes ",
+          "startMs": 190549,
+          "endMs": 190749
+        },
+        {
+          "id": "line:78:segment:3",
+          "text": "changent ",
+          "startMs": 190769,
+          "endMs": 190989
+        },
+        {
+          "id": "line:78:segment:4",
+          "text": "de ",
+          "startMs": 191009,
+          "endMs": 191069
+        },
+        {
+          "id": "line:78:segment:5",
+          "text": "mains ",
+          "startMs": 191089,
+          "endMs": 191229
+        },
+        {
+          "id": "line:78:segment:6",
+          "text": "donc ",
+          "startMs": 191249,
+          "endMs": 191429
+        },
+        {
+          "id": "line:78:segment:7",
+          "text": "lève ",
+          "startMs": 191449,
+          "endMs": 191609
+        },
+        {
+          "id": "line:78:segment:8",
+          "text": "les ",
+          "startMs": 191649,
+          "endMs": 191729
+        },
+        {
+          "id": "line:78:segment:9",
+          "text": "tiennes",
+          "startMs": 191789,
+          "endMs": 192269
+        }
+      ]
+    },
+    {
+      "id": "line:79",
+      "kind": "lyrics",
+      "text": "On kicke sec aujourd'hui comme demain",
+      "startMs": 192309,
+      "endMs": 193869,
+      "segments": [
+        {
+          "id": "line:79:segment:0",
+          "text": "On ",
+          "startMs": 192309,
+          "endMs": 192449
+        },
+        {
+          "id": "line:79:segment:1",
+          "text": "kicke ",
+          "startMs": 192489,
+          "endMs": 192749
+        },
+        {
+          "id": "line:79:segment:2",
+          "text": "sec ",
+          "startMs": 192769,
+          "endMs": 193009
+        },
+        {
+          "id": "line:79:segment:3",
+          "text": "aujourd'hui ",
+          "startMs": 193049,
+          "endMs": 193409
+        },
+        {
+          "id": "line:79:segment:4",
+          "text": "comme ",
+          "startMs": 193429,
+          "endMs": 193649
+        },
+        {
+          "id": "line:79:segment:5",
+          "text": "demain",
+          "startMs": 193669,
+          "endMs": 193869
+        }
+      ]
+    },
+    {
+      "id": "line:80",
+      "kind": "lyrics",
+      "text": "On prend l'Rap à la source, rime, sample et flow",
+      "startMs": 193889,
+      "endMs": 196289,
+      "segments": [
+        {
+          "id": "line:80:segment:0",
+          "text": "On ",
+          "startMs": 193889,
+          "endMs": 193929
+        },
+        {
+          "id": "line:80:segment:1",
+          "text": "prend ",
+          "startMs": 193949,
+          "endMs": 194189
+        },
+        {
+          "id": "line:80:segment:2",
+          "text": "l'Rap ",
+          "startMs": 194209,
+          "endMs": 194409
+        },
+        {
+          "id": "line:80:segment:3",
+          "text": "à ",
+          "startMs": 194589,
+          "endMs": 194609
+        },
+        {
+          "id": "line:80:segment:4",
+          "text": "la ",
+          "startMs": 194649,
+          "endMs": 194769
+        },
+        {
+          "id": "line:80:segment:5",
+          "text": "source, ",
+          "startMs": 194809,
+          "endMs": 195409
+        },
+        {
+          "id": "line:80:segment:6",
+          "text": "rime, ",
+          "startMs": 195449,
+          "endMs": 195689
+        },
+        {
+          "id": "line:80:segment:7",
+          "text": "sample ",
+          "startMs": 195709,
+          "endMs": 196049
+        },
+        {
+          "id": "line:80:segment:8",
+          "text": "et ",
+          "startMs": 196089,
+          "endMs": 196129
+        },
+        {
+          "id": "line:80:segment:9",
+          "text": "flow",
+          "startMs": 196169,
+          "endMs": 196289
+        }
+      ]
+    },
+    {
+      "id": "line:81",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, l'équipe qui t'met des gifles au micro",
+      "startMs": 196349,
+      "endMs": 198989,
+      "segments": [
+        {
+          "id": "line:81:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 196349,
+          "endMs": 197249
+        },
+        {
+          "id": "line:81:segment:1",
+          "text": "l'équipe ",
+          "startMs": 197269,
+          "endMs": 197549
+        },
+        {
+          "id": "line:81:segment:2",
+          "text": "qui ",
+          "startMs": 197589,
+          "endMs": 197669
+        },
+        {
+          "id": "line:81:segment:3",
+          "text": "t'met ",
+          "startMs": 197689,
+          "endMs": 197949
+        },
+        {
+          "id": "line:81:segment:4",
+          "text": "des ",
+          "startMs": 197969,
+          "endMs": 198069
+        },
+        {
+          "id": "line:81:segment:5",
+          "text": "gifles ",
+          "startMs": 198109,
+          "endMs": 198349
+        },
+        {
+          "id": "line:81:segment:6",
+          "text": "au ",
+          "startMs": 198369,
+          "endMs": 198429
+        },
+        {
+          "id": "line:81:segment:7",
+          "text": "micro",
+          "startMs": 198469,
+          "endMs": 198989
+        }
+      ]
+    },
+    {
+      "id": "line:82",
+      "kind": "lyrics",
+      "text": "En deux-zéro-double-un, on rentre dans l'jeu",
+      "startMs": 199029,
+      "endMs": 201010,
+      "segments": [
+        {
+          "id": "line:82:segment:0",
+          "text": "En ",
+          "startMs": 199029,
+          "endMs": 199209
+        },
+        {
+          "id": "line:82:segment:1",
+          "text": "deux-zéro-double-un, ",
+          "startMs": 199249,
+          "endMs": 200269
+        },
+        {
+          "id": "line:82:segment:2",
+          "text": "on ",
+          "startMs": 200329,
+          "endMs": 200389
+        },
+        {
+          "id": "line:82:segment:3",
+          "text": "rentre ",
+          "startMs": 200409,
+          "endMs": 200589
+        },
+        {
+          "id": "line:82:segment:4",
+          "text": "dans ",
+          "startMs": 200629,
+          "endMs": 200730
+        },
+        {
+          "id": "line:82:segment:5",
+          "text": "l'jeu",
+          "startMs": 200750,
+          "endMs": 201010
+        }
+      ]
+    },
+    {
+      "id": "line:83",
+      "kind": "lyrics",
+      "text": "Et les cartes changent de mains donc lève les tiennes",
+      "startMs": 201050,
+      "endMs": 202990,
+      "segments": [
+        {
+          "id": "line:83:segment:0",
+          "text": "Et ",
+          "startMs": 201050,
+          "endMs": 201130
+        },
+        {
+          "id": "line:83:segment:1",
+          "text": "les ",
+          "startMs": 201150,
+          "endMs": 201250
+        },
+        {
+          "id": "line:83:segment:2",
+          "text": "cartes ",
+          "startMs": 201270,
+          "endMs": 201470
+        },
+        {
+          "id": "line:83:segment:3",
+          "text": "changent ",
+          "startMs": 201490,
+          "endMs": 201710
+        },
+        {
+          "id": "line:83:segment:4",
+          "text": "de ",
+          "startMs": 201730,
+          "endMs": 201790
+        },
+        {
+          "id": "line:83:segment:5",
+          "text": "mains ",
+          "startMs": 201830,
+          "endMs": 201950
+        },
+        {
+          "id": "line:83:segment:6",
+          "text": "donc ",
+          "startMs": 201970,
+          "endMs": 202150
+        },
+        {
+          "id": "line:83:segment:7",
+          "text": "lève ",
+          "startMs": 202170,
+          "endMs": 202350
+        },
+        {
+          "id": "line:83:segment:8",
+          "text": "les ",
+          "startMs": 202370,
+          "endMs": 202470
+        },
+        {
+          "id": "line:83:segment:9",
+          "text": "tiennes",
+          "startMs": 202530,
+          "endMs": 202990
+        }
+      ]
+    },
+    {
+      "id": "line:84",
+      "kind": "lyrics",
+      "text": "On kicke sec aujourd'hui comme demain",
+      "startMs": 203050,
+      "endMs": 204610,
+      "segments": [
+        {
+          "id": "line:84:segment:0",
+          "text": "On ",
+          "startMs": 203050,
+          "endMs": 203190
+        },
+        {
+          "id": "line:84:segment:1",
+          "text": "kicke ",
+          "startMs": 203210,
+          "endMs": 203470
+        },
+        {
+          "id": "line:84:segment:2",
+          "text": "sec ",
+          "startMs": 203510,
+          "endMs": 203630
+        },
+        {
+          "id": "line:84:segment:3",
+          "text": "aujourd'hui ",
+          "startMs": 203650,
+          "endMs": 204130
+        },
+        {
+          "id": "line:84:segment:4",
+          "text": "comme ",
+          "startMs": 204150,
+          "endMs": 204370
+        },
+        {
+          "id": "line:84:segment:5",
+          "text": "demain",
+          "startMs": 204390,
+          "endMs": 204610
+        }
+      ]
+    },
+    {
+      "id": "line:85",
+      "kind": "lyrics",
+      "text": "J'ai été puiser à la source de milliers de fontaines de jouvence",
+      "startMs": 204630,
+      "endMs": 207550,
+      "segments": [
+        {
+          "id": "line:85:segment:0",
+          "text": "J'ai ",
+          "startMs": 204630,
+          "endMs": 204710
+        },
+        {
+          "id": "line:85:segment:1",
+          "text": "été ",
+          "startMs": 204750,
+          "endMs": 204850
+        },
+        {
+          "id": "line:85:segment:2",
+          "text": "puiser ",
+          "startMs": 204890,
+          "endMs": 205250
+        },
+        {
+          "id": "line:85:segment:3",
+          "text": "à ",
+          "startMs": 205290,
+          "endMs": 205370
+        },
+        {
+          "id": "line:85:segment:4",
+          "text": "la ",
+          "startMs": 205410,
+          "endMs": 205550
+        },
+        {
+          "id": "line:85:segment:5",
+          "text": "source ",
+          "startMs": 205610,
+          "endMs": 205850
+        },
+        {
+          "id": "line:85:segment:6",
+          "text": "de ",
+          "startMs": 205890,
+          "endMs": 205990
+        },
+        {
+          "id": "line:85:segment:7",
+          "text": "milliers ",
+          "startMs": 206010,
+          "endMs": 206350
+        },
+        {
+          "id": "line:85:segment:8",
+          "text": "de ",
+          "startMs": 206390,
+          "endMs": 206450
+        },
+        {
+          "id": "line:85:segment:9",
+          "text": "fontaines ",
+          "startMs": 206490,
+          "endMs": 206870
+        },
+        {
+          "id": "line:85:segment:10",
+          "text": "de ",
+          "startMs": 206910,
+          "endMs": 207030
+        },
+        {
+          "id": "line:85:segment:11",
+          "text": "jouvence",
+          "startMs": 207070,
+          "endMs": 207550
+        }
+      ]
+    },
+    {
+      "id": "line:86",
+      "kind": "lyrics",
+      "text": "Mêlées à la foudre et aux viviers de conquêtes émouvantes",
+      "startMs": 207590,
+      "endMs": 210170,
+      "segments": [
+        {
+          "id": "line:86:segment:0",
+          "text": "Mêlées ",
+          "startMs": 207590,
+          "endMs": 207930
+        },
+        {
+          "id": "line:86:segment:1",
+          "text": "à ",
+          "startMs": 207970,
+          "endMs": 208010
+        },
+        {
+          "id": "line:86:segment:2",
+          "text": "la ",
+          "startMs": 208050,
+          "endMs": 208150
+        },
+        {
+          "id": "line:86:segment:3",
+          "text": "foudre ",
+          "startMs": 208190,
+          "endMs": 208390
+        },
+        {
+          "id": "line:86:segment:4",
+          "text": "et ",
+          "startMs": 208470,
+          "endMs": 208510
+        },
+        {
+          "id": "line:86:segment:5",
+          "text": "aux ",
+          "startMs": 208550,
+          "endMs": 208630
+        },
+        {
+          "id": "line:86:segment:6",
+          "text": "viviers ",
+          "startMs": 208670,
+          "endMs": 209030
+        },
+        {
+          "id": "line:86:segment:7",
+          "text": "de ",
+          "startMs": 209070,
+          "endMs": 209150
+        },
+        {
+          "id": "line:86:segment:8",
+          "text": "conquêtes ",
+          "startMs": 209170,
+          "endMs": 209550
+        },
+        {
+          "id": "line:86:segment:9",
+          "text": "émouvantes",
+          "startMs": 209590,
+          "endMs": 210170
+        }
+      ]
+    },
+    {
+      "id": "line:87",
+      "kind": "lyrics",
+      "text": "Hissé par la foule pour oublier que ton père est souffrant",
+      "startMs": 210230,
+      "endMs": 212870,
+      "segments": [
+        {
+          "id": "line:87:segment:0",
+          "text": "Hissé ",
+          "startMs": 210230,
+          "endMs": 210530
+        },
+        {
+          "id": "line:87:segment:1",
+          "text": "par ",
+          "startMs": 210550,
+          "endMs": 210710
+        },
+        {
+          "id": "line:87:segment:2",
+          "text": "la ",
+          "startMs": 210750,
+          "endMs": 210810
+        },
+        {
+          "id": "line:87:segment:3",
+          "text": "foule ",
+          "startMs": 210850,
+          "endMs": 211090
+        },
+        {
+          "id": "line:87:segment:4",
+          "text": "pour ",
+          "startMs": 211130,
+          "endMs": 211250
+        },
+        {
+          "id": "line:87:segment:5",
+          "text": "oublier ",
+          "startMs": 211310,
+          "endMs": 211670
+        },
+        {
+          "id": "line:87:segment:6",
+          "text": "que ",
+          "startMs": 211690,
+          "endMs": 211810
+        },
+        {
+          "id": "line:87:segment:7",
+          "text": "ton ",
+          "startMs": 211850,
+          "endMs": 211970
+        },
+        {
+          "id": "line:87:segment:8",
+          "text": "père ",
+          "startMs": 212010,
+          "endMs": 212190
+        },
+        {
+          "id": "line:87:segment:9",
+          "text": "est ",
+          "startMs": 212250,
+          "endMs": 212350
+        },
+        {
+          "id": "line:87:segment:10",
+          "text": "souffrant",
+          "startMs": 212390,
+          "endMs": 212870
+        }
+      ]
+    },
+    {
+      "id": "line:88",
+      "kind": "lyrics",
+      "text": "Opéré souvent mais suffit d'un son d'trompette et tout change",
+      "startMs": 212950,
+      "endMs": 215770,
+      "segments": [
+        {
+          "id": "line:88:segment:0",
+          "text": "Opéré ",
+          "startMs": 212950,
+          "endMs": 213390
+        },
+        {
+          "id": "line:88:segment:1",
+          "text": "souvent ",
+          "startMs": 213430,
+          "endMs": 213730
+        },
+        {
+          "id": "line:88:segment:2",
+          "text": "mais ",
+          "startMs": 213750,
+          "endMs": 213870
+        },
+        {
+          "id": "line:88:segment:3",
+          "text": "suffit ",
+          "startMs": 213910,
+          "endMs": 214150
+        },
+        {
+          "id": "line:88:segment:4",
+          "text": "d'un ",
+          "startMs": 214190,
+          "endMs": 214330
+        },
+        {
+          "id": "line:88:segment:5",
+          "text": "son ",
+          "startMs": 214350,
+          "endMs": 214490
+        },
+        {
+          "id": "line:88:segment:6",
+          "text": "d'trompette ",
+          "startMs": 214510,
+          "endMs": 214970
+        },
+        {
+          "id": "line:88:segment:7",
+          "text": "et ",
+          "startMs": 215010,
+          "endMs": 215050
+        },
+        {
+          "id": "line:88:segment:8",
+          "text": "tout ",
+          "startMs": 215070,
+          "endMs": 215270
+        },
+        {
+          "id": "line:88:segment:9",
+          "text": "change",
+          "startMs": 215290,
+          "endMs": 215770
+        }
+      ]
+    },
+    {
+      "id": "line:89",
+      "kind": "lyrics",
+      "text": "Avant qu'je naisse dans une messe au contexte éprouvant",
+      "startMs": 215830,
+      "endMs": 218210,
+      "segments": [
+        {
+          "id": "line:89:segment:0",
+          "text": "Avant ",
+          "startMs": 215830,
+          "endMs": 215990
+        },
+        {
+          "id": "line:89:segment:1",
+          "text": "qu'je ",
+          "startMs": 216010,
+          "endMs": 216190
+        },
+        {
+          "id": "line:89:segment:2",
+          "text": "naisse ",
+          "startMs": 216330,
+          "endMs": 216550
+        },
+        {
+          "id": "line:89:segment:3",
+          "text": "dans ",
+          "startMs": 216590,
+          "endMs": 216730
+        },
+        {
+          "id": "line:89:segment:4",
+          "text": "une ",
+          "startMs": 216770,
+          "endMs": 216910
+        },
+        {
+          "id": "line:89:segment:5",
+          "text": "messe ",
+          "startMs": 216930,
+          "endMs": 217110
+        },
+        {
+          "id": "line:89:segment:6",
+          "text": "au ",
+          "startMs": 217150,
+          "endMs": 217230
+        },
+        {
+          "id": "line:89:segment:7",
+          "text": "contexte ",
+          "startMs": 217250,
+          "endMs": 217590
+        },
+        {
+          "id": "line:89:segment:8",
+          "text": "éprouvant",
+          "startMs": 217650,
+          "endMs": 218210
+        }
+      ]
+    },
+    {
+      "id": "line:90",
+      "kind": "lyrics",
+      "text": "Avant qu'ne s'lève le glaive d'une jeunesse pompette et touchante",
+      "startMs": 218230,
+      "endMs": 220870,
+      "segments": [
+        {
+          "id": "line:90:segment:0",
+          "text": "Avant ",
+          "startMs": 218230,
+          "endMs": 218350
+        },
+        {
+          "id": "line:90:segment:1",
+          "text": "qu'ne ",
+          "startMs": 218370,
+          "endMs": 218550
+        },
+        {
+          "id": "line:90:segment:2",
+          "text": "s'lève ",
+          "startMs": 218590,
+          "endMs": 218910
+        },
+        {
+          "id": "line:90:segment:3",
+          "text": "le ",
+          "startMs": 218930,
+          "endMs": 219050
+        },
+        {
+          "id": "line:90:segment:4",
+          "text": "glaive ",
+          "startMs": 219090,
+          "endMs": 219310
+        },
+        {
+          "id": "line:90:segment:5",
+          "text": "d'une ",
+          "startMs": 219330,
+          "endMs": 219470
+        },
+        {
+          "id": "line:90:segment:6",
+          "text": "jeunesse ",
+          "startMs": 219490,
+          "endMs": 219890
+        },
+        {
+          "id": "line:90:segment:7",
+          "text": "pompette ",
+          "startMs": 219930,
+          "endMs": 220270
+        },
+        {
+          "id": "line:90:segment:8",
+          "text": "et ",
+          "startMs": 220330,
+          "endMs": 220410
+        },
+        {
+          "id": "line:90:segment:9",
+          "text": "touchante",
+          "startMs": 220430,
+          "endMs": 220870
+        }
+      ]
+    },
+    {
+      "id": "line:91",
+      "kind": "lyrics",
+      "text": "Ouais, petit, on dirait bien qu'le ciel a trompé tes louanges",
+      "startMs": 220910,
+      "endMs": 223471,
+      "segments": [
+        {
+          "id": "line:91:segment:0",
+          "text": "Ouais, ",
+          "startMs": 220910,
+          "endMs": 221150
+        },
+        {
+          "id": "line:91:segment:1",
+          "text": "petit, ",
+          "startMs": 221170,
+          "endMs": 221430
+        },
+        {
+          "id": "line:91:segment:2",
+          "text": "on ",
+          "startMs": 221490,
+          "endMs": 221590
+        },
+        {
+          "id": "line:91:segment:3",
+          "text": "dirait ",
+          "startMs": 221630,
+          "endMs": 221871
+        },
+        {
+          "id": "line:91:segment:4",
+          "text": "bien ",
+          "startMs": 221891,
+          "endMs": 222051
+        },
+        {
+          "id": "line:91:segment:5",
+          "text": "qu'le ",
+          "startMs": 222071,
+          "endMs": 222231
+        },
+        {
+          "id": "line:91:segment:6",
+          "text": "ciel ",
+          "startMs": 222271,
+          "endMs": 222511
+        },
+        {
+          "id": "line:91:segment:7",
+          "text": "a ",
+          "startMs": 222551,
+          "endMs": 222591
+        },
+        {
+          "id": "line:91:segment:8",
+          "text": "trompé ",
+          "startMs": 222611,
+          "endMs": 222871
+        },
+        {
+          "id": "line:91:segment:9",
+          "text": "tes ",
+          "startMs": 222891,
+          "endMs": 223091
+        },
+        {
+          "id": "line:91:segment:10",
+          "text": "louanges",
+          "startMs": 223111,
+          "endMs": 223471
+        }
+      ]
+    },
+    {
+      "id": "line:92",
+      "kind": "lyrics",
+      "text": "Les anges attendent les dénouements étranges",
+      "startMs": 223531,
+      "endMs": 225151,
+      "segments": [
+        {
+          "id": "line:92:segment:0",
+          "text": "Les ",
+          "startMs": 223531,
+          "endMs": 223611
+        },
+        {
+          "id": "line:92:segment:1",
+          "text": "anges ",
+          "startMs": 223691,
+          "endMs": 223871
+        },
+        {
+          "id": "line:92:segment:2",
+          "text": "attendent ",
+          "startMs": 223911,
+          "endMs": 224251
+        },
+        {
+          "id": "line:92:segment:3",
+          "text": "les ",
+          "startMs": 224291,
+          "endMs": 224391
+        },
+        {
+          "id": "line:92:segment:4",
+          "text": "dénouements ",
+          "startMs": 224411,
+          "endMs": 224751
+        },
+        {
+          "id": "line:92:segment:5",
+          "text": "étranges",
+          "startMs": 224791,
+          "endMs": 225151
+        }
+      ]
+    },
+    {
+      "id": "line:93",
+      "kind": "lyrics",
+      "text": "Des contrées étouffantes, c'monde est dégoûtant",
+      "startMs": 225191,
+      "endMs": 227171,
+      "segments": [
+        {
+          "id": "line:93:segment:0",
+          "text": "Des ",
+          "startMs": 225191,
+          "endMs": 225271
+        },
+        {
+          "id": "line:93:segment:1",
+          "text": "contrées ",
+          "startMs": 225291,
+          "endMs": 225631
+        },
+        {
+          "id": "line:93:segment:2",
+          "text": "étouffantes, ",
+          "startMs": 225671,
+          "endMs": 226231
+        },
+        {
+          "id": "line:93:segment:3",
+          "text": "c'monde ",
+          "startMs": 226251,
+          "endMs": 226471
+        },
+        {
+          "id": "line:93:segment:4",
+          "text": "est ",
+          "startMs": 226511,
+          "endMs": 226571
+        },
+        {
+          "id": "line:93:segment:5",
+          "text": "dégoûtant",
+          "startMs": 226611,
+          "endMs": 227171
+        }
+      ]
+    },
+    {
+      "id": "line:94",
+      "kind": "lyrics",
+      "text": "Et de tout temps j'peux compter des moutons",
+      "startMs": 227211,
+      "endMs": 228811,
+      "segments": [
+        {
+          "id": "line:94:segment:0",
+          "text": "Et ",
+          "startMs": 227211,
+          "endMs": 227271
+        },
+        {
+          "id": "line:94:segment:1",
+          "text": "de ",
+          "startMs": 227311,
+          "endMs": 227431
+        },
+        {
+          "id": "line:94:segment:2",
+          "text": "tout ",
+          "startMs": 227451,
+          "endMs": 227591
+        },
+        {
+          "id": "line:94:segment:3",
+          "text": "temps ",
+          "startMs": 227611,
+          "endMs": 227791
+        },
+        {
+          "id": "line:94:segment:4",
+          "text": "j'peux ",
+          "startMs": 227811,
+          "endMs": 227951
+        },
+        {
+          "id": "line:94:segment:5",
+          "text": "compter ",
+          "startMs": 227991,
+          "endMs": 228251
+        },
+        {
+          "id": "line:94:segment:6",
+          "text": "des ",
+          "startMs": 228291,
+          "endMs": 228431
+        },
+        {
+          "id": "line:94:segment:7",
+          "text": "moutons",
+          "startMs": 228471,
+          "endMs": 228811
+        }
+      ]
+    },
+    {
+      "id": "line:95",
+      "kind": "lyrics",
+      "text": "Leur nombre est déroutant",
+      "startMs": 228831,
+      "endMs": 229811,
+      "segments": [
+        {
+          "id": "line:95:segment:0",
+          "text": "Leur ",
+          "startMs": 228831,
+          "endMs": 228971
+        },
+        {
+          "id": "line:95:segment:1",
+          "text": "nombre ",
+          "startMs": 228991,
+          "endMs": 229171
+        },
+        {
+          "id": "line:95:segment:2",
+          "text": "est ",
+          "startMs": 229211,
+          "endMs": 229271
+        },
+        {
+          "id": "line:95:segment:3",
+          "text": "déroutant",
+          "startMs": 229291,
+          "endMs": 229811
+        }
+      ]
+    },
+    {
+      "id": "line:96",
+      "kind": "lyrics",
+      "text": "J'essaie pourtant tout pour rester coupant",
+      "startMs": 229851,
+      "endMs": 231651,
+      "segments": [
+        {
+          "id": "line:96:segment:0",
+          "text": "J'essaie ",
+          "startMs": 229851,
+          "endMs": 230111
+        },
+        {
+          "id": "line:96:segment:1",
+          "text": "pourtant ",
+          "startMs": 230131,
+          "endMs": 230491
+        },
+        {
+          "id": "line:96:segment:2",
+          "text": "tout ",
+          "startMs": 230511,
+          "endMs": 230711
+        },
+        {
+          "id": "line:96:segment:3",
+          "text": "pour ",
+          "startMs": 230731,
+          "endMs": 230851
+        },
+        {
+          "id": "line:96:segment:4",
+          "text": "rester ",
+          "startMs": 230871,
+          "endMs": 231131
+        },
+        {
+          "id": "line:96:segment:5",
+          "text": "coupant",
+          "startMs": 231171,
+          "endMs": 231651
+        }
+      ]
+    },
+    {
+      "id": "line:97",
+      "kind": "lyrics",
+      "text": "Tous sont laissés pour compte, où sont les vrais souffrances?",
+      "startMs": 231691,
+      "endMs": 234371,
+      "segments": [
+        {
+          "id": "line:97:segment:0",
+          "text": "Tous ",
+          "startMs": 231691,
+          "endMs": 231951
+        },
+        {
+          "id": "line:97:segment:1",
+          "text": "sont ",
+          "startMs": 231971,
+          "endMs": 232111
+        },
+        {
+          "id": "line:97:segment:2",
+          "text": "laissés ",
+          "startMs": 232151,
+          "endMs": 232431
+        },
+        {
+          "id": "line:97:segment:3",
+          "text": "pour ",
+          "startMs": 232471,
+          "endMs": 232651
+        },
+        {
+          "id": "line:97:segment:4",
+          "text": "compte, ",
+          "startMs": 232671,
+          "endMs": 233011
+        },
+        {
+          "id": "line:97:segment:5",
+          "text": "où ",
+          "startMs": 233071,
+          "endMs": 233251
+        },
+        {
+          "id": "line:97:segment:6",
+          "text": "sont ",
+          "startMs": 233291,
+          "endMs": 233431
+        },
+        {
+          "id": "line:97:segment:7",
+          "text": "les ",
+          "startMs": 233471,
+          "endMs": 233591
+        },
+        {
+          "id": "line:97:segment:8",
+          "text": "vrais ",
+          "startMs": 233651,
+          "endMs": 233791
+        },
+        {
+          "id": "line:97:segment:9",
+          "text": "souffrances?",
+          "startMs": 233831,
+          "endMs": 234371
+        }
+      ]
+    },
+    {
+      "id": "line:98",
+      "kind": "lyrics",
+      "text": "Nous sommes de cette douce France où le rêve est troublant",
+      "startMs": 234391,
+      "endMs": 236971,
+      "segments": [
+        {
+          "id": "line:98:segment:0",
+          "text": "Nous ",
+          "startMs": 234391,
+          "endMs": 234611
+        },
+        {
+          "id": "line:98:segment:1",
+          "text": "sommes ",
+          "startMs": 234631,
+          "endMs": 234851
+        },
+        {
+          "id": "line:98:segment:2",
+          "text": "de ",
+          "startMs": 234871,
+          "endMs": 234991
+        },
+        {
+          "id": "line:98:segment:3",
+          "text": "cette ",
+          "startMs": 235011,
+          "endMs": 235191
+        },
+        {
+          "id": "line:98:segment:4",
+          "text": "douce ",
+          "startMs": 235211,
+          "endMs": 235391
+        },
+        {
+          "id": "line:98:segment:5",
+          "text": "France ",
+          "startMs": 235431,
+          "endMs": 235731
+        },
+        {
+          "id": "line:98:segment:6",
+          "text": "où ",
+          "startMs": 235791,
+          "endMs": 236011
+        },
+        {
+          "id": "line:98:segment:7",
+          "text": "le ",
+          "startMs": 236031,
+          "endMs": 236111
+        },
+        {
+          "id": "line:98:segment:8",
+          "text": "rêve ",
+          "startMs": 236151,
+          "endMs": 236331
+        },
+        {
+          "id": "line:98:segment:9",
+          "text": "est ",
+          "startMs": 236391,
+          "endMs": 236471
+        },
+        {
+          "id": "line:98:segment:10",
+          "text": "troublant",
+          "startMs": 236511,
+          "endMs": 236971
+        }
+      ]
+    },
+    {
+      "id": "line:99",
+      "kind": "lyrics",
+      "text": "On prend l'Rap à la source dans cette course technologique",
+      "startMs": 237031,
+      "endMs": 239311,
+      "segments": [
+        {
+          "id": "line:99:segment:0",
+          "text": "On ",
+          "startMs": 237031,
+          "endMs": 237071
+        },
+        {
+          "id": "line:99:segment:1",
+          "text": "prend ",
+          "startMs": 237091,
+          "endMs": 237191
+        },
+        {
+          "id": "line:99:segment:2",
+          "text": "l'Rap ",
+          "startMs": 237211,
+          "endMs": 237471
+        },
+        {
+          "id": "line:99:segment:3",
+          "text": "à ",
+          "startMs": 237491,
+          "endMs": 237511
+        },
+        {
+          "id": "line:99:segment:4",
+          "text": "la ",
+          "startMs": 237551,
+          "endMs": 237671
+        },
+        {
+          "id": "line:99:segment:5",
+          "text": "source ",
+          "startMs": 237751,
+          "endMs": 238031
+        },
+        {
+          "id": "line:99:segment:6",
+          "text": "dans ",
+          "startMs": 238051,
+          "endMs": 238151
+        },
+        {
+          "id": "line:99:segment:7",
+          "text": "cette ",
+          "startMs": 238191,
+          "endMs": 238371
+        },
+        {
+          "id": "line:99:segment:8",
+          "text": "course ",
+          "startMs": 238411,
+          "endMs": 238631
+        },
+        {
+          "id": "line:99:segment:9",
+          "text": "technologique",
+          "startMs": 238671,
+          "endMs": 239311
+        }
+      ]
+    },
+    {
+      "id": "line:100",
+      "kind": "lyrics",
+      "text": "Dans cette foule métropolitaine où tout est trop logique",
+      "startMs": 239331,
+      "endMs": 241991,
+      "segments": [
+        {
+          "id": "line:100:segment:0",
+          "text": "Dans ",
+          "startMs": 239331,
+          "endMs": 239531
+        },
+        {
+          "id": "line:100:segment:1",
+          "text": "cette ",
+          "startMs": 239551,
+          "endMs": 239751
+        },
+        {
+          "id": "line:100:segment:2",
+          "text": "foule ",
+          "startMs": 239791,
+          "endMs": 240031
+        },
+        {
+          "id": "line:100:segment:3",
+          "text": "métropolitaine ",
+          "startMs": 240051,
+          "endMs": 240851
+        },
+        {
+          "id": "line:100:segment:4",
+          "text": "où ",
+          "startMs": 240911,
+          "endMs": 241051
+        },
+        {
+          "id": "line:100:segment:5",
+          "text": "tout ",
+          "startMs": 241071,
+          "endMs": 241291
+        },
+        {
+          "id": "line:100:segment:6",
+          "text": "est ",
+          "startMs": 241351,
+          "endMs": 241491
+        },
+        {
+          "id": "line:100:segment:7",
+          "text": "trop ",
+          "startMs": 241511,
+          "endMs": 241691
+        },
+        {
+          "id": "line:100:segment:8",
+          "text": "logique",
+          "startMs": 241711,
+          "endMs": 241991
+        }
+      ]
+    },
+    {
+      "id": "line:101",
+      "kind": "lyrics",
+      "text": "Goûtez toutes ces sonorités, la Source est trop torride",
+      "startMs": 242031,
+      "endMs": 244692,
+      "segments": [
+        {
+          "id": "line:101:segment:0",
+          "text": "Goûtez ",
+          "startMs": 242031,
+          "endMs": 242371
+        },
+        {
+          "id": "line:101:segment:1",
+          "text": "toutes ",
+          "startMs": 242411,
+          "endMs": 242651
+        },
+        {
+          "id": "line:101:segment:2",
+          "text": "ces ",
+          "startMs": 242691,
+          "endMs": 242831
+        },
+        {
+          "id": "line:101:segment:3",
+          "text": "sonorités, ",
+          "startMs": 242851,
+          "endMs": 243532
+        },
+        {
+          "id": "line:101:segment:4",
+          "text": "la ",
+          "startMs": 243592,
+          "endMs": 243712
+        },
+        {
+          "id": "line:101:segment:5",
+          "text": "Source ",
+          "startMs": 243772,
+          "endMs": 244012
+        },
+        {
+          "id": "line:101:segment:6",
+          "text": "est ",
+          "startMs": 244052,
+          "endMs": 244152
+        },
+        {
+          "id": "line:101:segment:7",
+          "text": "trop ",
+          "startMs": 244172,
+          "endMs": 244372
+        },
+        {
+          "id": "line:101:segment:8",
+          "text": "torride",
+          "startMs": 244392,
+          "endMs": 244692
+        }
+      ]
+    },
+    {
+      "id": "line:102",
+      "kind": "lyrics",
+      "text": "Comme les boules des Porto-ricaines, écoute les prototypes",
+      "startMs": 244732,
+      "endMs": 247272,
+      "segments": [
+        {
+          "id": "line:102:segment:0",
+          "text": "Comme ",
+          "startMs": 244732,
+          "endMs": 244912
+        },
+        {
+          "id": "line:102:segment:1",
+          "text": "les ",
+          "startMs": 244952,
+          "endMs": 245092
+        },
+        {
+          "id": "line:102:segment:2",
+          "text": "boules ",
+          "startMs": 245112,
+          "endMs": 245372
+        },
+        {
+          "id": "line:102:segment:3",
+          "text": "des ",
+          "startMs": 245412,
+          "endMs": 245532
+        },
+        {
+          "id": "line:102:segment:4",
+          "text": "Porto-ricaines, ",
+          "startMs": 245552,
+          "endMs": 246272
+        },
+        {
+          "id": "line:102:segment:5",
+          "text": "écoute ",
+          "startMs": 246312,
+          "endMs": 246672
+        },
+        {
+          "id": "line:102:segment:6",
+          "text": "les ",
+          "startMs": 246732,
+          "endMs": 246872
+        },
+        {
+          "id": "line:102:segment:7",
+          "text": "prototypes",
+          "startMs": 246892,
+          "endMs": 247272
+        }
+      ]
+    },
+    {
+      "id": "line:103",
+      "kind": "lyrics",
+      "text": "On prend l'Rap à la source, rime, sample et flow",
+      "startMs": 247452,
+      "endMs": 249932,
+      "segments": [
+        {
+          "id": "line:103:segment:0",
+          "text": "On ",
+          "startMs": 247452,
+          "endMs": 247572
+        },
+        {
+          "id": "line:103:segment:1",
+          "text": "prend ",
+          "startMs": 247592,
+          "endMs": 247832
+        },
+        {
+          "id": "line:103:segment:2",
+          "text": "l'Rap ",
+          "startMs": 247852,
+          "endMs": 248212
+        },
+        {
+          "id": "line:103:segment:3",
+          "text": "à ",
+          "startMs": 248232,
+          "endMs": 248252
+        },
+        {
+          "id": "line:103:segment:4",
+          "text": "la ",
+          "startMs": 248272,
+          "endMs": 248392
+        },
+        {
+          "id": "line:103:segment:5",
+          "text": "source, ",
+          "startMs": 248452,
+          "endMs": 249052
+        },
+        {
+          "id": "line:103:segment:6",
+          "text": "rime, ",
+          "startMs": 249112,
+          "endMs": 249332
+        },
+        {
+          "id": "line:103:segment:7",
+          "text": "sample ",
+          "startMs": 249372,
+          "endMs": 249692
+        },
+        {
+          "id": "line:103:segment:8",
+          "text": "et ",
+          "startMs": 249732,
+          "endMs": 249772
+        },
+        {
+          "id": "line:103:segment:9",
+          "text": "flow",
+          "startMs": 249832,
+          "endMs": 249932
+        }
+      ]
+    },
+    {
+      "id": "line:104",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, l'équipe qui t'met des gifles au micro",
+      "startMs": 249992,
+      "endMs": 252612,
+      "segments": [
+        {
+          "id": "line:104:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 249992,
+          "endMs": 250892
+        },
+        {
+          "id": "line:104:segment:1",
+          "text": "l'équipe ",
+          "startMs": 250912,
+          "endMs": 251192
+        },
+        {
+          "id": "line:104:segment:2",
+          "text": "qui ",
+          "startMs": 251212,
+          "endMs": 251312
+        },
+        {
+          "id": "line:104:segment:3",
+          "text": "t'met ",
+          "startMs": 251332,
+          "endMs": 251592
+        },
+        {
+          "id": "line:104:segment:4",
+          "text": "des ",
+          "startMs": 251612,
+          "endMs": 251712
+        },
+        {
+          "id": "line:104:segment:5",
+          "text": "gifles ",
+          "startMs": 251732,
+          "endMs": 251992
+        },
+        {
+          "id": "line:104:segment:6",
+          "text": "au ",
+          "startMs": 252012,
+          "endMs": 252072
+        },
+        {
+          "id": "line:104:segment:7",
+          "text": "micro",
+          "startMs": 252112,
+          "endMs": 252612
+        }
+      ]
+    },
+    {
+      "id": "line:105",
+      "kind": "lyrics",
+      "text": "En deux-zéro-double-un, on rentre dans l'jeu",
+      "startMs": 252672,
+      "endMs": 254632,
+      "segments": [
+        {
+          "id": "line:105:segment:0",
+          "text": "En ",
+          "startMs": 252672,
+          "endMs": 252852
+        },
+        {
+          "id": "line:105:segment:1",
+          "text": "deux-zéro-double-un, ",
+          "startMs": 252892,
+          "endMs": 253892
+        },
+        {
+          "id": "line:105:segment:2",
+          "text": "on ",
+          "startMs": 253952,
+          "endMs": 254012
+        },
+        {
+          "id": "line:105:segment:3",
+          "text": "rentre ",
+          "startMs": 254052,
+          "endMs": 254232
+        },
+        {
+          "id": "line:105:segment:4",
+          "text": "dans ",
+          "startMs": 254252,
+          "endMs": 254352
+        },
+        {
+          "id": "line:105:segment:5",
+          "text": "l'jeu",
+          "startMs": 254392,
+          "endMs": 254632
+        }
+      ]
+    },
+    {
+      "id": "line:106",
+      "kind": "lyrics",
+      "text": "Et les cartes changent de mains donc lève les tiennes",
+      "startMs": 254672,
+      "endMs": 256612,
+      "segments": [
+        {
+          "id": "line:106:segment:0",
+          "text": "Et ",
+          "startMs": 254672,
+          "endMs": 254752
+        },
+        {
+          "id": "line:106:segment:1",
+          "text": "les ",
+          "startMs": 254792,
+          "endMs": 254872
+        },
+        {
+          "id": "line:106:segment:2",
+          "text": "cartes ",
+          "startMs": 254912,
+          "endMs": 255112
+        },
+        {
+          "id": "line:106:segment:3",
+          "text": "changent ",
+          "startMs": 255132,
+          "endMs": 255352
+        },
+        {
+          "id": "line:106:segment:4",
+          "text": "de ",
+          "startMs": 255372,
+          "endMs": 255432
+        },
+        {
+          "id": "line:106:segment:5",
+          "text": "mains ",
+          "startMs": 255452,
+          "endMs": 255592
+        },
+        {
+          "id": "line:106:segment:6",
+          "text": "donc ",
+          "startMs": 255612,
+          "endMs": 255732
+        },
+        {
+          "id": "line:106:segment:7",
+          "text": "lève ",
+          "startMs": 255792,
+          "endMs": 255972
+        },
+        {
+          "id": "line:106:segment:8",
+          "text": "les ",
+          "startMs": 256012,
+          "endMs": 256092
+        },
+        {
+          "id": "line:106:segment:9",
+          "text": "tiennes",
+          "startMs": 256152,
+          "endMs": 256612
+        }
+      ]
+    },
+    {
+      "id": "line:107",
+      "kind": "lyrics",
+      "text": "On kicke sec aujourd'hui comme demain",
+      "startMs": 256672,
+      "endMs": 258232,
+      "segments": [
+        {
+          "id": "line:107:segment:0",
+          "text": "On ",
+          "startMs": 256672,
+          "endMs": 256812
+        },
+        {
+          "id": "line:107:segment:1",
+          "text": "kicke ",
+          "startMs": 256852,
+          "endMs": 257112
+        },
+        {
+          "id": "line:107:segment:2",
+          "text": "sec ",
+          "startMs": 257132,
+          "endMs": 257252
+        },
+        {
+          "id": "line:107:segment:3",
+          "text": "aujourd'hui ",
+          "startMs": 257412,
+          "endMs": 257752
+        },
+        {
+          "id": "line:107:segment:4",
+          "text": "comme ",
+          "startMs": 257792,
+          "endMs": 258012
+        },
+        {
+          "id": "line:107:segment:5",
+          "text": "demain",
+          "startMs": 258032,
+          "endMs": 258232
+        }
+      ]
+    },
+    {
+      "id": "line:108",
+      "kind": "lyrics",
+      "text": "On prend l'Rap à la source, rime, sample et flow",
+      "startMs": 258252,
+      "endMs": 260652,
+      "segments": [
+        {
+          "id": "line:108:segment:0",
+          "text": "On ",
+          "startMs": 258252,
+          "endMs": 258292
+        },
+        {
+          "id": "line:108:segment:1",
+          "text": "prend ",
+          "startMs": 258312,
+          "endMs": 258552
+        },
+        {
+          "id": "line:108:segment:2",
+          "text": "l'Rap ",
+          "startMs": 258572,
+          "endMs": 258772
+        },
+        {
+          "id": "line:108:segment:3",
+          "text": "à ",
+          "startMs": 258952,
+          "endMs": 258972
+        },
+        {
+          "id": "line:108:segment:4",
+          "text": "la ",
+          "startMs": 259012,
+          "endMs": 259132
+        },
+        {
+          "id": "line:108:segment:5",
+          "text": "source, ",
+          "startMs": 259172,
+          "endMs": 259772
+        },
+        {
+          "id": "line:108:segment:6",
+          "text": "rime, ",
+          "startMs": 259832,
+          "endMs": 260052
+        },
+        {
+          "id": "line:108:segment:7",
+          "text": "sample ",
+          "startMs": 260072,
+          "endMs": 260412
+        },
+        {
+          "id": "line:108:segment:8",
+          "text": "et ",
+          "startMs": 260452,
+          "endMs": 260492
+        },
+        {
+          "id": "line:108:segment:9",
+          "text": "flow",
+          "startMs": 260532,
+          "endMs": 260652
+        }
+      ]
+    },
+    {
+      "id": "line:109",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, l'équipe qui t'met des gifles au micro",
+      "startMs": 260712,
+      "endMs": 263352,
+      "segments": [
+        {
+          "id": "line:109:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 260712,
+          "endMs": 261612
+        },
+        {
+          "id": "line:109:segment:1",
+          "text": "l'équipe ",
+          "startMs": 261632,
+          "endMs": 261912
+        },
+        {
+          "id": "line:109:segment:2",
+          "text": "qui ",
+          "startMs": 261932,
+          "endMs": 262012
+        },
+        {
+          "id": "line:109:segment:3",
+          "text": "t'met ",
+          "startMs": 262052,
+          "endMs": 262312
+        },
+        {
+          "id": "line:109:segment:4",
+          "text": "des ",
+          "startMs": 262332,
+          "endMs": 262432
+        },
+        {
+          "id": "line:109:segment:5",
+          "text": "gifles ",
+          "startMs": 262472,
+          "endMs": 262712
+        },
+        {
+          "id": "line:109:segment:6",
+          "text": "au ",
+          "startMs": 262732,
+          "endMs": 262792
+        },
+        {
+          "id": "line:109:segment:7",
+          "text": "micro",
+          "startMs": 262832,
+          "endMs": 263352
+        }
+      ]
+    },
+    {
+      "id": "line:110",
+      "kind": "lyrics",
+      "text": "En deux-zéro-double-un, on rentre dans l'jeu",
+      "startMs": 263392,
+      "endMs": 265373,
+      "segments": [
+        {
+          "id": "line:110:segment:0",
+          "text": "En ",
+          "startMs": 263392,
+          "endMs": 263572
+        },
+        {
+          "id": "line:110:segment:1",
+          "text": "deux-zéro-double-un, ",
+          "startMs": 263612,
+          "endMs": 264613
+        },
+        {
+          "id": "line:110:segment:2",
+          "text": "on ",
+          "startMs": 264673,
+          "endMs": 264753
+        },
+        {
+          "id": "line:110:segment:3",
+          "text": "rentre ",
+          "startMs": 264773,
+          "endMs": 264953
+        },
+        {
+          "id": "line:110:segment:4",
+          "text": "dans ",
+          "startMs": 264973,
+          "endMs": 265093
+        },
+        {
+          "id": "line:110:segment:5",
+          "text": "l'jeu",
+          "startMs": 265113,
+          "endMs": 265373
+        }
+      ]
+    },
+    {
+      "id": "line:111",
+      "kind": "lyrics",
+      "text": "Et les cartes changent de mains donc lève les tiennes",
+      "startMs": 265413,
+      "endMs": 267353,
+      "segments": [
+        {
+          "id": "line:111:segment:0",
+          "text": "Et ",
+          "startMs": 265413,
+          "endMs": 265493
+        },
+        {
+          "id": "line:111:segment:1",
+          "text": "les ",
+          "startMs": 265513,
+          "endMs": 265613
+        },
+        {
+          "id": "line:111:segment:2",
+          "text": "cartes ",
+          "startMs": 265633,
+          "endMs": 265833
+        },
+        {
+          "id": "line:111:segment:3",
+          "text": "changent ",
+          "startMs": 265853,
+          "endMs": 266073
+        },
+        {
+          "id": "line:111:segment:4",
+          "text": "de ",
+          "startMs": 266093,
+          "endMs": 266153
+        },
+        {
+          "id": "line:111:segment:5",
+          "text": "mains ",
+          "startMs": 266193,
+          "endMs": 266313
+        },
+        {
+          "id": "line:111:segment:6",
+          "text": "donc ",
+          "startMs": 266333,
+          "endMs": 266513
+        },
+        {
+          "id": "line:111:segment:7",
+          "text": "lève ",
+          "startMs": 266533,
+          "endMs": 266713
+        },
+        {
+          "id": "line:111:segment:8",
+          "text": "les ",
+          "startMs": 266733,
+          "endMs": 266813
+        },
+        {
+          "id": "line:111:segment:9",
+          "text": "tiennes",
+          "startMs": 266873,
+          "endMs": 267353
+        }
+      ]
+    },
+    {
+      "id": "line:112",
+      "kind": "lyrics",
+      "text": "On kicke sec aujourd'hui comme demain",
+      "startMs": 267413,
+      "endMs": 268973,
+      "segments": [
+        {
+          "id": "line:112:segment:0",
+          "text": "On ",
+          "startMs": 267413,
+          "endMs": 267553
+        },
+        {
+          "id": "line:112:segment:1",
+          "text": "kicke ",
+          "startMs": 267573,
+          "endMs": 267833
+        },
+        {
+          "id": "line:112:segment:2",
+          "text": "sec ",
+          "startMs": 267873,
+          "endMs": 268093
+        },
+        {
+          "id": "line:112:segment:3",
+          "text": "aujourd'hui ",
+          "startMs": 268133,
+          "endMs": 268473
+        },
+        {
+          "id": "line:112:segment:4",
+          "text": "comme ",
+          "startMs": 268513,
+          "endMs": 268673
+        },
+        {
+          "id": "line:112:segment:5",
+          "text": "demain",
+          "startMs": 268693,
+          "endMs": 268973
+        }
+      ]
+    },
+    {
+      "id": "line:113",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, on arrive dans ce putain d'biz",
+      "startMs": 269013,
+      "endMs": 271513,
+      "segments": [
+        {
+          "id": "line:113:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 269013,
+          "endMs": 269533
+        },
+        {
+          "id": "line:113:segment:1",
+          "text": "on ",
+          "startMs": 269613,
+          "endMs": 269733
+        },
+        {
+          "id": "line:113:segment:2",
+          "text": "arrive ",
+          "startMs": 269793,
+          "endMs": 270173
+        },
+        {
+          "id": "line:113:segment:3",
+          "text": "dans ",
+          "startMs": 270193,
+          "endMs": 270333
+        },
+        {
+          "id": "line:113:segment:4",
+          "text": "ce ",
+          "startMs": 270373,
+          "endMs": 270513
+        },
+        {
+          "id": "line:113:segment:5",
+          "text": "putain ",
+          "startMs": 270533,
+          "endMs": 270913
+        },
+        {
+          "id": "line:113:segment:6",
+          "text": "d'biz",
+          "startMs": 270933,
+          "endMs": 271513
+        }
+      ]
+    },
+    {
+      "id": "line:114",
+      "kind": "lyrics",
+      "text": "À la source, on va chercher des putain d'hits",
+      "startMs": 271573,
+      "endMs": 274033,
+      "segments": [
+        {
+          "id": "line:114:segment:0",
+          "text": "À ",
+          "startMs": 271573,
+          "endMs": 271673
+        },
+        {
+          "id": "line:114:segment:1",
+          "text": "la ",
+          "startMs": 271713,
+          "endMs": 271833
+        },
+        {
+          "id": "line:114:segment:2",
+          "text": "source, ",
+          "startMs": 271893,
+          "endMs": 272273
+        },
+        {
+          "id": "line:114:segment:3",
+          "text": "on ",
+          "startMs": 272333,
+          "endMs": 272473
+        },
+        {
+          "id": "line:114:segment:4",
+          "text": "va ",
+          "startMs": 272493,
+          "endMs": 272633
+        },
+        {
+          "id": "line:114:segment:5",
+          "text": "chercher ",
+          "startMs": 272653,
+          "endMs": 273013
+        },
+        {
+          "id": "line:114:segment:6",
+          "text": "des ",
+          "startMs": 273033,
+          "endMs": 273153
+        },
+        {
+          "id": "line:114:segment:7",
+          "text": "putain ",
+          "startMs": 273193,
+          "endMs": 273653
+        },
+        {
+          "id": "line:114:segment:8",
+          "text": "d'hits",
+          "startMs": 273673,
+          "endMs": 274033
+        }
+      ]
+    },
+    {
+      "id": "line:115",
+      "kind": "lyrics",
+      "text": "Un-neuf-neuf-cinq, on arrive dans ce putain d'biz",
+      "startMs": 274073,
+      "endMs": 276893,
+      "segments": [
+        {
+          "id": "line:115:segment:0",
+          "text": "Un-neuf-neuf-cinq, ",
+          "startMs": 274073,
+          "endMs": 274833
+        },
+        {
+          "id": "line:115:segment:1",
+          "text": "on ",
+          "startMs": 274913,
+          "endMs": 275033
+        },
+        {
+          "id": "line:115:segment:2",
+          "text": "arrive ",
+          "startMs": 275093,
+          "endMs": 275493
+        },
+        {
+          "id": "line:115:segment:3",
+          "text": "dans ",
+          "startMs": 275533,
+          "endMs": 275673
+        },
+        {
+          "id": "line:115:segment:4",
+          "text": "ce ",
+          "startMs": 275693,
+          "endMs": 275833
+        },
+        {
+          "id": "line:115:segment:5",
+          "text": "putain ",
+          "startMs": 275853,
+          "endMs": 276253
+        },
+        {
+          "id": "line:115:segment:6",
+          "text": "d'biz",
+          "startMs": 276293,
+          "endMs": 276893
+        }
+      ]
+    },
+    {
+      "id": "line:116",
+      "kind": "lyrics",
+      "text": "À la source, on va chercher des putain d'hits",
+      "startMs": 276933,
+      "endMs": 279233,
+      "segments": [
+        {
+          "id": "line:116:segment:0",
+          "text": "À ",
+          "startMs": 276933,
+          "endMs": 277053
+        },
+        {
+          "id": "line:116:segment:1",
+          "text": "la ",
+          "startMs": 277093,
+          "endMs": 277193
+        },
+        {
+          "id": "line:116:segment:2",
+          "text": "source, ",
+          "startMs": 277253,
+          "endMs": 277653
+        },
+        {
+          "id": "line:116:segment:3",
+          "text": "on ",
+          "startMs": 277713,
+          "endMs": 277853
+        },
+        {
+          "id": "line:116:segment:4",
+          "text": "va ",
+          "startMs": 277873,
+          "endMs": 278013
+        },
+        {
+          "id": "line:116:segment:5",
+          "text": "chercher ",
+          "startMs": 278033,
+          "endMs": 278393
+        },
+        {
+          "id": "line:116:segment:6",
+          "text": "des ",
+          "startMs": 278413,
+          "endMs": 278553
+        },
+        {
+          "id": "line:116:segment:7",
+          "text": "putain ",
+          "startMs": 278573,
+          "endMs": 278773
+        },
+        {
+          "id": "line:116:segment:8",
+          "text": "d'hits",
+          "startMs": 279053,
+          "endMs": 279233
+        }
+      ]
+    },
+    {
+      "id": "line:117",
+      "kind": "lyrics",
+      "text": "I make music for my people",
+      "startMs": 279373,
+      "endMs": 285754,
+      "segments": [
+        {
+          "id": "line:117:segment:0",
+          "text": "I ",
+          "startMs": 279373,
+          "endMs": 281813
+        },
+        {
+          "id": "line:117:segment:1",
+          "text": "make ",
+          "startMs": 282513,
+          "endMs": 282693
+        },
+        {
+          "id": "line:117:segment:2",
+          "text": "music ",
+          "startMs": 282733,
+          "endMs": 283033
+        },
+        {
+          "id": "line:117:segment:3",
+          "text": "for ",
+          "startMs": 283073,
+          "endMs": 283573
+        },
+        {
+          "id": "line:117:segment:4",
+          "text": "my ",
+          "startMs": 283613,
+          "endMs": 284213
+        },
+        {
+          "id": "line:117:segment:5",
+          "text": "people",
+          "startMs": 284233,
+          "endMs": 285754
+        }
+      ]
+    },
+    {
+      "id": "line:118",
+      "kind": "lyrics",
+      "text": "Nineteen-Ninety-five!",
+      "startMs": 286034,
+      "endMs": 287694,
+      "segments": [
+        {
+          "id": "line:118:segment:0",
+          "text": "Nineteen-Ninety-five!",
+          "startMs": 286034,
+          "endMs": 287694
+        }
+      ]
+    }
+  ]
+}
