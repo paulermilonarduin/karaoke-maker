@@ -575,6 +575,33 @@ p {
   padding: 0 12px;
 }
 
+.timeline-editor__tools {
+  display: grid;
+  grid-template-columns: auto minmax(220px, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeline-editor__tools .button {
+  min-height: 36px;
+  padding: 0 10px;
+}
+
+.timeline-editor__zoom {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.timeline-editor__zoom span {
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+
 .timeline-editor__scroll {
   min-width: 0;
   overflow-x: auto;
@@ -598,6 +625,32 @@ p {
     ),
     var(--color-bg);
   background-size: 80px 100%;
+}
+
+.timeline-playhead {
+  position: absolute;
+  z-index: 7;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-warning);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-warning) 42%, transparent);
+  pointer-events: none;
+}
+
+.timeline-playhead__label {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  padding: 2px 5px;
+  border: 1px solid color-mix(in srgb, var(--color-warning) 52%, transparent);
+  border-radius: 5px;
+  color: var(--color-warning);
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 850;
+  white-space: nowrap;
 }
 
 .timeline-block {
@@ -676,6 +729,22 @@ p {
   border-radius: 6px;
   background: color-mix(in srgb, var(--color-accent) 16%, transparent);
   cursor: grab;
+}
+
+.timeline-gap {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  min-width: 3px;
+  border: 1px dashed color-mix(in srgb, var(--color-warning) 56%, transparent);
+  border-radius: 5px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--color-warning) 18%, transparent) 0 4px,
+      transparent 4px 8px
+    );
+  pointer-events: auto;
 }
 
 .timeline-segment--active {
@@ -1616,6 +1685,11 @@ input[type='range'] {
   .timeline-editor__actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+
+  .timeline-editor__tools,
+  .timeline-editor__zoom {
+    grid-template-columns: 1fr;
   }
 
   .timeline-inspector {

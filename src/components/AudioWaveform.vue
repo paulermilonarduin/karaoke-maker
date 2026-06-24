@@ -318,6 +318,7 @@ defineExpose({
   adjustPlaybackRate,
   nudgeSelectedRegion,
   seekBy,
+  setZoom,
   setPlaybackRate,
   togglePlayback,
 })

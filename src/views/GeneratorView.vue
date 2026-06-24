@@ -43,6 +43,15 @@ type TimelineSnapshot = {
   selectedSegmentId?: string
 }
 
+type SegmentGap = {
+  id: string
+  durationMs: number
+  style: {
+    left: string
+    width: string
+  }
+}
+
 defineProps<{
   accentColor: string
 }>()
@@ -68,6 +77,7 @@ const selectedSegmentId = ref<string>()
 const splitTextInput = ref<HTMLTextAreaElement>()
 const syncError = ref<string>()
 const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
+const timelineScrollRef = ref<HTMLElement>()
 const isCapturingShortcut = ref(false)
 const timelineDrag = ref<TimelineDrag>()
 const undoStack = ref<TimelineSnapshot[]>([])
@@ -124,6 +134,14 @@ const timelineSummary = computed(() =>
     duration: audioDurationMs.value ? formatTimestamp(audioDurationMs.value) : '00:00.000',
   }),
 )
+const timelineZoomLabel = computed(() => `${timelineZoomPxPerSecond.value} px/s`)
+const timelinePlayheadStyle = computed(() => {
+  const durationMs = audioDurationMs.value ?? 1
+
+  return {
+    left: `${(currentTimeMs.value / durationMs) * 100}%`,
+  }
+})
 const canUndo = computed(() => undoStack.value.length > 0)
 const canRedo = computed(() => redoStack.value.length > 0)
 const canMergeWithPreviousSegment = computed(() => {
@@ -311,6 +329,88 @@ function getSegmentStyle(line: DraftLyricLine, segment: DraftLyricSegment) {
   return {
     left: `${((segment.startMs - line.startMs) / lineDuration) * 100}%`,
     width: `${((segment.endMs - segment.startMs) / lineDuration) * 100}%`,
+  }
+}
+
+function getSegmentGaps(line: DraftLyricLine): SegmentGap[] {
+  if (isInterludeLine(line) || !hasTiming(line)) {
+    return []
+  }
+
+  const lineDuration = line.endMs - line.startMs
+
+  return line.segments.flatMap((segment, index) => {
+    const nextSegment = line.segments[index + 1]
+
+    if (!hasSegmentTiming(segment) || !hasSegmentTiming(nextSegment)) {
+      return []
+    }
+
+    const gapStartMs = segment.endMs
+    const gapEndMs = nextSegment.startMs
+
+    if (gapEndMs <= gapStartMs) {
+      return []
+    }
+
+    return [
+      {
+        id: `${segment.id}:gap:${nextSegment.id}`,
+        durationMs: gapEndMs - gapStartMs,
+        style: {
+          left: `${((gapStartMs - line.startMs) / lineDuration) * 100}%`,
+          width: `${((gapEndMs - gapStartMs) / lineDuration) * 100}%`,
+        },
+      },
+    ]
+  })
+}
+
+function setTimelineZoom(value: number) {
+  const nextZoom = clamp(Math.round(value), 20, 480)
+
+  timelineZoomPxPerSecond.value = nextZoom
+  waveformRef.value?.setZoom(nextZoom)
+}
+
+function zoomTimeline(delta: number) {
+  setTimelineZoom(timelineZoomPxPerSecond.value + delta)
+  requestAnimationFrame(() => centerTimelineOnCurrentTime())
+}
+
+function centerTimelineOnCurrentTime() {
+  const scrollElement = timelineScrollRef.value
+  const durationMs = audioDurationMs.value
+
+  if (!scrollElement || !durationMs) {
+    return
+  }
+
+  const playheadLeftPx = (currentTimeMs.value / durationMs) * timelineWidthPx.value
+
+  scrollElement.scrollLeft = Math.max(0, playheadLeftPx - scrollElement.clientWidth / 2)
+}
+
+function onTimelineZoomInput(event: Event) {
+  setTimelineZoom(Number((event.target as HTMLInputElement).value))
+}
+
+function onTimelineWheel(event: WheelEvent) {
+  const scrollElement = timelineScrollRef.value
+
+  if (!scrollElement || !hasTimeline.value) {
+    return
+  }
+
+  if (event.ctrlKey) {
+    event.preventDefault()
+    zoomTimeline(event.deltaY > 0 ? -20 : 20)
+    return
+  }
+
+  if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+    event.preventDefault()
+    scrollElement.scrollLeft += event.deltaY
   }
 }
 
@@ -997,10 +1097,47 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
+        <div class="timeline-editor__tools">
+          <button class="button" type="button" :disabled="!hasTimeline" @click="zoomTimeline(-20)">
+            {{ t('generator.zoomOut') }}
+          </button>
+          <label class="timeline-editor__zoom">
+            {{ t('generator.timelineZoom') }}
+            <input
+              type="range"
+              min="20"
+              max="480"
+              step="10"
+              :value="timelineZoomPxPerSecond"
+              :disabled="!hasTimeline"
+              @input="onTimelineZoomInput"
+            />
+            <span>{{ timelineZoomLabel }}</span>
+          </label>
+          <button class="button" type="button" :disabled="!hasTimeline" @click="zoomTimeline(20)">
+            {{ t('generator.zoomIn') }}
+          </button>
+          <button class="button" type="button" :disabled="!hasTimeline" @click="centerTimelineOnCurrentTime">
+            {{ t('generator.centerPlayhead') }}
+          </button>
+        </div>
+
         <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
 
-        <div v-if="hasTimeline" class="timeline-editor__scroll">
+        <div
+          v-if="hasTimeline"
+          ref="timelineScrollRef"
+          class="timeline-editor__scroll"
+          @wheel="onTimelineWheel"
+        >
           <div class="timeline-editor__track" :style="{ width: `${timelineWidthPx}px` }">
+            <span
+              class="timeline-playhead"
+              :style="timelinePlayheadStyle"
+              :aria-label="t('generator.playhead')"
+            >
+              <span class="timeline-playhead__label">{{ formatTimestamp(currentTimeMs) }}</span>
+            </span>
             <div
               v-for="(line, lineIndex) in project.draftLines"
               :key="line.id"
@@ -1025,6 +1162,14 @@ onBeforeUnmount(() => {
                 {{ isInterludeLine(line) ? t('generator.interludeBlock') : line.text }}
               </span>
               <span v-if="!isInterludeLine(line)" class="timeline-block__segments">
+                <span
+                  v-for="gap in getSegmentGaps(line)"
+                  :key="gap.id"
+                  class="timeline-gap"
+                  :style="gap.style"
+                  :title="t('generator.segmentGap', { duration: formatTimestamp(gap.durationMs) })"
+                  aria-hidden="true"
+                ></span>
                 <span
                   v-for="(segment, segmentIndex) in line.segments"
                   :key="segment.id"
