@@ -39,38 +39,62 @@ const karaokeFile = computed(() => {
   }
 })
 const lyrics = computed(() => karaokeFile.value?.lines ?? [])
+// A gap shorter than this just lingers on the last line; a longer one shows an
+// interlude countdown (a filling bar) to keep singers engaged until the next line.
+const INTERLUDE_MIN_GAP_MS = 2500
+
 const activeLine = computed(() => findActiveLine(lyrics.value, currentTimeMs.value))
-// In an instrumental gap no line is strictly active. Rather than fall back to
-// the "press play" placeholder, keep the last line that has already begun so it
-// lingers (fully highlighted) until the next one starts.
-const displayLine = computed<LyricLine | undefined>(() => {
-  if (activeLine.value) {
-    return activeLine.value
+
+// Resolves what to show, including instrumental gaps where no line is strictly
+// active: short gaps linger on the last sung line, long gaps render a synthetic
+// "bridge" interlude (the existing progress-bar loader) counting to the next line.
+const playback = computed<{
+  display?: LyricLine
+  previous?: LyricLine
+  next?: LyricLine
+}>(() => {
+  const active = activeLine.value
+
+  if (active) {
+    const index = lyrics.value.findIndex((line) => line.id === active.id)
+    return { display: active, previous: lyrics.value[index - 1], next: lyrics.value[index + 1] }
   }
 
-  let lingering: LyricLine | undefined
+  let lingeringIndex = -1
 
-  for (const line of lyrics.value) {
-    if (line.startMs <= currentTimeMs.value) {
-      lingering = line
+  for (let index = 0; index < lyrics.value.length; index += 1) {
+    if (lyrics.value[index].startMs <= currentTimeMs.value) {
+      lingeringIndex = index
     } else {
       break
     }
   }
 
-  return lingering
+  const lingering = lyrics.value[lingeringIndex]
+  const upcoming = lyrics.value[lingeringIndex + 1]
+
+  if (upcoming) {
+    const gapStart = lingering?.endMs ?? 0
+
+    if (upcoming.startMs - gapStart >= INTERLUDE_MIN_GAP_MS) {
+      const interlude: LyricLine = {
+        id: `interlude:${lingeringIndex}`,
+        kind: 'bridge',
+        startMs: gapStart,
+        endMs: upcoming.startMs,
+        text: '',
+      }
+
+      return { display: interlude, previous: lingering, next: upcoming }
+    }
+  }
+
+  return { display: lingering, previous: lyrics.value[lingeringIndex - 1], next: upcoming }
 })
-const displayIndex = computed(() =>
-  displayLine.value
-    ? lyrics.value.findIndex((candidate) => candidate.id === displayLine.value!.id)
-    : -1,
-)
-const previousLine = computed<LyricLine | undefined>(() =>
-  displayLine.value ? lyrics.value[displayIndex.value - 1] : undefined,
-)
-const nextLine = computed<LyricLine | undefined>(() =>
-  displayLine.value ? lyrics.value[displayIndex.value + 1] : lyrics.value[0],
-)
+
+const displayLine = computed(() => playback.value.display)
+const previousLine = computed(() => playback.value.previous)
+const nextLine = computed(() => playback.value.next)
 
 function revokeAudio() {
   if (resolvedAudioUrl.value?.startsWith('blob:')) {
