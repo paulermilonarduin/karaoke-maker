@@ -779,18 +779,35 @@ p {
   background: color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
-.lyrics-display__title {
+.lyrics-display__song {
   max-width: min(560px, calc(100% - 180px));
   margin: 0 auto;
   overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.lyrics-display__title,
+.lyrics-display__artist {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lyrics-display__title {
   color: var(--color-text-muted);
   font-size: 0.78rem;
   font-weight: 850;
   letter-spacing: 0.08em;
-  text-align: center;
-  text-overflow: ellipsis;
   text-transform: uppercase;
-  white-space: nowrap;
+}
+
+.lyrics-display__artist {
+  margin-top: 2px;
+  color: color-mix(in srgb, var(--color-text-muted) 78%, transparent);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .lyrics-display__time {
@@ -1050,6 +1067,24 @@ p {
   background: var(--color-surface-hover);
 }
 
+.catalog-track__title,
+.catalog-track__artist,
+.catalog-track__format {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.catalog-track__title {
+  font-size: 0.94rem;
+}
+
+.catalog-track__artist {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
 .catalog-track__format {
   color: var(--color-text-muted);
   font-size: 0.75rem;
@@ -1303,7 +1338,7 @@ input[type='range'] {
     min-height: 320px;
   }
 
-  .lyrics-display__title {
+  .lyrics-display__song {
     max-width: 100%;
     padding: 0 56px;
   }

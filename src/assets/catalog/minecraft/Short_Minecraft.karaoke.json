@@ -1,9 +1,20 @@
 {
-  "schemaVersion": 1,
-  "title": "Short_Minecraft",
-  "audio": {
-    "fileName": "Short_Minecraft.mp3",
+  "schemaVersion": 2,
+  "song": {
+    "title": "Minecraft UDSS",
+    "artist": "Robert LaFondue",
     "durationMs": 96012
+  },
+  "audio": {
+    "fileName": "Short_Minecraft.mp3"
+  },
+  "assets": {
+    "cover": null,
+    "background": null
+  },
+  "display": {
+    "accentColor": null,
+    "backgroundColor": null
   },
   "lines": [
     {
@@ -15,6 +26,7 @@
     },
     {
       "id": "line:0",
+      "kind": "lyrics",
       "text": "Le serveur Minecraft c'est une bonne idée",
       "startMs": 20081,
       "endMs": 22588,
@@ -61,11 +73,11 @@
           "startMs": 21862,
           "endMs": 22588
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:1",
+      "kind": "lyrics",
       "text": "Mais bon moi je crois que j'aurais mieux fait",
       "startMs": 22588,
       "endMs": 25438,
@@ -124,11 +136,11 @@
           "startMs": 24562,
           "endMs": 25438
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:2",
+      "kind": "lyrics",
       "text": "Sans arbres moches qui donnent pas de graines",
       "startMs": 25438,
       "endMs": 27780,
@@ -181,11 +193,11 @@
           "startMs": 27371,
           "endMs": 27780
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:3",
+      "kind": "lyrics",
       "text": "Mais la nouvelle version et tous ses golems",
       "startMs": 27780,
       "endMs": 30582,
@@ -238,11 +250,11 @@
           "startMs": 29869,
           "endMs": 30582
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:4",
+      "kind": "lyrics",
       "text": "Geoffrey n'aurait pas volé la montagne",
       "startMs": 30582,
       "endMs": 33433,
@@ -283,11 +295,11 @@
           "startMs": 32255,
           "endMs": 33433
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:5",
+      "kind": "lyrics",
       "text": "Et mis tant de villageois au bagne",
       "startMs": 33433,
       "endMs": 35842,
@@ -334,11 +346,11 @@
           "startMs": 35140,
           "endMs": 35842
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:6",
+      "kind": "lyrics",
       "text": "Les blocs d'émeraude montent jusqu'au plafond",
       "startMs": 35842,
       "endMs": 38692,
@@ -379,11 +391,11 @@
           "startMs": 37819,
           "endMs": 38692
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:7",
+      "kind": "lyrics",
       "text": "Mais ses habitants n'ont pas de maison",
       "startMs": 38692,
       "endMs": 41380,
@@ -430,11 +442,11 @@
           "startMs": 40388,
           "endMs": 41380
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:8",
+      "kind": "lyrics",
       "text": "Il tue et mutile pour un peu de fer",
       "startMs": 41380,
       "endMs": 44011,
@@ -493,11 +505,11 @@
           "startMs": 43147,
           "endMs": 44011
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:9",
+      "kind": "lyrics",
       "text": "Pour trouver de l'or va jusqu'en enfer",
       "startMs": 44011,
       "endMs": 46500,
@@ -544,11 +556,11 @@
           "startMs": 45537,
           "endMs": 46500
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:10",
+      "kind": "lyrics",
       "text": "Marie n'aurait pas fait une maison volante",
       "startMs": 46500,
       "endMs": 49164,
@@ -595,11 +607,11 @@
           "startMs": 48367,
           "endMs": 49164
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:11",
+      "kind": "lyrics",
       "text": "Projetant sur l'village une ombre géante",
       "startMs": 49164,
       "endMs": 52114,
@@ -640,11 +652,11 @@
           "startMs": 50939,
           "endMs": 52114
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:12",
+      "kind": "lyrics",
       "text": "De son île elle ne tomberait jamais",
       "startMs": 52114,
       "endMs": 54334,
@@ -691,11 +703,11 @@
           "startMs": 53635,
           "endMs": 54334
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:13",
+      "kind": "lyrics",
       "text": "N'oublierait pas de rendre les livres empruntés",
       "startMs": 54334,
       "endMs": 57016,
@@ -742,11 +754,11 @@
           "startMs": 56182,
           "endMs": 57016
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:14",
+      "kind": "lyrics",
       "text": "Au mois grâce à elle ya du bon ragoût",
       "startMs": 57016,
       "endMs": 59563,
@@ -805,11 +817,11 @@
           "startMs": 59005,
           "endMs": 59563
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:15",
+      "kind": "lyrics",
       "text": "Mais c'est normal c'est la seule femme qui joue",
       "startMs": 59563,
       "endMs": 62386,
@@ -868,11 +880,11 @@
           "startMs": 62037,
           "endMs": 62386
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:16",
+      "kind": "lyrics",
       "text": "Une maison dans le ciel c'est pas médiéval",
       "startMs": 62386,
       "endMs": 64850,
@@ -925,11 +937,11 @@
           "startMs": 64069,
           "endMs": 64850
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:17",
+      "kind": "lyrics",
       "text": "Et un site industriel c'est pas médiéval",
       "startMs": 64850,
       "endMs": 67431,
@@ -976,11 +988,11 @@
           "startMs": 66564,
           "endMs": 67431
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:18",
+      "kind": "lyrics",
       "text": "La magie et les sorts c'est pas médiéval",
       "startMs": 67431,
       "endMs": 70538,
@@ -1033,11 +1045,11 @@
           "startMs": 69301,
           "endMs": 70538
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:19",
+      "kind": "lyrics",
       "text": "Si c'était moi j'aurais mieux fait que Val",
       "startMs": 70538,
       "endMs": 72988,
@@ -1090,11 +1102,11 @@
           "startMs": 72564,
           "endMs": 72988
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:20",
+      "kind": "lyrics",
       "text": "Une maison dans le ciel c'est pas médiéval",
       "startMs": 72988,
       "endMs": 75400,
@@ -1147,11 +1159,11 @@
           "startMs": 74481,
           "endMs": 75400
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:21",
+      "kind": "lyrics",
       "text": "Et un site industriel c'est pas médiéval",
       "startMs": 75400,
       "endMs": 77997,
@@ -1198,11 +1210,11 @@
           "startMs": 77152,
           "endMs": 77997
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:22",
+      "kind": "lyrics",
       "text": "La magie et les sorts c'est pas médiéval",
       "startMs": 77997,
       "endMs": 80890,
@@ -1255,11 +1267,11 @@
           "startMs": 79787,
           "endMs": 80890
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:23",
+      "kind": "lyrics",
       "text": "Si c'était moi j'aurais mieux fait que Val",
       "startMs": 80890,
       "endMs": 83492,
@@ -1312,11 +1324,11 @@
           "startMs": 82929,
           "endMs": 83492
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:24",
+      "kind": "lyrics",
       "text": "Une maison dans le ciel c'est pas médiéval",
       "startMs": 83492,
       "endMs": 85957,
@@ -1369,11 +1381,11 @@
           "startMs": 85072,
           "endMs": 85957
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:25",
+      "kind": "lyrics",
       "text": "Et un site industriel c'est pas médiéval",
       "startMs": 85957,
       "endMs": 88588,
@@ -1420,11 +1432,11 @@
           "startMs": 87587,
           "endMs": 88588
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:26",
+      "kind": "lyrics",
       "text": "La magie et les sorts c'est pas médiéval",
       "startMs": 88588,
       "endMs": 91586,
@@ -1477,11 +1489,11 @@
           "startMs": 90331,
           "endMs": 91586
         }
-      ],
-      "kind": "lyrics"
+      ]
     },
     {
       "id": "line:27",
+      "kind": "lyrics",
       "text": "Si c'était moi j'aurais mieux fait que Val",
       "startMs": 91586,
       "endMs": 94405,
@@ -1534,8 +1546,7 @@
           "startMs": 93548,
           "endMs": 94390
         }
-      ],
-      "kind": "lyrics"
+      ]
     }
   ]
 }

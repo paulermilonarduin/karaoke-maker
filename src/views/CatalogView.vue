@@ -22,7 +22,9 @@ const filteredTracks = computed(() => {
     return catalogTracks
   }
 
-  return catalogTracks.filter((track) => normalizeTrackSearch(track.title).includes(query))
+  return catalogTracks.filter((track) =>
+    normalizeTrackSearch(`${track.title} ${track.artist}`).includes(query),
+  )
 })
 const previousLine = computed<LyricLine | undefined>(() => {
   const line = activeLine.value
@@ -59,6 +61,14 @@ function selectTrack(track: CatalogTrack) {
   selectedTrack.value = track
   currentTimeMs.value = 0
   audioDurationMs.value = undefined
+}
+
+function formatCatalogDuration(durationMs: number): string {
+  const totalSeconds = Math.max(0, Math.round(durationMs / 1000))
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
 }
 </script>
 
@@ -107,8 +117,11 @@ function selectTrack(track: CatalogTrack) {
             role="listitem"
             @click="selectTrack(track)"
           >
-            <span>{{ track.title }}</span>
-            <span class="catalog-track__format">{{ t('catalog.format') }}</span>
+            <span class="catalog-track__title">{{ track.title }}</span>
+            <span class="catalog-track__artist">{{ track.artist }}</span>
+            <span class="catalog-track__format">
+              {{ formatCatalogDuration(track.durationMs) }} · {{ t('catalog.format') }}
+            </span>
           </button>
 
           <p v-if="filteredTracks.length === 0" class="catalog-empty">
@@ -126,6 +139,7 @@ function selectTrack(track: CatalogTrack) {
           :next-line="nextLine"
           :placeholder="t('catalog.placeholder')"
           :title="selectedTrack.title"
+          :artist="selectedTrack.artist"
         >
           <template #footer>
             <AudioPlayer

@@ -1,4 +1,4 @@
-export const KARAOKE_SCHEMA_VERSION = 1 as const
+export const KARAOKE_SCHEMA_VERSION = 2 as const
 
 export type LyricSegment = {
   id: string
@@ -36,17 +36,31 @@ export type DraftLyricLine = {
 
 export type KaraokeProject = {
   title: string
+  artist: string
   audioFileName?: string
   lyricsFileName?: string
   draftLines: DraftLyricLine[]
 }
 
+export type KaraokeSong = {
+  title: string
+  artist: string
+  durationMs: number
+}
+
 export type KaraokeFile = {
   schemaVersion: typeof KARAOKE_SCHEMA_VERSION
-  title: string
+  song: KaraokeSong
   audio: {
     fileName?: string
-    durationMs: number
+  }
+  assets?: {
+    cover?: string | null
+    background?: string | null
+  }
+  display?: {
+    accentColor?: string | null
+    backgroundColor?: string | null
   }
   lines: Array<LyricLine & { endMs: number }>
 }
@@ -156,10 +170,21 @@ export function createKaraokeFile(
 
   const file: KaraokeFile = {
     schemaVersion: KARAOKE_SCHEMA_VERSION,
-    title: project.title,
+    song: {
+      title: project.title,
+      artist: project.artist,
+      durationMs: audioDurationMs,
+    },
     audio: {
       fileName: project.audioFileName,
-      durationMs: audioDurationMs,
+    },
+    assets: {
+      cover: null,
+      background: null,
+    },
+    display: {
+      accentColor: null,
+      backgroundColor: null,
     },
     lines: completeLines,
   }
@@ -177,6 +202,58 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isNonNegativeInteger(value: unknown): value is number {
   return Number.isInteger(value) && (value as number) >= 0
+}
+
+function isNullableString(value: unknown): value is string | null {
+  return value === null || typeof value === 'string'
+}
+
+function parseOptionalAssets(value: unknown): KaraokeFile['assets'] | undefined {
+  if (value === undefined) {
+    return undefined
+  }
+
+  if (!isRecord(value)) {
+    return undefined
+  }
+
+  const { cover, background } = value
+
+  if (
+    (cover !== undefined && !isNullableString(cover)) ||
+    (background !== undefined && !isNullableString(background))
+  ) {
+    return undefined
+  }
+
+  return {
+    ...(cover !== undefined ? { cover } : {}),
+    ...(background !== undefined ? { background } : {}),
+  }
+}
+
+function parseOptionalDisplay(value: unknown): KaraokeFile['display'] | undefined {
+  if (value === undefined) {
+    return undefined
+  }
+
+  if (!isRecord(value)) {
+    return undefined
+  }
+
+  const { accentColor, backgroundColor } = value
+
+  if (
+    (accentColor !== undefined && !isNullableString(accentColor)) ||
+    (backgroundColor !== undefined && !isNullableString(backgroundColor))
+  ) {
+    return undefined
+  }
+
+  return {
+    ...(accentColor !== undefined ? { accentColor } : {}),
+    ...(backgroundColor !== undefined ? { backgroundColor } : {}),
+  }
 }
 
 function parseSegment(value: unknown, line: LyricLine, index: number): LyricSegment {
@@ -276,17 +353,24 @@ export function parseKaraokeFile(content: string): KaraokeFile {
     throw new Error(`La version du fichier karaoké n'est pas supportée.`)
   }
 
-  if (typeof value.title !== 'string' || !isRecord(value.audio) || !Array.isArray(value.lines)) {
+  if (!isRecord(value.song) || !isRecord(value.audio) || !Array.isArray(value.lines)) {
     throw new Error('La structure du fichier karaoké est invalide.')
   }
 
-  const { fileName, durationMs } = value.audio
+  const { title, artist, durationMs } = value.song
+  const { fileName } = value.audio
+  const assets = parseOptionalAssets(value.assets)
+  const display = parseOptionalDisplay(value.display)
 
   if (
+    typeof title !== 'string' ||
+    typeof artist !== 'string' ||
+    !isNonNegativeInteger(durationMs) ||
     (fileName !== undefined && typeof fileName !== 'string') ||
-    !isNonNegativeInteger(durationMs)
+    (value.assets !== undefined && assets === undefined) ||
+    (value.display !== undefined && display === undefined)
   ) {
-    throw new Error('Les informations audio du fichier karaoké sont invalides.')
+    throw new Error('Les informations du fichier karaoké sont invalides.')
   }
 
   const lines = value.lines.map((line, index) => parseLine(line, index))
@@ -305,8 +389,10 @@ export function parseKaraokeFile(content: string): KaraokeFile {
 
   return {
     schemaVersion: KARAOKE_SCHEMA_VERSION,
-    title: value.title,
-    audio: { fileName, durationMs },
+    song: { title, artist, durationMs },
+    audio: { fileName },
+    ...(assets !== undefined ? { assets } : {}),
+    ...(display !== undefined ? { display } : {}),
     lines,
   }
 }

@@ -74,6 +74,7 @@ Cette V1 doit surtout valider le flux principal : créer une synchronisation min
 
 Karaoke Maker utilise un format JSON interne versionné (`*.karaoke.json`). Il représente :
 
+- Les informations du morceau (`title`, `artist`, `durationMs`)
 - Une ligne de paroles complète
 - Plusieurs segments temporels à l'intérieur d'une même ligne
 - Des blocs d’interlude (`kind: "interlude"`) pour les passages sans paroles
@@ -154,13 +155,26 @@ Cette approche suffit pour le POC et permet de migrer facilement vers une librai
 
 Le JSON est la source de vérité unique. Chaque segment conserve son texte exact, espaces compris, afin que leur concaténation reconstitue la ligne.
 
+Le format détaillé est documenté dans `docs/KARAOKE_JSON.md`.
+
 ```json
 {
-  "schemaVersion": 1,
-  "title": "Song title",
-  "audio": {
-    "fileName": "song.mp3",
+  "schemaVersion": 2,
+  "song": {
+    "title": "Song title",
+    "artist": "Artist name",
     "durationMs": 180000
+  },
+  "audio": {
+    "fileName": "song.mp3"
+  },
+  "assets": {
+    "cover": null,
+    "background": null
+  },
+  "display": {
+    "accentColor": null,
+    "backgroundColor": null
   },
   "lines": [
     {

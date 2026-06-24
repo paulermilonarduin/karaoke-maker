@@ -32,6 +32,7 @@ defineProps<{
 
 const project = ref<KaraokeProject>({
   title: '',
+  artist: '',
   draftLines: [],
 })
 const manualInterludeCount = ref(0)

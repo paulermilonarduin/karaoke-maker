@@ -1,21 +1,35 @@
 import shortMinecraftAudioUrl from '../assets/catalog/minecraft/Short_Minecraft.mp3'
 import shortMinecraftKaraoke from '../assets/catalog/minecraft/Short_Minecraft.karaoke.json?raw'
+import { parseKaraokeFile } from '../domain/lyrics'
 
 export type CatalogTrack = {
   id: string
   title: string
+  artist: string
+  durationMs: number
   audioUrl: string
   karaokeContent: string
 }
 
-const createEmptyKaraokeContent = (title: string) =>
+const createEmptyKaraokeContent = (title: string, artist: string) =>
   JSON.stringify(
     {
-      schemaVersion: 1,
-      title,
+      schemaVersion: 2,
+      song: {
+        title,
+        artist,
+        durationMs: 96012,
+      },
       audio: {
         fileName: 'Short_Minecraft.mp3',
-        durationMs: 96012,
+      },
+      assets: {
+        cover: null,
+        background: null,
+      },
+      display: {
+        accentColor: null,
+        backgroundColor: null,
       },
       lines: [],
     },
@@ -26,21 +40,31 @@ const createEmptyKaraokeContent = (title: string) =>
 const demoTracks: CatalogTrack[] = Array.from({ length: 11 }, (_, index) => {
   const displayIndex = String(index + 1).padStart(2, '0')
   const title = `Démo ${displayIndex}`
+  const artist = 'Karaoke Maker'
 
-  return {
+  return createCatalogTrack({
     id: `demo-${displayIndex}`,
-    title,
     audioUrl: shortMinecraftAudioUrl,
-    karaokeContent: createEmptyKaraokeContent(title),
-  }
+    karaokeContent: createEmptyKaraokeContent(title, artist),
+  })
 })
 
+function createCatalogTrack(track: Pick<CatalogTrack, 'id' | 'audioUrl' | 'karaokeContent'>) {
+  const karaokeFile = parseKaraokeFile(track.karaokeContent)
+
+  return {
+    ...track,
+    title: karaokeFile.song.title,
+    artist: karaokeFile.song.artist,
+    durationMs: karaokeFile.song.durationMs,
+  }
+}
+
 export const catalogTracks: CatalogTrack[] = [
-  {
+  createCatalogTrack({
     id: 'minecraft',
-    title: 'Short Minecraft',
     audioUrl: shortMinecraftAudioUrl,
     karaokeContent: shortMinecraftKaraoke,
-  },
+  }),
   ...demoTracks,
 ]

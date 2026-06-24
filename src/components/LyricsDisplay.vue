@@ -11,6 +11,7 @@ const props = defineProps<{
   previousLine?: LyricLine
   nextLine?: LyricLine
   placeholder?: string
+  artist?: string
   title?: string
 }>()
 
@@ -178,7 +179,10 @@ onBeforeUnmount(() => {
     >
       <span aria-hidden="true">{{ isFullscreen ? '×' : '⛶' }}</span>
     </button>
-    <p v-if="title" class="lyrics-display__title">{{ title }}</p>
+    <div v-if="title || artist" class="lyrics-display__song">
+      <p v-if="title" class="lyrics-display__title">{{ title }}</p>
+      <p v-if="artist" class="lyrics-display__artist">{{ artist }}</p>
+    </div>
     <p class="lyrics-display__time">
       {{ activeLine ? formatTimestamp(activeLine.startMs) : '00:00.000' }}
     </p>
