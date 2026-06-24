@@ -26,8 +26,6 @@ Cas prioritaires à corriger :
 
 ## Générateur V2
 
-Améliorations à prévoir après la vague fonctionnelle actuelle :
+Amélioration à prévoir après le refactor des composables :
 
-- Extraire la logique timeline hors de `GeneratorView.vue`.
-- Créer des composables dédiés : `useTimelineEditor`, `useTimelineUndo`, `useGeneratorFiles`.
 - Ajouter une preview plus fidèle du rendu karaoké directement dans le générateur.

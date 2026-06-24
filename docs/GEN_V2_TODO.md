@@ -15,6 +15,4 @@
 
 ## Améliorations second temps
 
-- Extraire la logique timeline hors de `GeneratorView.vue`.
-- Créer des composables `useTimelineEditor`, `useTimelineUndo`, `useGeneratorFiles`.
 - Ajouter une preview plus fidèle du rendu karaoké pendant la génération.
