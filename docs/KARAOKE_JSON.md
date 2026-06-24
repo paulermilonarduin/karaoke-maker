@@ -25,6 +25,9 @@ Le MP3 reste externe au JSON. Le fichier JSON décrit le morceau, les métadonn�
     "accentColor": null,
     "backgroundColor": null
   },
+  "sync": {
+    "offsetMs": 0
+  },
   "lines": []
 }
 ```
@@ -39,6 +42,7 @@ Le MP3 reste externe au JSON. Le fichier JSON décrit le morceau, les métadonn�
 - `assets.cover` : pochette optionnelle pour le catalogue
 - `assets.background` : image de fond optionnelle pour le lecteur
 - `display` : préférences visuelles optionnelles propres au morceau
+- `sync.offsetMs` : offset global optionnel appliqué au temps de lecture
 - `lines` : contenu synchronisé lu par le lecteur
 
 ## Lignes

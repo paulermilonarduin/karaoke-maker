@@ -178,6 +178,9 @@ Le format détaillé est documenté dans `docs/KARAOKE_JSON.md`.
     "accentColor": null,
     "backgroundColor": null
   },
+  "sync": {
+    "offsetMs": 0
+  },
   "lines": [
     {
       "id": "interlude:intro",

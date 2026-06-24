@@ -8,6 +8,7 @@ import {
   createKaraokeFile,
   formatTimestamp,
   isInterludeLine,
+  parseKaraokeFile,
   parsePlainLyrics,
   serializeKaraokeFile,
   type DraftLyricLine,
@@ -41,6 +42,7 @@ type TimelineSnapshot = {
   manualInterludeCount: number
   selectedLineId?: string
   selectedSegmentId?: string
+  syncOffsetMs?: number
 }
 
 type SegmentGap = {
@@ -135,6 +137,7 @@ const timelineSummary = computed(() =>
   }),
 )
 const timelineZoomLabel = computed(() => `${timelineZoomPxPerSecond.value} px/s`)
+const syncOffsetLabel = computed(() => formatTimestamp(Math.abs(project.value.syncOffsetMs ?? 0)))
 const timelinePlayheadStyle = computed(() => {
   const durationMs = audioDurationMs.value ?? 1
 
@@ -193,6 +196,7 @@ function pushUndoSnapshot() {
       manualInterludeCount: manualInterludeCount.value,
       selectedLineId: selectedLineId.value,
       selectedSegmentId: selectedSegmentId.value,
+      syncOffsetMs: project.value.syncOffsetMs,
     },
   ]
   redoStack.value = []
@@ -209,6 +213,7 @@ function createTimelineSnapshot(): TimelineSnapshot {
     manualInterludeCount: manualInterludeCount.value,
     selectedLineId: selectedLineId.value,
     selectedSegmentId: selectedSegmentId.value,
+    syncOffsetMs: project.value.syncOffsetMs,
   }
 }
 
@@ -217,6 +222,7 @@ function restoreTimelineSnapshot(snapshot: TimelineSnapshot) {
   manualInterludeCount.value = snapshot.manualInterludeCount
   selectedLineId.value = snapshot.selectedLineId
   selectedSegmentId.value = snapshot.selectedSegmentId
+  project.value.syncOffsetMs = snapshot.syncOffsetMs
   syncError.value = undefined
 }
 
@@ -939,6 +945,55 @@ function nudgeSelectedLine(deltaMs: number) {
   moveLine(index, deltaMs)
 }
 
+function setGlobalOffset(value: number, recordUndo = false) {
+  const nextOffsetMs = clamp(Math.round(value), -300_000, 300_000)
+
+  if ((project.value.syncOffsetMs ?? 0) === nextOffsetMs) {
+    return
+  }
+
+  if (recordUndo) {
+    pushUndoSnapshot()
+  }
+
+  project.value.syncOffsetMs = nextOffsetMs
+}
+
+function adjustGlobalOffset(deltaMs: number) {
+  setGlobalOffset((project.value.syncOffsetMs ?? 0) + deltaMs, true)
+}
+
+function onGlobalOffsetInput(event: Event) {
+  setGlobalOffset(Number((event.target as HTMLInputElement).value), true)
+}
+
+function loadKaraokeContent(content: string, fileName?: string) {
+  const karaokeFile = parseKaraokeFile(content)
+
+  project.value = {
+    title: karaokeFile.song.title,
+    artist: karaokeFile.song.artist,
+    audioFileName: karaokeFile.audio.fileName,
+    karaokeFileName: fileName,
+    syncOffsetMs: karaokeFile.sync?.offsetMs ?? 0,
+    draftLines: karaokeFile.lines.map((line) => ({
+      id: line.id,
+      kind: line.kind,
+      text: line.text,
+      startMs: line.startMs,
+      endMs: line.endMs,
+      segments: isInterludeLine(line)
+        ? []
+        : (line.segments ?? []).map((segment) => ({ ...segment })),
+    })),
+  }
+  audioDurationMs.value = karaokeFile.song.durationMs
+  selectedLineId.value = project.value.draftLines[0]?.id
+  selectedSegmentId.value = project.value.draftLines[0]?.segments[0]?.id
+  clearUndoStack()
+  syncError.value = undefined
+}
+
 function onAudioFile(file: File) {
   if (audioUrl.value) {
     URL.revokeObjectURL(audioUrl.value)
@@ -950,7 +1005,9 @@ function onAudioFile(file: File) {
   syncError.value = undefined
   clearUndoStack()
   project.value.audioFileName = file.name
-  project.value.title = file.name.replace(/\.[^.]+$/, '')
+  if (!project.value.title) {
+    project.value.title = file.name.replace(/\.[^.]+$/, '')
+  }
 }
 
 async function onLyricsFile(file: File) {
@@ -965,7 +1022,20 @@ async function onLyricsFile(file: File) {
   syncError.value = undefined
 }
 
+async function onKaraokeFile(file: File) {
+  try {
+    loadKaraokeContent(await file.text(), file.name)
+  } catch (error) {
+    syncError.value = error instanceof Error ? error.message : t('generator.error.importJson')
+  }
+}
+
 function onDurationChange(durationMs: number) {
+  if (audioDurationMs.value !== undefined && project.value.draftLines.length > 0) {
+    initializeTimelineIfPossible()
+    return
+  }
+
   audioDurationMs.value = durationMs
   initializeTimelineIfPossible()
 }
@@ -1059,6 +1129,12 @@ onBeforeUnmount(() => {
           :value="project.lyricsFileName"
           @change="onLyricsFile"
         />
+        <FileDropField
+          accept=".json,application/json"
+          :label="t('generator.karaokeJsonLabel')"
+          :value="project.karaokeFileName"
+          @change="onKaraokeFile"
+        />
       </div>
 
       <AudioWaveform
@@ -1120,6 +1196,30 @@ onBeforeUnmount(() => {
           <button class="button" type="button" :disabled="!hasTimeline" @click="centerTimelineOnCurrentTime">
             {{ t('generator.centerPlayhead') }}
           </button>
+        </div>
+
+        <div class="timeline-offset">
+          <div>
+            <p class="timeline-offset__title">{{ t('generator.offsetTitle') }}</p>
+            <p class="timeline-offset__help">{{ t('generator.offsetHelp') }}</p>
+          </div>
+          <button class="button" type="button" @click="adjustGlobalOffset(-100)">−100 ms</button>
+          <label class="timeline-offset__input">
+            {{ t('generator.offsetMs') }}
+            <input
+              type="number"
+              step="10"
+              :value="project.syncOffsetMs ?? 0"
+              @change="onGlobalOffsetInput"
+            />
+          </label>
+          <button class="button" type="button" @click="adjustGlobalOffset(100)">+100 ms</button>
+          <button class="button" type="button" :disabled="(project.syncOffsetMs ?? 0) === 0" @click="setGlobalOffset(0, true)">
+            {{ t('generator.offsetReset') }}
+          </button>
+          <span class="timeline-offset__value">
+            {{ (project.syncOffsetMs ?? 0) < 0 ? '−' : '+' }}{{ syncOffsetLabel }}
+          </span>
         </div>
 
         <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
