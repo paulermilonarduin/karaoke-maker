@@ -1,25 +1,33 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import AudioWaveform from '../components/AudioWaveform.vue'
 import FileDropField from '../components/FileDropField.vue'
 import ShortcutEditor from '../components/ShortcutEditor.vue'
 import {
+  applyWordAlignment,
   buildSyncedLines,
+  collectLyricWords,
   createKaraokeFile,
   findActiveLine,
   formatTimestamp,
   isBridgeLine,
   parsePlainLyrics,
   serializeKaraokeFile,
+  type AlignmentResult,
   type DraftLyricLine,
   type KaraokeProject,
 } from '../domain/lyrics'
+import {
+  isAlignmentAvailable,
+  onAlignmentProgress,
+  requestAlignment,
+} from '../desktop/bridge'
 import {
   useGeneratorShortcutSettings,
   useGeneratorShortcuts,
 } from '../generator/shortcuts'
 import type { WaveformRegionChange, WaveformRegionModel } from '../generator/timeline'
-import { useI18n } from '../i18n'
+import { useI18n, type Locale } from '../i18n'
 
 type SegmentPosition = {
   lineIndex: number
@@ -37,18 +45,27 @@ const project = ref<KaraokeProject>({
 const manualBridgeCount = ref(0)
 
 const audioUrl = ref<string>()
+const audioFile = ref<File>()
 const currentTimeMs = ref(0)
 const audioDurationMs = ref<number>()
 const syncError = ref<string>()
 const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
 const isCapturingShortcut = ref(false)
+const autoAlignAvailable = isAlignmentAvailable()
+const autoAlignState = ref<'idle' | 'running' | 'error' | 'done'>('idle')
+const autoAlignProgress = ref('')
+const autoAlignError = ref('')
+const autoAlignDismissed = ref(false)
+const autoAlignResult = ref<AlignmentResult | null>(null)
+const leadMs = ref(180)
+const { t, locale, localeOptions } = useI18n()
+const songLanguage = ref<Locale>(locale.value)
 const {
   actions: shortcutActions,
   hasCustomShortcuts,
   resetShortcuts,
   setShortcut,
 } = useGeneratorShortcutSettings()
-const { t } = useI18n()
 
 const syncedLines = computed(() =>
   buildSyncedLines(project.value.draftLines, audioDurationMs.value),
@@ -189,6 +206,15 @@ const canExport = computed(
     syncedLines.value.length === project.value.draftLines.length,
 )
 
+const showAutoAlign = computed(
+  () =>
+    autoAlignAvailable &&
+    !!audioUrl.value &&
+    project.value.draftLines.length > 0 &&
+    !autoAlignDismissed.value &&
+    (autoAlignState.value !== 'idle' || syncedLineCount.value === 0),
+)
+
 const activeLine = computed(() => findActiveLine(syncedLines.value, currentTimeMs.value))
 
 const nextDraftLineLabel = computed(() => getDraftLineLabel(nextDraftLine.value))
@@ -207,9 +233,11 @@ function onAudioFile(file: File) {
   }
 
   audioUrl.value = URL.createObjectURL(file)
+  audioFile.value = file
   currentTimeMs.value = 0
   audioDurationMs.value = undefined
   syncError.value = undefined
+  resetAutoAlign()
   project.value.audioFileName = file.name
   project.value.title = file.name.replace(/\.[^.]+$/, '')
 }
@@ -220,6 +248,94 @@ async function onLyricsFile(file: File) {
   project.value.lyricsFileName = file.name
   project.value.draftLines = parsePlainLyrics(content)
   syncError.value = undefined
+  resetAutoAlign()
+}
+
+function resetAutoAlign() {
+  autoAlignState.value = 'idle'
+  autoAlignProgress.value = ''
+  autoAlignError.value = ''
+  autoAlignDismissed.value = false
+  autoAlignResult.value = null
+}
+
+function applyAlignmentResult() {
+  const result = autoAlignResult.value
+
+  if (!result) {
+    return
+  }
+
+  const durationMs = audioDurationMs.value ?? result.durationMs
+
+  project.value.draftLines = applyWordAlignment(
+    project.value.draftLines,
+    result.words,
+    durationMs,
+    leadMs.value,
+  )
+}
+
+// Re-merge instantly when the lead changes — no need to re-run the aligner.
+watch(leadMs, () => {
+  if (autoAlignResult.value) {
+    applyAlignmentResult()
+  }
+})
+
+async function runAutoAlignment() {
+  if (!audioFile.value || autoAlignState.value === 'running') {
+    return
+  }
+
+  const words = collectLyricWords(project.value.draftLines)
+
+  if (words.length === 0) {
+    autoAlignState.value = 'error'
+    autoAlignError.value = t('generator.autoNoWords')
+    return
+  }
+
+  autoAlignState.value = 'running'
+  autoAlignProgress.value = t('generator.autoStarting')
+  autoAlignError.value = ''
+
+  const unsubscribe = onAlignmentProgress((line) => {
+    autoAlignProgress.value = line.replace(/^(PROGRESS|ERROR):\s*/, '')
+  })
+
+  try {
+    const audioBytes = await audioFile.value.arrayBuffer()
+    const result = await requestAlignment({
+      audioBytes,
+      audioFileName: audioFile.value.name,
+      words,
+      language: songLanguage.value,
+      device: 'cpu',
+      useDemucs: true,
+    })
+
+    if (audioDurationMs.value === undefined) {
+      audioDurationMs.value = result.durationMs
+    }
+
+    autoAlignResult.value = result
+    applyAlignmentResult()
+    autoAlignState.value = 'done'
+    syncError.value = undefined
+  } catch (error) {
+    autoAlignState.value = 'error'
+    autoAlignError.value = error instanceof Error ? error.message : t('generator.autoFailed')
+  } finally {
+    unsubscribe()
+    autoAlignProgress.value = ''
+  }
+}
+
+function dismissAutoAlign() {
+  autoAlignDismissed.value = true
+  autoAlignState.value = 'idle'
+  autoAlignError.value = ''
 }
 
 function markNextLine() {
@@ -593,6 +709,90 @@ onBeforeUnmount(() => {
         @durationchange="audioDurationMs = $event"
         @regionchange="onRegionChange"
       />
+
+      <div v-if="showAutoAlign" class="auto-align">
+        <p class="eyebrow">{{ t('generator.autoTitle') }}</p>
+
+        <template v-if="autoAlignState === 'running'">
+          <p class="auto-align__progress">
+            <span class="auto-align__spinner" aria-hidden="true"></span>
+            {{ autoAlignProgress || t('generator.autoStarting') }}
+          </p>
+        </template>
+
+        <template v-else-if="autoAlignState === 'done'">
+          <p class="auto-align__title">✓ {{ t('generator.autoApplied') }}</p>
+
+          <label class="auto-align__lead">
+            <span class="auto-align__hint">{{ t('generator.autoLead') }} : {{ leadMs }} ms</span>
+            <input
+              v-model.number="leadMs"
+              class="auto-align__lead-range"
+              type="range"
+              min="0"
+              max="400"
+              step="10"
+              :aria-label="t('generator.autoLead')"
+            />
+          </label>
+
+          <div class="action-row">
+            <button class="button" type="button" @click="runAutoAlignment">
+              {{ t('generator.autoRedo') }}
+            </button>
+            <button class="button" type="button" @click="dismissAutoAlign">
+              {{ t('generator.autoHide') }}
+            </button>
+          </div>
+        </template>
+
+        <template v-else>
+          <p class="auto-align__title">{{ t('generator.autoQuestion') }}</p>
+          <p class="auto-align__hint">{{ t('generator.autoHint') }}</p>
+          <p v-if="autoAlignState === 'error'" class="auto-align__error" role="alert">
+            {{ t('generator.autoError', { message: autoAlignError }) }}
+          </p>
+
+          <div class="auto-align__language" role="group" :aria-label="t('generator.autoLanguage')">
+            <span class="auto-align__hint">{{ t('generator.autoLanguage') }}</span>
+            <div class="auto-align__lang-options">
+              <button
+                v-for="option in localeOptions"
+                :key="option.value"
+                class="button auto-align__lang"
+                :class="{ 'auto-align__lang--active': songLanguage === option.value }"
+                type="button"
+                :aria-pressed="songLanguage === option.value"
+                @click="songLanguage = option.value"
+              >
+                <span v-if="songLanguage === option.value" class="auto-align__lang-check" aria-hidden="true">✓ </span>{{ option.flag }} {{ option.label }}
+              </button>
+            </div>
+          </div>
+
+          <label class="auto-align__lead">
+            <span class="auto-align__hint">{{ t('generator.autoLead') }} : {{ leadMs }} ms</span>
+            <input
+              v-model.number="leadMs"
+              class="auto-align__lead-range"
+              type="range"
+              min="0"
+              max="400"
+              step="10"
+              :aria-label="t('generator.autoLead')"
+            />
+          </label>
+
+          <div class="action-row">
+            <button class="button button--primary" type="button" @click="runAutoAlignment">
+              {{ autoAlignState === 'error' ? t('generator.autoRetry') : t('generator.autoYes') }}
+            </button>
+            <button class="button" type="button" @click="dismissAutoAlign">
+              {{ t('generator.autoNo') }}
+            </button>
+          </div>
+        </template>
+      </div>
 
       <div class="generator-tools">
         <div class="sync-panel">
