@@ -175,11 +175,11 @@ function hasTiming(line: DraftLyricLine): line is DraftLyricLine & {
   return line.startMs !== undefined && line.endMs !== undefined && line.endMs > line.startMs
 }
 
-function hasSegmentTiming(segment: DraftLyricSegment): segment is DraftLyricSegment & {
+function hasSegmentTiming(segment: DraftLyricSegment | undefined): segment is DraftLyricSegment & {
   startMs: number
   endMs: number
 } {
-  return segment.startMs !== undefined && segment.endMs !== undefined && segment.endMs > segment.startMs
+  return !!segment && segment.startMs !== undefined && segment.endMs !== undefined && segment.endMs > segment.startMs
 }
 
 function clamp(value: number, minimum: number, maximum: number): number {
