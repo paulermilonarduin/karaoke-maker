@@ -28,6 +28,7 @@ import {
   useGeneratorShortcutSettings,
   useGeneratorShortcuts,
 } from '../generator/shortcuts'
+import { resultPlainLyrics, searchLyrics, type LyricsSearchResult } from '../lyrics/lrclib'
 import type { WaveformRegionChange, WaveformRegionModel } from '../generator/timeline'
 import { useI18n, type Locale } from '../i18n'
 
@@ -61,6 +62,10 @@ const autoAlignError = ref('')
 const autoAlignDismissed = ref(false)
 const autoAlignResult = ref<AlignmentResult | null>(null)
 const leadMs = ref(180)
+const lyricsQuery = ref('')
+const lyricsResults = ref<LyricsSearchResult[]>([])
+const lyricsSearchState = ref<'idle' | 'loading' | 'error'>('idle')
+const lyricsSearchError = ref('')
 const { t, locale, localeOptions } = useI18n()
 const songLanguage = ref<Locale>(locale.value)
 const {
@@ -264,6 +269,69 @@ function resetAutoAlign() {
   autoAlignError.value = ''
   autoAlignDismissed.value = false
   autoAlignResult.value = null
+}
+
+function formatSeconds(seconds?: number): string {
+  if (!seconds) {
+    return ''
+  }
+
+  const total = Math.round(seconds)
+
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`
+}
+
+async function searchOnlineLyrics() {
+  const query = lyricsQuery.value.trim()
+
+  if (!query || lyricsSearchState.value === 'loading') {
+    return
+  }
+
+  lyricsSearchState.value = 'loading'
+  lyricsSearchError.value = ''
+  lyricsResults.value = []
+
+  try {
+    lyricsResults.value = await searchLyrics(query)
+    lyricsSearchState.value = 'idle'
+
+    if (lyricsResults.value.length === 0) {
+      lyricsSearchError.value = t('generator.lyricsSearchEmpty')
+    }
+  } catch (error) {
+    lyricsSearchState.value = 'error'
+    lyricsSearchError.value = t('generator.lyricsSearchError', {
+      message: error instanceof Error ? error.message : String(error),
+    })
+  }
+}
+
+function loadSearchedLyrics(event: Event) {
+  const id = Number((event.target as HTMLSelectElement).value)
+  const result = lyricsResults.value.find((item) => item.id === id)
+
+  if (!result) {
+    return
+  }
+
+  const plain = resultPlainLyrics(result)
+
+  if (!plain.trim()) {
+    lyricsSearchError.value = t('generator.lyricsSearchNoText')
+    return
+  }
+
+  project.value.lyricsFileName = `${result.artistName} — ${result.trackName}`
+  project.value.draftLines = parsePlainLyrics(plain)
+
+  if (!project.value.title) {
+    project.value.title = result.trackName
+  }
+
+  syncError.value = undefined
+  lyricsSearchError.value = ''
+  resetAutoAlign()
 }
 
 function applyAlignmentResult() {
@@ -729,6 +797,47 @@ onBeforeUnmount(() => {
           :value="project.lyricsFileName"
           @change="onLyricsFile"
         />
+      </div>
+
+      <div class="lyrics-search">
+        <p class="eyebrow">{{ t('generator.lyricsSearchLabel') }}</p>
+        <div class="lyrics-search__row">
+          <input
+            v-model="lyricsQuery"
+            class="lyrics-search__input"
+            type="search"
+            :placeholder="t('generator.lyricsSearchPlaceholder')"
+            :aria-label="t('generator.lyricsSearchLabel')"
+            @keyup.enter="searchOnlineLyrics"
+          />
+          <button
+            class="button"
+            type="button"
+            :disabled="lyricsSearchState === 'loading' || !lyricsQuery.trim()"
+            @click="searchOnlineLyrics"
+          >
+            {{
+              lyricsSearchState === 'loading'
+                ? t('generator.lyricsSearching')
+                : t('generator.lyricsSearchButton')
+            }}
+          </button>
+        </div>
+        <select
+          v-if="lyricsResults.length"
+          class="lyrics-search__select"
+          :aria-label="t('generator.lyricsSearchLabel')"
+          @change="loadSearchedLyrics"
+        >
+          <option value="">{{ t('generator.lyricsSearchChoose') }}</option>
+          <option v-for="result in lyricsResults" :key="result.id" :value="result.id">
+            {{ result.artistName }} — {{ result.trackName
+            }}{{ result.duration ? ` (${formatSeconds(result.duration)})` : '' }}
+          </option>
+        </select>
+        <p v-if="lyricsSearchError" class="lyrics-search__error" role="alert">
+          {{ lyricsSearchError }}
+        </p>
       </div>
 
       <AudioWaveform

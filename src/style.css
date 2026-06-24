@@ -518,7 +518,56 @@ p {
 }
 
 .sync-panel__success {
-  color: #2c7a68;
+  color: var(--color-accent);
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.lyrics-search {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface-soft);
+}
+
+.lyrics-search__row {
+  display: flex;
+  gap: 8px;
+}
+
+.lyrics-search__input,
+.lyrics-search__select {
+  flex: 1;
+  min-width: 0;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 6px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.95rem;
+  /* Dark theme: native control chrome (dropdown, search clear, popup) follows
+     the app's dark scheme, tinted with the accent. */
+  color-scheme: dark;
+  accent-color: var(--color-accent);
+}
+
+.lyrics-search__input:focus-visible,
+.lyrics-search__select:focus-visible {
+  border-color: var(--color-accent);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.lyrics-search__select {
+  width: 100%;
+}
+
+.lyrics-search__error {
+  color: var(--color-danger);
   font-size: 0.88rem;
   font-weight: 750;
 }
@@ -529,17 +578,17 @@ p {
   padding: 14px 16px;
   border: 1px solid var(--color-accent);
   border-radius: 8px;
-  background: color-mix(in srgb, var(--color-accent) 12%, #fbf8f1);
+  background: color-mix(in srgb, var(--color-accent) 14%, var(--color-surface-soft));
 }
 
 .auto-align__title {
-  color: #1f2726;
+  color: var(--color-text);
   font-size: 1.05rem;
   font-weight: 800;
 }
 
 .auto-align__hint {
-  color: #59605b;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 }
 
@@ -547,13 +596,13 @@ p {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #2c7a68;
+  color: var(--color-accent);
   font-size: 0.92rem;
   font-weight: 700;
 }
 
 .auto-align__error {
-  color: #a1382e;
+  color: var(--color-danger);
   font-size: 0.88rem;
   font-weight: 750;
 }
