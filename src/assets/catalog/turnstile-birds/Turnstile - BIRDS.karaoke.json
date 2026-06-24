@@ -1,0 +1,1033 @@
+{
+  "schemaVersion": 1,
+  "title": "Turnstile - BIRDS",
+  "audio": {
+    "fileName": "Turnstile - BIRDS.mp3",
+    "durationMs": 146934
+  },
+  "lines": [
+    {
+      "id": "line:0",
+      "kind": "lyrics",
+      "text": "I don't know, but I believe",
+      "startMs": 22882,
+      "endMs": 47505,
+      "segments": [
+        {
+          "id": "line:0:segment:0",
+          "text": "I ",
+          "startMs": 22882,
+          "endMs": 24202
+        },
+        {
+          "id": "line:0:segment:1",
+          "text": "don't ",
+          "startMs": 24242,
+          "endMs": 45704
+        },
+        {
+          "id": "line:0:segment:2",
+          "text": "know, ",
+          "startMs": 45724,
+          "endMs": 46204
+        },
+        {
+          "id": "line:0:segment:3",
+          "text": "but ",
+          "startMs": 46564,
+          "endMs": 46704
+        },
+        {
+          "id": "line:0:segment:4",
+          "text": "I ",
+          "startMs": 46784,
+          "endMs": 46884
+        },
+        {
+          "id": "line:0:segment:5",
+          "text": "believe",
+          "startMs": 46904,
+          "endMs": 47505
+        }
+      ]
+    },
+    {
+      "id": "line:1",
+      "kind": "lyrics",
+      "text": "I found a song playing just for me",
+      "startMs": 47525,
+      "endMs": 50085,
+      "segments": [
+        {
+          "id": "line:1:segment:0",
+          "text": "I ",
+          "startMs": 47525,
+          "endMs": 47545
+        },
+        {
+          "id": "line:1:segment:1",
+          "text": "found ",
+          "startMs": 47985,
+          "endMs": 48285
+        },
+        {
+          "id": "line:1:segment:2",
+          "text": "a ",
+          "startMs": 48305,
+          "endMs": 48325
+        },
+        {
+          "id": "line:1:segment:3",
+          "text": "song ",
+          "startMs": 48345,
+          "endMs": 48845
+        },
+        {
+          "id": "line:1:segment:4",
+          "text": "playing ",
+          "startMs": 49285,
+          "endMs": 49625
+        },
+        {
+          "id": "line:1:segment:5",
+          "text": "just ",
+          "startMs": 49645,
+          "endMs": 49745
+        },
+        {
+          "id": "line:1:segment:6",
+          "text": "for ",
+          "startMs": 49765,
+          "endMs": 49925
+        },
+        {
+          "id": "line:1:segment:7",
+          "text": "me",
+          "startMs": 49965,
+          "endMs": 50085
+        }
+      ]
+    },
+    {
+      "id": "line:2",
+      "kind": "lyrics",
+      "text": "And now I'm free, free, free, free, free, free",
+      "startMs": 50145,
+      "endMs": 52485,
+      "segments": [
+        {
+          "id": "line:2:segment:0",
+          "text": "And ",
+          "startMs": 50145,
+          "endMs": 50245
+        },
+        {
+          "id": "line:2:segment:1",
+          "text": "now ",
+          "startMs": 50285,
+          "endMs": 50345
+        },
+        {
+          "id": "line:2:segment:2",
+          "text": "I'm ",
+          "startMs": 50365,
+          "endMs": 50525
+        },
+        {
+          "id": "line:2:segment:3",
+          "text": "free, ",
+          "startMs": 50605,
+          "endMs": 50865
+        },
+        {
+          "id": "line:2:segment:4",
+          "text": "free, ",
+          "startMs": 50925,
+          "endMs": 51185
+        },
+        {
+          "id": "line:2:segment:5",
+          "text": "free, ",
+          "startMs": 51245,
+          "endMs": 51505
+        },
+        {
+          "id": "line:2:segment:6",
+          "text": "free, ",
+          "startMs": 51565,
+          "endMs": 51845
+        },
+        {
+          "id": "line:2:segment:7",
+          "text": "free, ",
+          "startMs": 51905,
+          "endMs": 52165
+        },
+        {
+          "id": "line:2:segment:8",
+          "text": "free",
+          "startMs": 52225,
+          "endMs": 52485
+        }
+      ]
+    },
+    {
+      "id": "line:3",
+      "kind": "lyrics",
+      "text": "No one left to be, be, be, be, be, be, be",
+      "startMs": 52585,
+      "endMs": 55065,
+      "segments": [
+        {
+          "id": "line:3:segment:0",
+          "text": "No ",
+          "startMs": 52585,
+          "endMs": 52625
+        },
+        {
+          "id": "line:3:segment:1",
+          "text": "one ",
+          "startMs": 52665,
+          "endMs": 52825
+        },
+        {
+          "id": "line:3:segment:2",
+          "text": "left ",
+          "startMs": 52845,
+          "endMs": 53005
+        },
+        {
+          "id": "line:3:segment:3",
+          "text": "to ",
+          "startMs": 53045,
+          "endMs": 53165
+        },
+        {
+          "id": "line:3:segment:4",
+          "text": "be, ",
+          "startMs": 53205,
+          "endMs": 53465
+        },
+        {
+          "id": "line:3:segment:5",
+          "text": "be, ",
+          "startMs": 53525,
+          "endMs": 53785
+        },
+        {
+          "id": "line:3:segment:6",
+          "text": "be, ",
+          "startMs": 53865,
+          "endMs": 54105
+        },
+        {
+          "id": "line:3:segment:7",
+          "text": "be, ",
+          "startMs": 54165,
+          "endMs": 54445
+        },
+        {
+          "id": "line:3:segment:8",
+          "text": "be, ",
+          "startMs": 54525,
+          "endMs": 54745
+        },
+        {
+          "id": "line:3:segment:9",
+          "text": "be, ",
+          "startMs": 54825,
+          "endMs": 54985
+        },
+        {
+          "id": "line:3:segment:10",
+          "text": "be",
+          "startMs": 55025,
+          "endMs": 55065
+        }
+      ]
+    },
+    {
+      "id": "line:4",
+      "kind": "lyrics",
+      "text": "I was told that love and death go hand in hand",
+      "startMs": 55085,
+      "endMs": 57926,
+      "segments": [
+        {
+          "id": "line:4:segment:0",
+          "text": "I ",
+          "startMs": 55085,
+          "endMs": 55105
+        },
+        {
+          "id": "line:4:segment:1",
+          "text": "was ",
+          "startMs": 55145,
+          "endMs": 55425
+        },
+        {
+          "id": "line:4:segment:2",
+          "text": "told ",
+          "startMs": 55465,
+          "endMs": 55605
+        },
+        {
+          "id": "line:4:segment:3",
+          "text": "that ",
+          "startMs": 55645,
+          "endMs": 55745
+        },
+        {
+          "id": "line:4:segment:4",
+          "text": "love ",
+          "startMs": 55765,
+          "endMs": 55905
+        },
+        {
+          "id": "line:4:segment:5",
+          "text": "and ",
+          "startMs": 55965,
+          "endMs": 56045
+        },
+        {
+          "id": "line:4:segment:6",
+          "text": "death ",
+          "startMs": 56105,
+          "endMs": 56605
+        },
+        {
+          "id": "line:4:segment:7",
+          "text": "go ",
+          "startMs": 56925,
+          "endMs": 57085
+        },
+        {
+          "id": "line:4:segment:8",
+          "text": "hand ",
+          "startMs": 57105,
+          "endMs": 57285
+        },
+        {
+          "id": "line:4:segment:9",
+          "text": "in ",
+          "startMs": 57325,
+          "endMs": 57405
+        },
+        {
+          "id": "line:4:segment:10",
+          "text": "hand",
+          "startMs": 57445,
+          "endMs": 57926
+        }
+      ]
+    },
+    {
+      "id": "line:5",
+      "kind": "lyrics",
+      "text": "When you find is when you understand",
+      "startMs": 58386,
+      "endMs": 60506,
+      "segments": [
+        {
+          "id": "line:5:segment:0",
+          "text": "When ",
+          "startMs": 58386,
+          "endMs": 58506
+        },
+        {
+          "id": "line:5:segment:1",
+          "text": "you ",
+          "startMs": 58546,
+          "endMs": 58666
+        },
+        {
+          "id": "line:5:segment:2",
+          "text": "find ",
+          "startMs": 58706,
+          "endMs": 59186
+        },
+        {
+          "id": "line:5:segment:3",
+          "text": "is ",
+          "startMs": 59506,
+          "endMs": 59606
+        },
+        {
+          "id": "line:5:segment:4",
+          "text": "when ",
+          "startMs": 59666,
+          "endMs": 59826
+        },
+        {
+          "id": "line:5:segment:5",
+          "text": "you ",
+          "startMs": 59846,
+          "endMs": 59986
+        },
+        {
+          "id": "line:5:segment:6",
+          "text": "understand",
+          "startMs": 60086,
+          "endMs": 60506
+        }
+      ]
+    },
+    {
+      "id": "line:6",
+      "kind": "lyrics",
+      "text": "And you are free, free, free, free, free, free",
+      "startMs": 60606,
+      "endMs": 62866,
+      "segments": [
+        {
+          "id": "line:6:segment:0",
+          "text": "And ",
+          "startMs": 60606,
+          "endMs": 60666
+        },
+        {
+          "id": "line:6:segment:1",
+          "text": "you ",
+          "startMs": 60686,
+          "endMs": 60766
+        },
+        {
+          "id": "line:6:segment:2",
+          "text": "are ",
+          "startMs": 60806,
+          "endMs": 60906
+        },
+        {
+          "id": "line:6:segment:3",
+          "text": "free, ",
+          "startMs": 60986,
+          "endMs": 61246
+        },
+        {
+          "id": "line:6:segment:4",
+          "text": "free, ",
+          "startMs": 61306,
+          "endMs": 61566
+        },
+        {
+          "id": "line:6:segment:5",
+          "text": "free, ",
+          "startMs": 61626,
+          "endMs": 61886
+        },
+        {
+          "id": "line:6:segment:6",
+          "text": "free, ",
+          "startMs": 61946,
+          "endMs": 62206
+        },
+        {
+          "id": "line:6:segment:7",
+          "text": "free, ",
+          "startMs": 62286,
+          "endMs": 62506
+        },
+        {
+          "id": "line:6:segment:8",
+          "text": "free",
+          "startMs": 62526,
+          "endMs": 62866
+        }
+      ]
+    },
+    {
+      "id": "line:7",
+      "kind": "lyrics",
+      "text": "No one left to be, be, be, be, be, be",
+      "startMs": 62966,
+      "endMs": 65446,
+      "segments": [
+        {
+          "id": "line:7:segment:0",
+          "text": "No ",
+          "startMs": 62966,
+          "endMs": 63006
+        },
+        {
+          "id": "line:7:segment:1",
+          "text": "one ",
+          "startMs": 63046,
+          "endMs": 63206
+        },
+        {
+          "id": "line:7:segment:2",
+          "text": "left ",
+          "startMs": 63226,
+          "endMs": 63386
+        },
+        {
+          "id": "line:7:segment:3",
+          "text": "to ",
+          "startMs": 63426,
+          "endMs": 63546
+        },
+        {
+          "id": "line:7:segment:4",
+          "text": "be, ",
+          "startMs": 63586,
+          "endMs": 63826
+        },
+        {
+          "id": "line:7:segment:5",
+          "text": "be, ",
+          "startMs": 63906,
+          "endMs": 64166
+        },
+        {
+          "id": "line:7:segment:6",
+          "text": "be, ",
+          "startMs": 64226,
+          "endMs": 64506
+        },
+        {
+          "id": "line:7:segment:7",
+          "text": "be, ",
+          "startMs": 64546,
+          "endMs": 64806
+        },
+        {
+          "id": "line:7:segment:8",
+          "text": "be, ",
+          "startMs": 64886,
+          "endMs": 65146
+        },
+        {
+          "id": "line:7:segment:9",
+          "text": "be",
+          "startMs": 65206,
+          "endMs": 65446
+        }
+      ]
+    },
+    {
+      "id": "line:8",
+      "kind": "lyrics",
+      "text": "Finally you're free, free, free, free, free, free",
+      "startMs": 65526,
+      "endMs": 68067,
+      "segments": [
+        {
+          "id": "line:8:segment:0",
+          "text": "Finally ",
+          "startMs": 65526,
+          "endMs": 65966
+        },
+        {
+          "id": "line:8:segment:1",
+          "text": "you're ",
+          "startMs": 65986,
+          "endMs": 66126
+        },
+        {
+          "id": "line:8:segment:2",
+          "text": "free, ",
+          "startMs": 66186,
+          "endMs": 66446
+        },
+        {
+          "id": "line:8:segment:3",
+          "text": "free, ",
+          "startMs": 66506,
+          "endMs": 66766
+        },
+        {
+          "id": "line:8:segment:4",
+          "text": "free, ",
+          "startMs": 66826,
+          "endMs": 67086
+        },
+        {
+          "id": "line:8:segment:5",
+          "text": "free, ",
+          "startMs": 67146,
+          "endMs": 67426
+        },
+        {
+          "id": "line:8:segment:6",
+          "text": "free, ",
+          "startMs": 67466,
+          "endMs": 67726
+        },
+        {
+          "id": "line:8:segment:7",
+          "text": "free",
+          "startMs": 67786,
+          "endMs": 68067
+        }
+      ]
+    },
+    {
+      "id": "line:9",
+      "kind": "lyrics",
+      "text": "No one left to be, be, be, be, be, be",
+      "startMs": 68147,
+      "endMs": 70667,
+      "segments": [
+        {
+          "id": "line:9:segment:0",
+          "text": "No ",
+          "startMs": 68147,
+          "endMs": 68187
+        },
+        {
+          "id": "line:9:segment:1",
+          "text": "one ",
+          "startMs": 68227,
+          "endMs": 68387
+        },
+        {
+          "id": "line:9:segment:2",
+          "text": "left ",
+          "startMs": 68427,
+          "endMs": 68587
+        },
+        {
+          "id": "line:9:segment:3",
+          "text": "to ",
+          "startMs": 68607,
+          "endMs": 68747
+        },
+        {
+          "id": "line:9:segment:4",
+          "text": "be, ",
+          "startMs": 68787,
+          "endMs": 69047
+        },
+        {
+          "id": "line:9:segment:5",
+          "text": "be, ",
+          "startMs": 69107,
+          "endMs": 69367
+        },
+        {
+          "id": "line:9:segment:6",
+          "text": "be, ",
+          "startMs": 69427,
+          "endMs": 69687
+        },
+        {
+          "id": "line:9:segment:7",
+          "text": "be, ",
+          "startMs": 69747,
+          "endMs": 70007
+        },
+        {
+          "id": "line:9:segment:8",
+          "text": "be, ",
+          "startMs": 70087,
+          "endMs": 70347
+        },
+        {
+          "id": "line:9:segment:9",
+          "text": "be",
+          "startMs": 70407,
+          "endMs": 70667
+        }
+      ]
+    },
+    {
+      "id": "line:10",
+      "kind": "lyrics",
+      "text": "No one left to be",
+      "startMs": 70727,
+      "endMs": 71887,
+      "segments": [
+        {
+          "id": "line:10:segment:0",
+          "text": "No ",
+          "startMs": 70727,
+          "endMs": 70787
+        },
+        {
+          "id": "line:10:segment:1",
+          "text": "one ",
+          "startMs": 70827,
+          "endMs": 71007
+        },
+        {
+          "id": "line:10:segment:2",
+          "text": "left ",
+          "startMs": 71027,
+          "endMs": 71127
+        },
+        {
+          "id": "line:10:segment:3",
+          "text": "to ",
+          "startMs": 71207,
+          "endMs": 71327
+        },
+        {
+          "id": "line:10:segment:4",
+          "text": "be",
+          "startMs": 71387,
+          "endMs": 71887
+        }
+      ]
+    },
+    {
+      "id": "line:11",
+      "kind": "lyrics",
+      "text": "Finally I can see it",
+      "startMs": 103370,
+      "endMs": 104890,
+      "segments": [
+        {
+          "id": "line:11:segment:0",
+          "text": "Finally ",
+          "startMs": 103370,
+          "endMs": 103910
+        },
+        {
+          "id": "line:11:segment:1",
+          "text": "I ",
+          "startMs": 104010,
+          "endMs": 104090
+        },
+        {
+          "id": "line:11:segment:2",
+          "text": "can ",
+          "startMs": 104130,
+          "endMs": 104370
+        },
+        {
+          "id": "line:11:segment:3",
+          "text": "see ",
+          "startMs": 104390,
+          "endMs": 104630
+        },
+        {
+          "id": "line:11:segment:4",
+          "text": "it",
+          "startMs": 104770,
+          "endMs": 104890
+        }
+      ]
+    },
+    {
+      "id": "line:12",
+      "kind": "lyrics",
+      "text": "These birds not meant to fly alonе",
+      "startMs": 105110,
+      "endMs": 109610,
+      "segments": [
+        {
+          "id": "line:12:segment:0",
+          "text": "These ",
+          "startMs": 105110,
+          "endMs": 105330
+        },
+        {
+          "id": "line:12:segment:1",
+          "text": "birds ",
+          "startMs": 105390,
+          "endMs": 105770
+        },
+        {
+          "id": "line:12:segment:2",
+          "text": "not ",
+          "startMs": 105890,
+          "endMs": 106210
+        },
+        {
+          "id": "line:12:segment:3",
+          "text": "meant ",
+          "startMs": 106390,
+          "endMs": 106610
+        },
+        {
+          "id": "line:12:segment:4",
+          "text": "to ",
+          "startMs": 106630,
+          "endMs": 106810
+        },
+        {
+          "id": "line:12:segment:5",
+          "text": "fly ",
+          "startMs": 106870,
+          "endMs": 107190
+        },
+        {
+          "id": "line:12:segment:6",
+          "text": "alonе",
+          "startMs": 107210,
+          "endMs": 109610
+        }
+      ]
+    },
+    {
+      "id": "line:13",
+      "kind": "lyrics",
+      "text": "Finally I can see it",
+      "startMs": 111371,
+      "endMs": 112891,
+      "segments": [
+        {
+          "id": "line:13:segment:0",
+          "text": "Finally ",
+          "startMs": 111371,
+          "endMs": 111871
+        },
+        {
+          "id": "line:13:segment:1",
+          "text": "I ",
+          "startMs": 111891,
+          "endMs": 111911
+        },
+        {
+          "id": "line:13:segment:2",
+          "text": "can ",
+          "startMs": 112131,
+          "endMs": 112351
+        },
+        {
+          "id": "line:13:segment:3",
+          "text": "see ",
+          "startMs": 112371,
+          "endMs": 112591
+        },
+        {
+          "id": "line:13:segment:4",
+          "text": "it",
+          "startMs": 112731,
+          "endMs": 112891
+        }
+      ]
+    },
+    {
+      "id": "line:14",
+      "kind": "lyrics",
+      "text": "These birds not meant to fly alonе",
+      "startMs": 113091,
+      "endMs": 117571,
+      "segments": [
+        {
+          "id": "line:14:segment:0",
+          "text": "These ",
+          "startMs": 113091,
+          "endMs": 113311
+        },
+        {
+          "id": "line:14:segment:1",
+          "text": "birds ",
+          "startMs": 113351,
+          "endMs": 113711
+        },
+        {
+          "id": "line:14:segment:2",
+          "text": "not ",
+          "startMs": 113871,
+          "endMs": 114191
+        },
+        {
+          "id": "line:14:segment:3",
+          "text": "meant ",
+          "startMs": 114371,
+          "endMs": 114611
+        },
+        {
+          "id": "line:14:segment:4",
+          "text": "to ",
+          "startMs": 114631,
+          "endMs": 114811
+        },
+        {
+          "id": "line:14:segment:5",
+          "text": "fly ",
+          "startMs": 114831,
+          "endMs": 115191
+        },
+        {
+          "id": "line:14:segment:6",
+          "text": "alonе",
+          "startMs": 115211,
+          "endMs": 117571
+        }
+      ]
+    },
+    {
+      "id": "line:15",
+      "kind": "lyrics",
+      "text": "Finally I can see it",
+      "startMs": 127192,
+      "endMs": 128892,
+      "segments": [
+        {
+          "id": "line:15:segment:0",
+          "text": "Finally ",
+          "startMs": 127192,
+          "endMs": 127912
+        },
+        {
+          "id": "line:15:segment:1",
+          "text": "I ",
+          "startMs": 128012,
+          "endMs": 128092
+        },
+        {
+          "id": "line:15:segment:2",
+          "text": "can ",
+          "startMs": 128112,
+          "endMs": 128372
+        },
+        {
+          "id": "line:15:segment:3",
+          "text": "see ",
+          "startMs": 128392,
+          "endMs": 128632
+        },
+        {
+          "id": "line:15:segment:4",
+          "text": "it",
+          "startMs": 128772,
+          "endMs": 128892
+        }
+      ]
+    },
+    {
+      "id": "line:16",
+      "kind": "lyrics",
+      "text": "These birds not meant to fly alone",
+      "startMs": 129112,
+      "endMs": 131693,
+      "segments": [
+        {
+          "id": "line:16:segment:0",
+          "text": "These ",
+          "startMs": 129112,
+          "endMs": 129312
+        },
+        {
+          "id": "line:16:segment:1",
+          "text": "birds ",
+          "startMs": 129332,
+          "endMs": 129772
+        },
+        {
+          "id": "line:16:segment:2",
+          "text": "not ",
+          "startMs": 129892,
+          "endMs": 130212
+        },
+        {
+          "id": "line:16:segment:3",
+          "text": "meant ",
+          "startMs": 130372,
+          "endMs": 130612
+        },
+        {
+          "id": "line:16:segment:4",
+          "text": "to ",
+          "startMs": 130632,
+          "endMs": 130812
+        },
+        {
+          "id": "line:16:segment:5",
+          "text": "fly ",
+          "startMs": 130872,
+          "endMs": 131193
+        },
+        {
+          "id": "line:16:segment:6",
+          "text": "alone",
+          "startMs": 131213,
+          "endMs": 131693
+        }
+      ]
+    },
+    {
+      "id": "line:17",
+      "kind": "lyrics",
+      "text": "Finally I can see it",
+      "startMs": 135353,
+      "endMs": 136933,
+      "segments": [
+        {
+          "id": "line:17:segment:0",
+          "text": "Finally ",
+          "startMs": 135353,
+          "endMs": 135873
+        },
+        {
+          "id": "line:17:segment:1",
+          "text": "I ",
+          "startMs": 135893,
+          "endMs": 135913
+        },
+        {
+          "id": "line:17:segment:2",
+          "text": "can ",
+          "startMs": 136133,
+          "endMs": 136373
+        },
+        {
+          "id": "line:17:segment:3",
+          "text": "see ",
+          "startMs": 136393,
+          "endMs": 136653
+        },
+        {
+          "id": "line:17:segment:4",
+          "text": "it",
+          "startMs": 136773,
+          "endMs": 136933
+        }
+      ]
+    },
+    {
+      "id": "line:18",
+      "kind": "lyrics",
+      "text": "These birds not meant to fly alone",
+      "startMs": 137093,
+      "endMs": 140553,
+      "segments": [
+        {
+          "id": "line:18:segment:0",
+          "text": "These ",
+          "startMs": 137093,
+          "endMs": 137333
+        },
+        {
+          "id": "line:18:segment:1",
+          "text": "birds ",
+          "startMs": 137373,
+          "endMs": 137733
+        },
+        {
+          "id": "line:18:segment:2",
+          "text": "not ",
+          "startMs": 137873,
+          "endMs": 138193
+        },
+        {
+          "id": "line:18:segment:3",
+          "text": "meant ",
+          "startMs": 138373,
+          "endMs": 138613
+        },
+        {
+          "id": "line:18:segment:4",
+          "text": "to ",
+          "startMs": 138633,
+          "endMs": 138813
+        },
+        {
+          "id": "line:18:segment:5",
+          "text": "fly ",
+          "startMs": 138833,
+          "endMs": 139193
+        },
+        {
+          "id": "line:18:segment:6",
+          "text": "alone",
+          "startMs": 139213,
+          "endMs": 140553
+        }
+      ]
+    }
+  ]
+}
