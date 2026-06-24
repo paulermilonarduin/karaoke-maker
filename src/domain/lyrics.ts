@@ -70,10 +70,12 @@ export function isInterludeLine(line: Pick<LyricLine, 'kind'>): boolean {
 }
 
 function splitIntoSegments(text: string, lineId: string): DraftLyricSegment[] {
-  return (text.match(/\S+\s*/g) ?? [text]).map((segmentText, index) => ({
-    id: `${lineId}:segment:${index}`,
-    text: segmentText,
-  }))
+  return [
+    {
+      id: `${lineId}:segment:0`,
+      text,
+    },
+  ]
 }
 
 export function parsePlainLyrics(content: string): DraftLyricLine[] {

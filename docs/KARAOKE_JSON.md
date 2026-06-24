@@ -43,7 +43,7 @@ Le MP3 reste externe au JSON. Le fichier JSON décrit le morceau, les métadonn�
 
 ## Lignes
 
-Une ligne de paroles utilise `kind: "lyrics"`.
+Une ligne de paroles utilise `kind: "lyrics"`. Elle pilote l’apparition du texte dans le lecteur.
 
 ```json
 {
@@ -62,6 +62,15 @@ Une ligne de paroles utilise `kind: "lyrics"`.
   ]
 }
 ```
+
+Les `segments` pilotent l’animation de highlight à l’intérieur de la ligne.
+
+- Une ligne fraîchement importée démarre avec un seul segment qui couvre toute la ligne
+- Les segments restent dans les limites temporelles de leur ligne
+- Les segments sont ordonnés par `startMs`
+- Les segments ne se chevauchent pas
+- Des blancs sont autorisés entre deux segments pour mettre l’animation en pause
+- Le texte concaténé des segments doit reconstruire exactement `line.text`
 
 Un passage sans paroles utilise uniquement `kind: "interlude"`.
 

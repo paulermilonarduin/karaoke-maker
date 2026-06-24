@@ -315,10 +315,24 @@ function matchesShortcut(event: KeyboardEvent, shortcut: ShortcutBinding): boole
 }
 
 function isEditableTarget(target: EventTarget | null): boolean {
-  return (
-    target instanceof HTMLElement &&
-    Boolean(target.closest('input, textarea, select, button, [contenteditable="true"]'))
-  )
+  if (!(target instanceof HTMLElement)) {
+    return false
+  }
+
+  const interactiveTarget = target.closest('input, textarea, select, button, [contenteditable="true"]')
+
+  if (!interactiveTarget) {
+    return false
+  }
+
+  if (
+    interactiveTarget instanceof HTMLInputElement ||
+    interactiveTarget instanceof HTMLTextAreaElement
+  ) {
+    return !interactiveTarget.readOnly
+  }
+
+  return true
 }
 
 export function useGeneratorShortcuts(
