@@ -86,6 +86,13 @@ Un passage sans paroles utilise uniquement `kind: "interlude"`.
 
 Les fichiers `.txt` importés dans le générateur sont traités comme du texte brut. Les interludes sont ajoutés dans l’interface de synchronisation, pas via des balises dans le `.txt`.
 
+Le lecteur attend une couverture continue de la piste audio :
+
+- La première ligne commence à `0`
+- Chaque ligne commence exactement à la fin de la ligne précédente
+- La dernière ligne finit exactement à `song.durationMs`
+- Si aucun texte ne doit être affiché, il faut insérer un interlude
+
 ## Extensions prévues
 
 Les blocs `assets` et `display` sont optionnels et pensés pour éviter de casser le format quand on ajoutera :

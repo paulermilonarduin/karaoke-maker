@@ -616,10 +616,13 @@ p {
       color-mix(in srgb, var(--color-accent) 7%, transparent)
     ),
     var(--color-surface);
+}
+
+.timeline-block--movable {
   cursor: grab;
 }
 
-.timeline-block:active {
+.timeline-block--movable:active {
   cursor: grabbing;
 }
 

@@ -355,7 +355,12 @@ export function parseKaraokeFile(content: string): KaraokeFile {
     throw new Error(`La version du fichier karaoké n'est pas supportée.`)
   }
 
-  if (!isRecord(value.song) || !isRecord(value.audio) || !Array.isArray(value.lines)) {
+  if (
+    !isRecord(value.song) ||
+    !isRecord(value.audio) ||
+    !Array.isArray(value.lines) ||
+    value.lines.length === 0
+  ) {
     throw new Error('La structure du fichier karaoké est invalide.')
   }
 
@@ -380,12 +385,22 @@ export function parseKaraokeFile(content: string): KaraokeFile {
   lines.forEach((line, index) => {
     const previousLine = lines[index - 1]
 
-    if (previousLine && line.startMs < previousLine.endMs) {
-      throw new Error(`Les lignes « ${previousLine.text} » et « ${line.text} » se chevauchent.`)
+    if (index === 0 && line.startMs !== 0) {
+      throw new Error('La première ligne doit commencer au début de la piste audio.')
+    }
+
+    if (previousLine && line.startMs !== previousLine.endMs) {
+      throw new Error(
+        `Les lignes « ${previousLine.text} » et « ${line.text} » doivent être continues.`,
+      )
     }
 
     if (line.endMs > durationMs) {
       throw new Error(`La ligne « ${line.text} » dépasse la durée de la piste audio.`)
+    }
+
+    if (index === lines.length - 1 && line.endMs !== durationMs) {
+      throw new Error('La dernière ligne doit terminer exactement avec la piste audio.')
     }
   })
 

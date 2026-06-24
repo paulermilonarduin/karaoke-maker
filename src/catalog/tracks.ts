@@ -11,6 +11,8 @@ export type CatalogTrack = {
   karaokeContent: string
 }
 
+const sourceKaraokeFile = parseKaraokeFile(shortMinecraftKaraoke)
+
 const createEmptyKaraokeContent = (title: string, artist: string) =>
   JSON.stringify(
     {
@@ -18,10 +20,10 @@ const createEmptyKaraokeContent = (title: string, artist: string) =>
       song: {
         title,
         artist,
-        durationMs: 96012,
+        durationMs: sourceKaraokeFile.song.durationMs,
       },
       audio: {
-        fileName: 'Short_Minecraft.mp3',
+        fileName: sourceKaraokeFile.audio.fileName,
       },
       assets: {
         cover: null,
@@ -31,7 +33,15 @@ const createEmptyKaraokeContent = (title: string, artist: string) =>
         accentColor: null,
         backgroundColor: null,
       },
-      lines: [],
+      lines: [
+        {
+          id: 'interlude:demo',
+          kind: 'interlude',
+          text: '',
+          startMs: 0,
+          endMs: sourceKaraokeFile.song.durationMs,
+        },
+      ],
     },
     null,
     2,

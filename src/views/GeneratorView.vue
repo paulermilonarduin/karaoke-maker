@@ -33,6 +33,14 @@ type TimelineDrag = {
   mode: DragMode
   lastClientX: number
   segmentIndex?: number
+  snapshotCaptured?: boolean
+}
+
+type TimelineSnapshot = {
+  draftLines: DraftLyricLine[]
+  manualInterludeCount: number
+  selectedLineId?: string
+  selectedSegmentId?: string
 }
 
 defineProps<{
@@ -43,6 +51,7 @@ const minimumLineDurationMs = 250
 const minimumSegmentDurationMs = 40
 const defaultInterludeDurationMs = 2000
 const defaultTimelineZoomPxPerSecond = 80
+const maxUndoStackSize = 50
 
 const project = ref<KaraokeProject>({
   title: '',
@@ -61,6 +70,7 @@ const syncError = ref<string>()
 const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
 const isCapturingShortcut = ref(false)
 const timelineDrag = ref<TimelineDrag>()
+const undoStack = ref<TimelineSnapshot[]>([])
 const {
   actions: shortcutActions,
   hasCustomShortcuts,
@@ -113,6 +123,7 @@ const timelineSummary = computed(() =>
     duration: audioDurationMs.value ? formatTimestamp(audioDurationMs.value) : '00:00.000',
   }),
 )
+const canUndo = computed(() => undoStack.value.length > 0)
 
 function hasTiming(line: DraftLyricLine): line is DraftLyricLine & {
   startMs: number
@@ -132,12 +143,74 @@ function clamp(value: number, minimum: number, maximum: number): number {
   return Math.min(maximum, Math.max(minimum, value))
 }
 
+function cloneDraftLines(lines: DraftLyricLine[]): DraftLyricLine[] {
+  return lines.map((line) => ({
+    ...line,
+    segments: line.segments.map((segment) => ({ ...segment })),
+  }))
+}
+
+function pushUndoSnapshot() {
+  undoStack.value = [
+    ...undoStack.value.slice(-(maxUndoStackSize - 1)),
+    {
+      draftLines: cloneDraftLines(project.value.draftLines),
+      manualInterludeCount: manualInterludeCount.value,
+      selectedLineId: selectedLineId.value,
+      selectedSegmentId: selectedSegmentId.value,
+    },
+  ]
+}
+
+function clearUndoStack() {
+  undoStack.value = []
+}
+
+function undoLastChange() {
+  const snapshot = undoStack.value[undoStack.value.length - 1]
+
+  if (!snapshot) {
+    return
+  }
+
+  undoStack.value = undoStack.value.slice(0, -1)
+  project.value.draftLines = cloneDraftLines(snapshot.draftLines)
+  manualInterludeCount.value = snapshot.manualInterludeCount
+  selectedLineId.value = snapshot.selectedLineId
+  selectedSegmentId.value = snapshot.selectedSegmentId
+  syncError.value = undefined
+}
+
 function createSegmentId(line: DraftLyricLine): string {
   return `${line.id}:segment:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`
 }
 
 function getLineDuration(line: DraftLyricLine): number {
   return hasTiming(line) ? line.endMs - line.startMs : 0
+}
+
+function getLineMinimumDuration(): number {
+  const durationMs = audioDurationMs.value
+  const lineCount = project.value.draftLines.length
+
+  if (!durationMs || lineCount === 0) {
+    return minimumLineDurationMs
+  }
+
+  return Math.max(1, Math.min(minimumLineDurationMs, Math.floor(durationMs / lineCount)))
+}
+
+function getSegmentMinimumDuration(line: DraftLyricLine): number {
+  const lineDuration = getLineDuration(line)
+
+  if (lineDuration <= 0 || line.segments.length === 0) {
+    return 1
+  }
+
+  return Math.max(
+    1,
+    Math.min(minimumSegmentDurationMs, Math.floor(lineDuration / line.segments.length)),
+  )
 }
 
 function getLineStyle(line: DraftLyricLine) {
@@ -149,6 +222,32 @@ function getLineStyle(line: DraftLyricLine) {
     left: `${(startMs / durationMs) * 100}%`,
     width: `${(widthMs / durationMs) * 100}%`,
   }
+}
+
+function canMoveLine(lineIndex: number): boolean {
+  return lineIndex > 0 && lineIndex < project.value.draftLines.length - 1
+}
+
+function canApplyTimelineDrag(drag: TimelineDrag): boolean {
+  const line = project.value.draftLines[drag.lineIndex]
+
+  if (!line) {
+    return false
+  }
+
+  if (drag.mode === 'move-line') {
+    return canMoveLine(drag.lineIndex)
+  }
+
+  if (drag.mode === 'resize-line-start') {
+    return drag.lineIndex > 0
+  }
+
+  if (drag.mode === 'resize-line-end') {
+    return drag.lineIndex < project.value.draftLines.length - 1
+  }
+
+  return drag.segmentIndex !== undefined && !isInterludeLine(line)
 }
 
 function getSegmentStyle(line: DraftLyricLine, segment: DraftLyricSegment) {
@@ -169,7 +268,10 @@ function distributeSegments(line: DraftLyricLine) {
     return
   }
 
-  if (line.segments.length === 0 || line.segments.map((segment) => segment.text).join('') !== line.text) {
+  if (
+    line.segments.length === 0 ||
+    line.segments.map((segment) => segment.text).join('') !== line.text
+  ) {
     line.segments = [{ id: createSegmentId(line), text: line.text }]
   }
 
@@ -205,13 +307,15 @@ function constrainSegments(line: DraftLyricLine) {
   line.segments.forEach((segment, index) => {
     const previousSegment = line.segments[index - 1]
     const nextSegment = line.segments[index + 1]
+    const segmentMinimumDurationMs = getSegmentMinimumDuration(line)
     const minimumStart = previousSegment?.endMs ?? line.startMs
     const maximumEnd = nextSegment?.startMs ?? line.endMs
     const startMs = segment.startMs ?? minimumStart
     const endMs = segment.endMs ?? maximumEnd
+    const maximumStart = Math.max(minimumStart, maximumEnd - segmentMinimumDurationMs)
 
-    segment.startMs = clamp(startMs, minimumStart, Math.max(minimumStart, maximumEnd - minimumSegmentDurationMs))
-    segment.endMs = clamp(endMs, segment.startMs + minimumSegmentDurationMs, maximumEnd)
+    segment.startMs = clamp(startMs, minimumStart, maximumStart)
+    segment.endMs = clamp(endMs, segment.startMs + segmentMinimumDurationMs, maximumEnd)
   })
 }
 
@@ -258,24 +362,24 @@ function setBoundaryAfter(lineIndex: number, boundaryMs: number) {
   const line = project.value.draftLines[lineIndex]
   const nextLine = project.value.draftLines[lineIndex + 1]
 
-  if (!line || !hasTiming(line)) {
+  if (!line || !nextLine || !hasTiming(line) || !hasTiming(nextLine)) {
     return
   }
 
-  const minimumBoundary = line.startMs + minimumLineDurationMs
-  const maximumBoundary =
-    nextLine && hasTiming(nextLine)
-      ? nextLine.endMs - minimumLineDurationMs
-      : audioDurationMs.value ?? line.endMs
+  const lineMinimumDurationMs = getLineMinimumDuration()
+  const minimumBoundary = line.startMs + lineMinimumDurationMs
+  const maximumBoundary = nextLine.endMs - lineMinimumDurationMs
+
+  if (maximumBoundary < minimumBoundary) {
+    return
+  }
+
   const nextBoundary = clamp(boundaryMs, minimumBoundary, maximumBoundary)
 
   line.endMs = nextBoundary
   constrainSegments(line)
-
-  if (nextLine && hasTiming(nextLine)) {
-    nextLine.startMs = nextBoundary
-    constrainSegments(nextLine)
-  }
+  nextLine.startMs = nextBoundary
+  constrainSegments(nextLine)
 }
 
 function shiftLineSegments(line: DraftLyricLine, deltaMs: number) {
@@ -299,8 +403,14 @@ function moveLine(lineIndex: number, deltaMs: number) {
   }
 
   const duration = line.endMs - line.startMs
-  const minimumStart = previousLine.startMs + minimumLineDurationMs
-  const maximumStart = nextLine.endMs - minimumLineDurationMs - duration
+  const lineMinimumDurationMs = getLineMinimumDuration()
+  const minimumStart = previousLine.startMs + lineMinimumDurationMs
+  const maximumStart = nextLine.endMs - lineMinimumDurationMs - duration
+
+  if (maximumStart < minimumStart) {
+    return
+  }
+
   const nextStart = clamp(line.startMs + deltaMs, minimumStart, maximumStart)
   const appliedDelta = nextStart - line.startMs
 
@@ -379,8 +489,13 @@ function applyDrag(deltaMs: number) {
 
   const line = project.value.draftLines[drag.lineIndex]
 
-  if (!line) {
+  if (!line || !canApplyTimelineDrag(drag)) {
     return
+  }
+
+  if (!drag.snapshotCaptured) {
+    pushUndoSnapshot()
+    drag.snapshotCaptured = true
   }
 
   if (drag.mode === 'resize-line-start') {
@@ -425,6 +540,11 @@ function startTimelineDrag(
 ) {
   event.preventDefault()
   selectLine(project.value.draftLines[lineIndex], segmentIndex)
+
+  if (!canApplyTimelineDrag({ lineIndex, mode, segmentIndex, lastClientX: event.clientX })) {
+    return
+  }
+
   timelineDrag.value = { lineIndex, mode, segmentIndex, lastClientX: event.clientX }
   window.addEventListener('mousemove', onTimelineMouseMove)
   window.addEventListener('mouseup', stopTimelineDrag)
@@ -510,6 +630,7 @@ function splitSegmentAtCursor() {
     endMs: segment.endMs,
   }
 
+  pushUndoSnapshot()
   line.segments.splice(segmentIndex, 1, leftSegment, rightSegment)
   selectedSegmentId.value = rightSegment.id
   syncError.value = undefined
@@ -531,15 +652,19 @@ function compressTimelineToDuration() {
     return
   }
 
-  const totalDuration = lines.reduce((total, line) => total + Math.max(minimumLineDurationMs, getLineDuration(line)), 0)
+  const lineMinimumDurationMs = getLineMinimumDuration()
+  const totalDuration = lines.reduce(
+    (total, line) => total + Math.max(lineMinimumDurationMs, getLineDuration(line)),
+    0,
+  )
   let cursorMs = 0
 
   lines.forEach((line, index) => {
     const isLast = index === lines.length - 1
-    const sourceDuration = Math.max(minimumLineDurationMs, getLineDuration(line))
+    const sourceDuration = Math.max(lineMinimumDurationMs, getLineDuration(line))
     const nextDuration = isLast
       ? durationMs - cursorMs
-      : Math.max(minimumLineDurationMs, Math.round((sourceDuration / totalDuration) * durationMs))
+      : Math.max(lineMinimumDurationMs, Math.round((sourceDuration / totalDuration) * durationMs))
     const previousStart = line.startMs ?? cursorMs
     const nextStart = cursorMs
     const nextEnd = isLast ? durationMs : Math.min(durationMs, cursorMs + nextDuration)
@@ -567,6 +692,7 @@ function addInterludeBlock() {
     return
   }
 
+  pushUndoSnapshot()
   manualInterludeCount.value += 1
   const interlude = {
     id: `interlude:manual:${Date.now()}:${manualInterludeCount.value}`,
@@ -597,10 +723,11 @@ function addInterludeBlock() {
 function nudgeSelectedLine(deltaMs: number) {
   const index = selectedLineIndex.value
 
-  if (index === -1) {
+  if (index <= 0 || index >= project.value.draftLines.length - 1) {
     return
   }
 
+  pushUndoSnapshot()
   moveLine(index, deltaMs)
 }
 
@@ -613,6 +740,7 @@ function onAudioFile(file: File) {
   currentTimeMs.value = 0
   audioDurationMs.value = undefined
   syncError.value = undefined
+  clearUndoStack()
   project.value.audioFileName = file.name
   project.value.title = file.name.replace(/\.[^.]+$/, '')
 }
@@ -624,6 +752,7 @@ async function onLyricsFile(file: File) {
   project.value.draftLines = parsePlainLyrics(content)
   selectedLineId.value = project.value.draftLines[0]?.id
   selectedSegmentId.value = project.value.draftLines[0]?.segments[0]?.id
+  clearUndoStack()
   initializeTimelineIfPossible(true)
   syncError.value = undefined
 }
@@ -676,7 +805,7 @@ useGeneratorShortcuts(
     'player.toggle': () => void waveformRef.value?.togglePlayback(),
     'marker.create': splitSegmentAtCursor,
     'marker.interlude': addInterludeBlock,
-    'marker.undo': () => undefined,
+    'marker.undo': undoLastChange,
     'player.seekBackward': () => waveformRef.value?.seekBy(-100),
     'player.seekForward': () => waveformRef.value?.seekBy(100),
     'marker.nudgeBackward': () => nudgeSelectedLine(-100),
@@ -742,6 +871,9 @@ onBeforeUnmount(() => {
             <button class="button" type="button" :disabled="!hasTimeline" @click="addInterludeBlock">
               {{ t('generator.addInterlude') }}
             </button>
+            <button class="button" type="button" :disabled="!canUndo" @click="undoLastChange">
+              {{ t('generator.undo') }}
+            </button>
             <button
               class="button button--primary"
               type="button"
@@ -764,6 +896,7 @@ onBeforeUnmount(() => {
               :class="{
                 'timeline-block--active': selectedLineId === line.id,
                 'timeline-block--interlude': isInterludeLine(line),
+                'timeline-block--movable': canMoveLine(lineIndex),
               }"
               :style="getLineStyle(line)"
               role="button"
@@ -772,6 +905,7 @@ onBeforeUnmount(() => {
               @mousedown="startTimelineDrag($event, 'move-line', lineIndex)"
             >
               <span
+                v-if="lineIndex > 0"
                 class="timeline-block__handle timeline-block__handle--left"
                 @mousedown.stop="startTimelineDrag($event, 'resize-line-start', lineIndex)"
               ></span>
@@ -804,6 +938,7 @@ onBeforeUnmount(() => {
                 </span>
               </span>
               <span
+                v-if="lineIndex < project.draftLines.length - 1"
                 class="timeline-block__handle timeline-block__handle--right"
                 @mousedown.stop="startTimelineDrag($event, 'resize-line-end', lineIndex)"
               ></span>
