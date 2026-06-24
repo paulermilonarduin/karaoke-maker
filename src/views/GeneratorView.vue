@@ -71,6 +71,7 @@ const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
 const isCapturingShortcut = ref(false)
 const timelineDrag = ref<TimelineDrag>()
 const undoStack = ref<TimelineSnapshot[]>([])
+const redoStack = ref<TimelineSnapshot[]>([])
 const {
   actions: shortcutActions,
   hasCustomShortcuts,
@@ -124,6 +125,22 @@ const timelineSummary = computed(() =>
   }),
 )
 const canUndo = computed(() => undoStack.value.length > 0)
+const canRedo = computed(() => redoStack.value.length > 0)
+const canMergeWithPreviousSegment = computed(() => {
+  const line = selectedLine.value
+
+  return !!line && !isInterludeLine(line) && selectedSegmentIndex.value > 0
+})
+const canMergeWithNextSegment = computed(() => {
+  const line = selectedLine.value
+
+  return (
+    !!line &&
+    !isInterludeLine(line) &&
+    selectedSegmentIndex.value !== -1 &&
+    selectedSegmentIndex.value < line.segments.length - 1
+  )
+})
 
 function hasTiming(line: DraftLyricLine): line is DraftLyricLine & {
   startMs: number
@@ -160,25 +177,59 @@ function pushUndoSnapshot() {
       selectedSegmentId: selectedSegmentId.value,
     },
   ]
+  redoStack.value = []
 }
 
 function clearUndoStack() {
   undoStack.value = []
+  redoStack.value = []
+}
+
+function createTimelineSnapshot(): TimelineSnapshot {
+  return {
+    draftLines: cloneDraftLines(project.value.draftLines),
+    manualInterludeCount: manualInterludeCount.value,
+    selectedLineId: selectedLineId.value,
+    selectedSegmentId: selectedSegmentId.value,
+  }
+}
+
+function restoreTimelineSnapshot(snapshot: TimelineSnapshot) {
+  project.value.draftLines = cloneDraftLines(snapshot.draftLines)
+  manualInterludeCount.value = snapshot.manualInterludeCount
+  selectedLineId.value = snapshot.selectedLineId
+  selectedSegmentId.value = snapshot.selectedSegmentId
+  syncError.value = undefined
 }
 
 function undoLastChange() {
-  const snapshot = undoStack.value[undoStack.value.length - 1]
+  const snapshot = undoStack.value.at(-1)
 
   if (!snapshot) {
     return
   }
 
   undoStack.value = undoStack.value.slice(0, -1)
-  project.value.draftLines = cloneDraftLines(snapshot.draftLines)
-  manualInterludeCount.value = snapshot.manualInterludeCount
-  selectedLineId.value = snapshot.selectedLineId
-  selectedSegmentId.value = snapshot.selectedSegmentId
-  syncError.value = undefined
+  redoStack.value = [
+    ...redoStack.value.slice(-(maxUndoStackSize - 1)),
+    createTimelineSnapshot(),
+  ]
+  restoreTimelineSnapshot(snapshot)
+}
+
+function redoLastChange() {
+  const snapshot = redoStack.value.at(-1)
+
+  if (!snapshot) {
+    return
+  }
+
+  redoStack.value = redoStack.value.slice(0, -1)
+  undoStack.value = [
+    ...undoStack.value.slice(-(maxUndoStackSize - 1)),
+    createTimelineSnapshot(),
+  ]
+  restoreTimelineSnapshot(snapshot)
 }
 
 function createSegmentId(line: DraftLyricLine): string {
@@ -636,6 +687,63 @@ function splitSegmentAtCursor() {
   syncError.value = undefined
 }
 
+function mergeSegments(line: DraftLyricLine, leftIndex: number) {
+  const leftSegment = line.segments[leftIndex]
+  const rightSegment = line.segments[leftIndex + 1]
+
+  if (!leftSegment || !rightSegment) {
+    return
+  }
+
+  pushUndoSnapshot()
+  const mergedSegment = {
+    id: createSegmentId(line),
+    text: `${leftSegment.text}${rightSegment.text}`,
+    startMs: leftSegment.startMs,
+    endMs: rightSegment.endMs,
+  }
+
+  line.segments.splice(leftIndex, 2, mergedSegment)
+  selectedSegmentId.value = mergedSegment.id
+  syncError.value = undefined
+}
+
+function mergeSelectedSegmentWithPrevious() {
+  const line = selectedLine.value
+
+  if (!line || isInterludeLine(line) || selectedSegmentIndex.value <= 0) {
+    return
+  }
+
+  mergeSegments(line, selectedSegmentIndex.value - 1)
+}
+
+function mergeSelectedSegmentWithNext() {
+  const line = selectedLine.value
+
+  if (
+    !line ||
+    isInterludeLine(line) ||
+    selectedSegmentIndex.value === -1 ||
+    selectedSegmentIndex.value >= line.segments.length - 1
+  ) {
+    return
+  }
+
+  mergeSegments(line, selectedSegmentIndex.value)
+}
+
+function deleteSelectedSegmentSplit() {
+  if (canMergeWithPreviousSegment.value) {
+    mergeSelectedSegmentWithPrevious()
+    return
+  }
+
+  if (canMergeWithNextSegment.value) {
+    mergeSelectedSegmentWithNext()
+  }
+}
+
 function findLineIndexAtTime(timeMs: number): number {
   const index = project.value.draftLines.findIndex(
     (line) => hasTiming(line) && timeMs >= line.startMs && timeMs < line.endMs,
@@ -803,13 +911,14 @@ watch(
 useGeneratorShortcuts(
   {
     'player.toggle': () => void waveformRef.value?.togglePlayback(),
-    'marker.create': splitSegmentAtCursor,
-    'marker.interlude': addInterludeBlock,
-    'marker.undo': undoLastChange,
+    'timeline.splitSegment': splitSegmentAtCursor,
+    'timeline.addInterlude': addInterludeBlock,
+    'timeline.undo': undoLastChange,
+    'timeline.redo': redoLastChange,
     'player.seekBackward': () => waveformRef.value?.seekBy(-100),
     'player.seekForward': () => waveformRef.value?.seekBy(100),
-    'marker.nudgeBackward': () => nudgeSelectedLine(-100),
-    'marker.nudgeForward': () => nudgeSelectedLine(100),
+    'timeline.nudgeBackward': () => nudgeSelectedLine(-100),
+    'timeline.nudgeForward': () => nudgeSelectedLine(100),
     'player.slower': () => waveformRef.value?.adjustPlaybackRate(-1),
     'player.faster': () => waveformRef.value?.adjustPlaybackRate(1),
   },
@@ -873,6 +982,9 @@ onBeforeUnmount(() => {
             </button>
             <button class="button" type="button" :disabled="!canUndo" @click="undoLastChange">
               {{ t('generator.undo') }}
+            </button>
+            <button class="button" type="button" :disabled="!canRedo" @click="redoLastChange">
+              {{ t('generator.redo') }}
             </button>
             <button
               class="button button--primary"
@@ -978,6 +1090,32 @@ onBeforeUnmount(() => {
             <button class="button" type="button" @click="splitSegmentAtCursor">
               {{ t('generator.splitSegment') }}
             </button>
+            <div class="timeline-inspector__segment-actions">
+              <button
+                class="button"
+                type="button"
+                :disabled="!canMergeWithPreviousSegment"
+                @click="mergeSelectedSegmentWithPrevious"
+              >
+                {{ t('generator.mergePreviousSegment') }}
+              </button>
+              <button
+                class="button"
+                type="button"
+                :disabled="!canMergeWithNextSegment"
+                @click="mergeSelectedSegmentWithNext"
+              >
+                {{ t('generator.mergeNextSegment') }}
+              </button>
+              <button
+                class="button"
+                type="button"
+                :disabled="!canMergeWithPreviousSegment && !canMergeWithNextSegment"
+                @click="deleteSelectedSegmentSplit"
+              >
+                {{ t('generator.deleteSegmentSplit') }}
+              </button>
+            </div>
           </div>
         </div>
       </section>
