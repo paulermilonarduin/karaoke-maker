@@ -517,6 +517,12 @@ p {
   font-weight: 750;
 }
 
+.sync-panel__success {
+  color: #2c7a68;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
 .auto-align {
   display: grid;
   gap: 10px;

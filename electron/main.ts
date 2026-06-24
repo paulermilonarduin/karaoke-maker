@@ -2,9 +2,9 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import type { IpcMainInvokeEvent } from 'electron'
 import { spawn } from 'node:child_process'
 import { existsSync } from 'node:fs'
-import { mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
-import { dirname, extname, join } from 'node:path'
+import { basename, dirname, extname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url))
@@ -156,6 +156,136 @@ function registerAlignmentHandler() {
   ipcMain.handle('align:run', (event, request: AlignRequest) => runAlignment(event, request))
 }
 
+// Disk-backed catalog: lives in the repo sources so exported karaokés land next
+// to their audio and show up in the Catalog without editing code. Works in dev;
+// a packaged build would need a writable user folder instead.
+type CatalogEntry = { id: string; title: string; karaokeContent: string; audioFileName: string }
+
+type CatalogSaveRequest = {
+  id: string
+  karaokeJson: string
+  audioBytes: ArrayBuffer
+  audioFileName: string
+}
+
+function catalogDir(): string {
+  return join(app.getAppPath(), 'src', 'assets', 'catalog')
+}
+
+function slugify(value: string): string {
+  const slug = value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
+  return slug || 'karaoke'
+}
+
+async function listCatalog(): Promise<CatalogEntry[]> {
+  const dir = catalogDir()
+
+  if (!existsSync(dir)) {
+    return []
+  }
+
+  const entries: CatalogEntry[] = []
+  const folders = await readdir(dir, { withFileTypes: true })
+
+  for (const folder of folders) {
+    if (!folder.isDirectory()) {
+      continue
+    }
+
+    const folderPath = join(dir, folder.name)
+    const files = await readdir(folderPath)
+    const karaokeFile = files.find((file) => file.endsWith('.karaoke.json'))
+
+    if (!karaokeFile) {
+      continue
+    }
+
+    let title = folder.name
+    let audioFileName = ''
+    let karaokeContent: string
+
+    try {
+      karaokeContent = await readFile(join(folderPath, karaokeFile), 'utf-8')
+      const parsed = JSON.parse(karaokeContent) as {
+        title?: unknown
+        audio?: { fileName?: unknown }
+      }
+
+      if (typeof parsed.title === 'string') {
+        title = parsed.title
+      }
+
+      if (typeof parsed.audio?.fileName === 'string') {
+        audioFileName = parsed.audio.fileName
+      }
+    } catch {
+      continue
+    }
+
+    if (!audioFileName || !existsSync(join(folderPath, audioFileName))) {
+      const audio = files.find((file) => /\.(mp3|wav|m4a|ogg|flac)$/i.test(file))
+
+      if (!audio) {
+        continue
+      }
+
+      audioFileName = audio
+    }
+
+    entries.push({ id: folder.name, title, karaokeContent, audioFileName })
+  }
+
+  entries.sort((a, b) => a.title.localeCompare(b.title))
+
+  return entries
+}
+
+async function readCatalogAudio(id: string, fileName: string): Promise<ArrayBuffer | null> {
+  // basename() guards against path traversal in the IPC arguments.
+  const filePath = join(catalogDir(), basename(id), basename(fileName))
+
+  if (!existsSync(filePath)) {
+    return null
+  }
+
+  const buffer = await readFile(filePath)
+
+  return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)
+}
+
+async function saveToCatalog(
+  request: CatalogSaveRequest,
+): Promise<{ ok: boolean; id?: string; error?: string }> {
+  try {
+    const id = slugify(request.id)
+    const folder = join(catalogDir(), id)
+    const audioName = basename(request.audioFileName) || 'audio.mp3'
+    const base = audioName.replace(/\.[^.]+$/, '') || 'karaoke'
+
+    await mkdir(folder, { recursive: true })
+    await writeFile(join(folder, audioName), Buffer.from(request.audioBytes))
+    await writeFile(join(folder, `${base}.karaoke.json`), request.karaokeJson)
+
+    return { ok: true, id }
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : String(error) }
+  }
+}
+
+function registerCatalogHandlers() {
+  ipcMain.handle('catalog:list', () => listCatalog())
+  ipcMain.handle('catalog:readAudio', (_event, id: string, fileName: string) =>
+    readCatalogAudio(id, fileName),
+  )
+  ipcMain.handle('catalog:save', (_event, request: CatalogSaveRequest) => saveToCatalog(request))
+}
+
 function createMainWindow() {
   const mainWindow = new BrowserWindow({
     width: 1280,
@@ -189,6 +319,7 @@ function createMainWindow() {
 
 app.whenReady().then(() => {
   registerAlignmentHandler()
+  registerCatalogHandlers()
   createMainWindow()
 
   app.on('activate', () => {

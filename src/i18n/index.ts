@@ -36,6 +36,7 @@ const frMessages = {
 
   'generator.audioLabel': 'Musique MP3',
   'generator.addBridge': 'Interlude',
+  'generator.addToCatalog': 'Ajouter au catalogue',
   'generator.autoApplied': 'Calage automatique appliqué — ajustez ou exportez.',
   'generator.autoError': 'Le calage automatique a échoué : {message}',
   'generator.autoFailed': 'Le calage automatique a échoué.',
@@ -60,6 +61,7 @@ const frMessages = {
   'generator.error.missingAudio': 'Chargez une piste audio avant de placer des marqueurs.',
   'generator.error.wordOrder': 'Le marqueur doit être placé après celui du mot précédent.',
   'generator.exportJson': 'Exporter',
+  'generator.exportedToCatalog': 'Ajouté au catalogue : {id}',
   'generator.lyricsLabel': 'Paroles brutes',
   'generator.mark': 'Marquer',
   'generator.markLine': 'Marquer la ligne',
@@ -162,6 +164,7 @@ const enMessages: Record<keyof typeof frMessages, string> = {
 
   'generator.audioLabel': 'MP3 music',
   'generator.addBridge': 'Bridge',
+  'generator.addToCatalog': 'Add to catalog',
   'generator.autoApplied': 'Automatic timing applied — adjust or export.',
   'generator.autoError': 'Automatic alignment failed: {message}',
   'generator.autoFailed': 'Automatic alignment failed.',
@@ -185,6 +188,7 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'generator.error.missingAudio': 'Load an audio track before placing markers.',
   'generator.error.wordOrder': 'The marker must be placed after the previous word marker.',
   'generator.exportJson': 'Export',
+  'generator.exportedToCatalog': 'Added to the catalog: {id}',
   'generator.lyricsLabel': 'Raw lyrics',
   'generator.mark': 'Mark',
   'generator.markLine': 'Mark line',

@@ -1,18 +1,45 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { catalogTracks, type CatalogTrack } from '../catalog/tracks'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { catalogTracks } from '../catalog/tracks'
 import AudioPlayer from '../components/AudioPlayer.vue'
 import LyricsDisplay from '../components/LyricsDisplay.vue'
+import { isCatalogAvailable, listCatalog, readCatalogAudioUrl } from '../desktop/bridge'
 import { findActiveLine, parseKaraokeFile, type LyricLine } from '../domain/lyrics'
 import { useI18n } from '../i18n'
 
-const selectedTrack = ref<CatalogTrack>(catalogTracks[0])
+type PlayableTrack = {
+  id: string
+  title: string
+  karaokeContent: string
+  // Bundled tracks carry a ready Vite asset URL; disk tracks resolve their
+  // audio to a blob URL on selection.
+  audioUrl?: string
+  audioFileName?: string
+}
+
+const tracks = ref<PlayableTrack[]>([])
+const selectedTrack = ref<PlayableTrack>()
+const resolvedAudioUrl = ref<string>()
 const currentTimeMs = ref(0)
 const audioDurationMs = ref<number>()
-const karaokeFile = computed(() => parseKaraokeFile(selectedTrack.value.karaokeContent))
-const lyrics = computed(() => karaokeFile.value.lines)
-const activeLine = computed(() => findActiveLine(lyrics.value, currentTimeMs.value))
+const loadError = ref<string>()
 const { t } = useI18n()
+
+const karaokeFile = computed(() => {
+  const content = selectedTrack.value?.karaokeContent
+
+  if (!content) {
+    return undefined
+  }
+
+  try {
+    return parseKaraokeFile(content)
+  } catch {
+    return undefined
+  }
+})
+const lyrics = computed(() => karaokeFile.value?.lines ?? [])
+const activeLine = computed(() => findActiveLine(lyrics.value, currentTimeMs.value))
 const previousLine = computed<LyricLine | undefined>(() => {
   const line = activeLine.value
 
@@ -36,11 +63,67 @@ const nextLine = computed<LyricLine | undefined>(() => {
   return lyrics.value[index + 1]
 })
 
-function selectTrack(track: CatalogTrack) {
+function revokeAudio() {
+  if (resolvedAudioUrl.value?.startsWith('blob:')) {
+    URL.revokeObjectURL(resolvedAudioUrl.value)
+  }
+}
+
+async function selectTrack(track: PlayableTrack) {
   selectedTrack.value = track
   currentTimeMs.value = 0
   audioDurationMs.value = undefined
+  loadError.value = undefined
+  revokeAudio()
+  resolvedAudioUrl.value = undefined
+
+  try {
+    resolvedAudioUrl.value = track.audioUrl
+      ? track.audioUrl
+      : track.audioFileName
+        ? await readCatalogAudioUrl(track.id, track.audioFileName)
+        : undefined
+  } catch (error) {
+    loadError.value = error instanceof Error ? error.message : String(error)
+  }
 }
+
+function bundledTracks(): PlayableTrack[] {
+  return catalogTracks.map((track) => ({
+    id: track.id,
+    title: track.title,
+    karaokeContent: track.karaokeContent,
+    audioUrl: track.audioUrl,
+  }))
+}
+
+onMounted(async () => {
+  if (isCatalogAvailable()) {
+    try {
+      const entries = await listCatalog()
+
+      tracks.value = entries.map((entry) => ({
+        id: entry.id,
+        title: entry.title,
+        karaokeContent: entry.karaokeContent,
+        audioFileName: entry.audioFileName,
+      }))
+    } catch (error) {
+      loadError.value = error instanceof Error ? error.message : String(error)
+    }
+  }
+
+  // Browser, or an empty on-disk catalog: fall back to the bundled tracks.
+  if (tracks.value.length === 0) {
+    tracks.value = bundledTracks()
+  }
+
+  if (tracks.value[0]) {
+    await selectTrack(tracks.value[0])
+  }
+})
+
+onBeforeUnmount(revokeAudio)
 </script>
 
 <template>
@@ -48,17 +131,17 @@ function selectTrack(track: CatalogTrack) {
     <div class="catalog-view__header">
       <div>
         <p class="eyebrow">{{ t('catalog.eyebrow') }}</p>
-        <p class="line-count">{{ t('catalog.count', { count: catalogTracks.length }) }}</p>
+        <p class="line-count">{{ t('catalog.count', { count: tracks.length }) }}</p>
       </div>
     </div>
 
     <div class="catalog-layout">
       <aside class="catalog-list" :aria-label="t('catalog.availableTracks')">
         <button
-          v-for="track in catalogTracks"
+          v-for="track in tracks"
           :key="track.id"
           class="catalog-track"
-          :class="{ 'catalog-track--active': selectedTrack.id === track.id }"
+          :class="{ 'catalog-track--active': selectedTrack?.id === track.id }"
           type="button"
           @click="selectTrack(track)"
         >
@@ -75,12 +158,13 @@ function selectTrack(track: CatalogTrack) {
           :previous-line="previousLine"
           :next-line="nextLine"
           :placeholder="t('catalog.placeholder')"
-          :title="selectedTrack.title"
+          :title="selectedTrack?.title"
         >
           <template #footer>
+            <p v-if="loadError" class="sync-panel__error" role="alert">{{ loadError }}</p>
             <AudioPlayer
-              :key="selectedTrack.id"
-              :audio-url="selectedTrack.audioUrl"
+              :key="selectedTrack?.id"
+              :audio-url="resolvedAudioUrl"
               @timeupdate="currentTimeMs = $event"
               @durationchange="audioDurationMs = $event"
             />

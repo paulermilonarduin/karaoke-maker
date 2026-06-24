@@ -19,8 +19,10 @@ import {
 } from '../domain/lyrics'
 import {
   isAlignmentAvailable,
+  isCatalogAvailable,
   onAlignmentProgress,
   requestAlignment,
+  saveToCatalog,
 } from '../desktop/bridge'
 import {
   useGeneratorShortcutSettings,
@@ -49,6 +51,7 @@ const audioFile = ref<File>()
 const currentTimeMs = ref(0)
 const audioDurationMs = ref<number>()
 const syncError = ref<string>()
+const exportMessage = ref<string>()
 const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
 const isCapturingShortcut = ref(false)
 const autoAlignAvailable = isAlignmentAvailable()
@@ -213,6 +216,10 @@ const showAutoAlign = computed(
     project.value.draftLines.length > 0 &&
     !autoAlignDismissed.value &&
     (autoAlignState.value !== 'idle' || syncedLineCount.value === 0),
+)
+
+const exportLabel = computed(() =>
+  isCatalogAvailable() ? t('generator.addToCatalog') : t('generator.exportJson'),
 )
 
 const activeLine = computed(() => findActiveLine(syncedLines.value, currentTimeMs.value))
@@ -623,31 +630,55 @@ function onRegionChange(change: WaveformRegionChange) {
   }
 }
 
-function downloadKaraokeFile() {
+async function exportKaraoke() {
   if (audioDurationMs.value === undefined) {
     return
   }
 
-  try {
-    const karaokeFile = createKaraokeFile(
-      project.value,
-      syncedLines.value,
-      audioDurationMs.value,
-    )
-    const content = serializeKaraokeFile(karaokeFile)
-    const fileName = `${project.value.title || 'karaoke'}.karaoke.json`
-    const blob = new Blob([content], { type: 'application/json;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
+  exportMessage.value = undefined
+  let content: string
 
-    link.href = url
-    link.download = fileName
-    link.click()
-    URL.revokeObjectURL(url)
-    syncError.value = undefined
+  try {
+    const karaokeFile = createKaraokeFile(project.value, syncedLines.value, audioDurationMs.value)
+    content = serializeKaraokeFile(karaokeFile)
   } catch (error) {
     syncError.value = error instanceof Error ? error.message : t('generator.error.export')
+    return
   }
+
+  const title = project.value.title || 'karaoke'
+
+  // Desktop: save straight into the on-disk catalog (audio + json) so it shows
+  // up in the Catalog without any manual file juggling.
+  if (isCatalogAvailable() && audioFile.value) {
+    try {
+      const audioBytes = await audioFile.value.arrayBuffer()
+      const id = await saveToCatalog({
+        id: title,
+        karaokeJson: content,
+        audioBytes,
+        audioFileName: project.value.audioFileName ?? audioFile.value.name,
+      })
+
+      syncError.value = undefined
+      exportMessage.value = t('generator.exportedToCatalog', { id })
+    } catch (error) {
+      syncError.value = error instanceof Error ? error.message : t('generator.error.export')
+    }
+
+    return
+  }
+
+  // Browser: download the file.
+  const blob = new Blob([content], { type: 'application/json;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+
+  link.href = url
+  link.download = `${title}.karaoke.json`
+  link.click()
+  URL.revokeObjectURL(url)
+  syncError.value = undefined
 }
 
 useGeneratorShortcuts(
@@ -814,6 +845,7 @@ onBeforeUnmount(() => {
             {{ t('generator.nextWord') }} <strong>{{ nextSegment.text.trim() }}</strong>
           </p>
           <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
+          <p v-if="exportMessage" class="sync-panel__success" role="status">{{ exportMessage }}</p>
 
           <div class="action-row">
             <button
@@ -841,8 +873,8 @@ onBeforeUnmount(() => {
             >
               {{ t('generator.undo') }}
             </button>
-            <button class="button" type="button" :disabled="!canExport" @click="downloadKaraokeFile">
-              {{ t('generator.exportJson') }}
+            <button class="button" type="button" :disabled="!canExport" @click="exportKaraoke">
+              {{ exportLabel }}
             </button>
           </div>
         </div>

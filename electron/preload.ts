@@ -14,9 +14,23 @@ type AlignResponse =
   | { ok: true; result: unknown }
   | { ok: false; error: string }
 
+type CatalogEntry = { id: string; title: string; karaokeContent: string; audioFileName: string }
+
+type CatalogSaveRequest = {
+  id: string
+  karaokeJson: string
+  audioBytes: ArrayBuffer
+  audioFileName: string
+}
+
 type DesktopApi = {
   isDesktop: boolean
   platform: string
+  listCatalog: () => Promise<CatalogEntry[]>
+  readCatalogAudio: (id: string, fileName: string) => Promise<ArrayBuffer | null>
+  saveToCatalog: (
+    request: CatalogSaveRequest,
+  ) => Promise<{ ok: boolean; id?: string; error?: string }>
   alignKaraoke?: (request: AlignRequest) => Promise<AlignResponse>
   onAlignProgress?: (callback: (line: string) => void) => () => void
 }
@@ -24,6 +38,9 @@ type DesktopApi = {
 const api: DesktopApi = {
   isDesktop: true,
   platform: process.platform,
+  listCatalog: () => ipcRenderer.invoke('catalog:list'),
+  readCatalogAudio: (id, fileName) => ipcRenderer.invoke('catalog:readAudio', id, fileName),
+  saveToCatalog: (request) => ipcRenderer.invoke('catalog:save', request),
 }
 
 // The alignment feature (Python + WhisperX + Demucs) stays locked unless the
