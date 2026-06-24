@@ -1,0 +1,8 @@
+# Forced alignment toolchain for Karaoke Maker.
+# Install inside a dedicated virtualenv (see README.md). ffmpeg must be on PATH.
+
+whisperx>=3.1.1
+demucs>=4.0.1
+# torchaudio 2.8 dropped its built-in save backends; soundfile provides the WAV
+# backend Demucs needs to write the separated vocal stem.
+soundfile>=0.12.1
