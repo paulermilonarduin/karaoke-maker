@@ -40,28 +40,37 @@ const karaokeFile = computed(() => {
 })
 const lyrics = computed(() => karaokeFile.value?.lines ?? [])
 const activeLine = computed(() => findActiveLine(lyrics.value, currentTimeMs.value))
-const previousLine = computed<LyricLine | undefined>(() => {
-  const line = activeLine.value
-
-  if (!line) {
-    return undefined
+// In an instrumental gap no line is strictly active. Rather than fall back to
+// the "press play" placeholder, keep the last line that has already begun so it
+// lingers (fully highlighted) until the next one starts.
+const displayLine = computed<LyricLine | undefined>(() => {
+  if (activeLine.value) {
+    return activeLine.value
   }
 
-  const index = lyrics.value.findIndex((candidate) => candidate.id === line.id)
+  let lingering: LyricLine | undefined
 
-  return lyrics.value[index - 1]
-})
-const nextLine = computed<LyricLine | undefined>(() => {
-  const line = activeLine.value
-
-  if (!line) {
-    return lyrics.value[0]
+  for (const line of lyrics.value) {
+    if (line.startMs <= currentTimeMs.value) {
+      lingering = line
+    } else {
+      break
+    }
   }
 
-  const index = lyrics.value.findIndex((candidate) => candidate.id === line.id)
-
-  return lyrics.value[index + 1]
+  return lingering
 })
+const displayIndex = computed(() =>
+  displayLine.value
+    ? lyrics.value.findIndex((candidate) => candidate.id === displayLine.value!.id)
+    : -1,
+)
+const previousLine = computed<LyricLine | undefined>(() =>
+  displayLine.value ? lyrics.value[displayIndex.value - 1] : undefined,
+)
+const nextLine = computed<LyricLine | undefined>(() =>
+  displayLine.value ? lyrics.value[displayIndex.value + 1] : lyrics.value[0],
+)
 
 function revokeAudio() {
   if (resolvedAudioUrl.value?.startsWith('blob:')) {
@@ -154,7 +163,7 @@ onBeforeUnmount(revokeAudio)
         <LyricsDisplay
           :current-time-ms="currentTimeMs"
           :fallback-end-time-ms="audioDurationMs"
-          :active-line="activeLine"
+          :active-line="displayLine"
           :previous-line="previousLine"
           :next-line="nextLine"
           :placeholder="t('catalog.placeholder')"
