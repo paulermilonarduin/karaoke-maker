@@ -3,13 +3,14 @@ import type { Locale, TranslationKey } from '../i18n'
 
 export type GeneratorActionId =
   | 'player.toggle'
-  | 'marker.create'
-  | 'marker.interlude'
-  | 'marker.undo'
+  | 'timeline.splitSegment'
+  | 'timeline.addInterlude'
+  | 'timeline.undo'
+  | 'timeline.redo'
   | 'player.seekBackward'
   | 'player.seekForward'
-  | 'marker.nudgeBackward'
-  | 'marker.nudgeForward'
+  | 'timeline.nudgeBackward'
+  | 'timeline.nudgeForward'
   | 'player.slower'
   | 'player.faster'
 
@@ -35,19 +36,24 @@ export const generatorActions: GeneratorActionDefinition[] = [
     shortcut: { code: 'Space' },
   },
   {
-    id: 'marker.create',
-    labelKey: 'shortcut.action.markerCreate',
+    id: 'timeline.splitSegment',
+    labelKey: 'shortcut.action.timelineSplitSegment',
     shortcut: { code: 'Enter' },
   },
   {
-    id: 'marker.interlude',
-    labelKey: 'shortcut.action.markerInterlude',
+    id: 'timeline.addInterlude',
+    labelKey: 'shortcut.action.timelineAddInterlude',
     shortcut: { key: 'b' },
   },
   {
-    id: 'marker.undo',
-    labelKey: 'shortcut.action.markerUndo',
+    id: 'timeline.undo',
+    labelKey: 'shortcut.action.timelineUndo',
     shortcut: { key: 'z', control: true },
+  },
+  {
+    id: 'timeline.redo',
+    labelKey: 'shortcut.action.timelineRedo',
+    shortcut: { key: 'y', control: true },
   },
   {
     id: 'player.seekBackward',
@@ -62,14 +68,14 @@ export const generatorActions: GeneratorActionDefinition[] = [
     repeat: true,
   },
   {
-    id: 'marker.nudgeBackward',
-    labelKey: 'shortcut.action.markerNudgeBackward',
+    id: 'timeline.nudgeBackward',
+    labelKey: 'shortcut.action.timelineNudgeBackward',
     shortcut: { code: 'ArrowLeft', shift: true },
     repeat: true,
   },
   {
-    id: 'marker.nudgeForward',
-    labelKey: 'shortcut.action.markerNudgeForward',
+    id: 'timeline.nudgeForward',
+    labelKey: 'shortcut.action.timelineNudgeForward',
     shortcut: { code: 'ArrowRight', shift: true },
     repeat: true,
   },
@@ -86,6 +92,13 @@ export const generatorActions: GeneratorActionDefinition[] = [
 ]
 
 const shortcutStorageKey = 'karaoke-maker.generator-shortcuts.v1'
+const legacyActionIds: Partial<Record<string, GeneratorActionId>> = {
+  'marker.create': 'timeline.splitSegment',
+  'marker.interlude': 'timeline.addInterlude',
+  'marker.undo': 'timeline.undo',
+  'marker.nudgeBackward': 'timeline.nudgeBackward',
+  'marker.nudgeForward': 'timeline.nudgeForward',
+}
 
 const keyLabels: Record<Locale, Record<string, string>> = {
   fr: {
@@ -222,7 +235,10 @@ function loadCustomShortcuts(): Partial<Record<GeneratorActionId, ShortcutBindin
     const customShortcuts: Partial<Record<GeneratorActionId, ShortcutBinding>> = {}
 
     generatorActions.forEach((action) => {
-      const storedBinding = parsed.bindings?.[action.id]
+      const legacyEntry = Object.entries(legacyActionIds).find(
+        ([, nextActionId]) => nextActionId === action.id,
+      )
+      const storedBinding = parsed.bindings?.[action.id] ?? (legacyEntry ? parsed.bindings?.[legacyEntry[0]] : undefined)
 
       if (isShortcutBinding(storedBinding)) {
         const normalizedBinding = normalizeShortcutBinding(storedBinding)
@@ -315,10 +331,24 @@ function matchesShortcut(event: KeyboardEvent, shortcut: ShortcutBinding): boole
 }
 
 function isEditableTarget(target: EventTarget | null): boolean {
-  return (
-    target instanceof HTMLElement &&
-    Boolean(target.closest('input, textarea, select, button, [contenteditable="true"]'))
-  )
+  if (!(target instanceof HTMLElement)) {
+    return false
+  }
+
+  const interactiveTarget = target.closest('input, textarea, select, button, [contenteditable="true"]')
+
+  if (!interactiveTarget) {
+    return false
+  }
+
+  if (
+    interactiveTarget instanceof HTMLInputElement ||
+    interactiveTarget instanceof HTMLTextAreaElement
+  ) {
+    return !interactiveTarget.readOnly
+  }
+
+  return true
 }
 
 export function useGeneratorShortcuts(

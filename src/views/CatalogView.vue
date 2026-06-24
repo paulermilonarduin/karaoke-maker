@@ -12,7 +12,11 @@ const audioDurationMs = ref<number>()
 const trackSearchQuery = ref('')
 const karaokeFile = computed(() => parseKaraokeFile(selectedTrack.value.karaokeContent))
 const lyrics = computed(() => karaokeFile.value.lines)
-const activeLine = computed(() => findActiveLine(lyrics.value, currentTimeMs.value))
+const syncOffsetMs = computed(() => karaokeFile.value.sync?.offsetMs ?? 0)
+const displayTimeMs = computed(() => currentTimeMs.value + syncOffsetMs.value)
+const activeLine = computed(() =>
+  findActiveLine(lyrics.value, currentTimeMs.value, syncOffsetMs.value),
+)
 const { t } = useI18n()
 const normalizedTrackSearchQuery = computed(() => normalizeTrackSearch(trackSearchQuery.value))
 const filteredTracks = computed(() => {
@@ -132,7 +136,7 @@ function formatCatalogDuration(durationMs: number): string {
 
       <div class="catalog-player">
         <LyricsDisplay
-          :current-time-ms="currentTimeMs"
+          :current-time-ms="displayTimeMs"
           :fallback-end-time-ms="audioDurationMs"
           :active-line="activeLine"
           :previous-line="previousLine"

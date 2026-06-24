@@ -38,7 +38,9 @@ export type KaraokeProject = {
   title: string
   artist: string
   audioFileName?: string
+  karaokeFileName?: string
   lyricsFileName?: string
+  syncOffsetMs?: number
   draftLines: DraftLyricLine[]
 }
 
@@ -62,6 +64,9 @@ export type KaraokeFile = {
     accentColor?: string | null
     backgroundColor?: string | null
   }
+  sync?: {
+    offsetMs: number
+  }
   lines: Array<LyricLine & { endMs: number }>
 }
 
@@ -70,10 +75,12 @@ export function isInterludeLine(line: Pick<LyricLine, 'kind'>): boolean {
 }
 
 function splitIntoSegments(text: string, lineId: string): DraftLyricSegment[] {
-  return (text.match(/\S+\s*/g) ?? [text]).map((segmentText, index) => ({
-    id: `${lineId}:segment:${index}`,
-    text: segmentText,
-  }))
+  return [
+    {
+      id: `${lineId}:segment:0`,
+      text,
+    },
+  ]
 }
 
 export function parsePlainLyrics(content: string): DraftLyricLine[] {
@@ -186,6 +193,9 @@ export function createKaraokeFile(
       accentColor: null,
       backgroundColor: null,
     },
+    sync: {
+      offsetMs: project.syncOffsetMs ?? 0,
+    },
     lines: completeLines,
   }
 
@@ -202,6 +212,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isNonNegativeInteger(value: unknown): value is number {
   return Number.isInteger(value) && (value as number) >= 0
+}
+
+function isInteger(value: unknown): value is number {
+  return Number.isInteger(value)
 }
 
 function isNullableString(value: unknown): value is string | null {
@@ -253,6 +267,20 @@ function parseOptionalDisplay(value: unknown): KaraokeFile['display'] | undefine
   return {
     ...(accentColor !== undefined ? { accentColor } : {}),
     ...(backgroundColor !== undefined ? { backgroundColor } : {}),
+  }
+}
+
+function parseOptionalSync(value: unknown): KaraokeFile['sync'] | undefined {
+  if (value === undefined) {
+    return undefined
+  }
+
+  if (!isRecord(value) || !isInteger(value.offsetMs)) {
+    return undefined
+  }
+
+  return {
+    offsetMs: value.offsetMs,
   }
 }
 
@@ -353,7 +381,12 @@ export function parseKaraokeFile(content: string): KaraokeFile {
     throw new Error(`La version du fichier karaoké n'est pas supportée.`)
   }
 
-  if (!isRecord(value.song) || !isRecord(value.audio) || !Array.isArray(value.lines)) {
+  if (
+    !isRecord(value.song) ||
+    !isRecord(value.audio) ||
+    !Array.isArray(value.lines) ||
+    value.lines.length === 0
+  ) {
     throw new Error('La structure du fichier karaoké est invalide.')
   }
 
@@ -361,6 +394,7 @@ export function parseKaraokeFile(content: string): KaraokeFile {
   const { fileName } = value.audio
   const assets = parseOptionalAssets(value.assets)
   const display = parseOptionalDisplay(value.display)
+  const sync = parseOptionalSync(value.sync)
 
   if (
     typeof title !== 'string' ||
@@ -368,7 +402,8 @@ export function parseKaraokeFile(content: string): KaraokeFile {
     !isNonNegativeInteger(durationMs) ||
     (fileName !== undefined && typeof fileName !== 'string') ||
     (value.assets !== undefined && assets === undefined) ||
-    (value.display !== undefined && display === undefined)
+    (value.display !== undefined && display === undefined) ||
+    (value.sync !== undefined && sync === undefined)
   ) {
     throw new Error('Les informations du fichier karaoké sont invalides.')
   }
@@ -378,12 +413,22 @@ export function parseKaraokeFile(content: string): KaraokeFile {
   lines.forEach((line, index) => {
     const previousLine = lines[index - 1]
 
-    if (previousLine && line.startMs < previousLine.endMs) {
-      throw new Error(`Les lignes « ${previousLine.text} » et « ${line.text} » se chevauchent.`)
+    if (index === 0 && line.startMs !== 0) {
+      throw new Error('La première ligne doit commencer au début de la piste audio.')
+    }
+
+    if (previousLine && line.startMs !== previousLine.endMs) {
+      throw new Error(
+        `Les lignes « ${previousLine.text} » et « ${line.text} » doivent être continues.`,
+      )
     }
 
     if (line.endMs > durationMs) {
       throw new Error(`La ligne « ${line.text} » dépasse la durée de la piste audio.`)
+    }
+
+    if (index === lines.length - 1 && line.endMs !== durationMs) {
+      throw new Error('La dernière ligne doit terminer exactement avec la piste audio.')
     }
   })
 
@@ -393,15 +438,22 @@ export function parseKaraokeFile(content: string): KaraokeFile {
     audio: { fileName },
     ...(assets !== undefined ? { assets } : {}),
     ...(display !== undefined ? { display } : {}),
+    ...(sync !== undefined ? { sync } : {}),
     lines,
   }
 }
 
-export function findActiveLine(lines: LyricLine[], currentTimeMs: number): LyricLine | undefined {
+export function findActiveLine(
+  lines: LyricLine[],
+  currentTimeMs: number,
+  offsetMs = 0,
+): LyricLine | undefined {
+  const effectiveTimeMs = currentTimeMs + offsetMs
+
   return lines.find((line, index) => {
     const endMs = line.endMs ?? lines[index + 1]?.startMs ?? Number.POSITIVE_INFINITY
 
-    return currentTimeMs >= line.startMs && currentTimeMs < endMs
+    return effectiveTimeMs >= line.startMs && effectiveTimeMs < endMs
   })
 }
 

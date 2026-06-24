@@ -23,6 +23,7 @@ const props = withDefaults(
 const emit = defineEmits<{
   timeupdate: [timeMs: number]
   durationchange: [durationMs: number]
+  zoomchange: [pxPerSecond: number]
   regionchange: [change: WaveformRegionChange]
   error: [message: string]
 }>()
@@ -259,6 +260,7 @@ function adjustPlaybackRate(direction: -1 | 1) {
 function setZoom(value: number) {
   zoomPxPerSecond.value = value
   wavesurfer?.zoom(value)
+  emit('zoomchange', value)
 }
 
 function onZoomInput(event: Event) {
@@ -316,6 +318,7 @@ defineExpose({
   adjustPlaybackRate,
   nudgeSelectedRegion,
   seekBy,
+  setZoom,
   setPlaybackRate,
   togglePlayback,
 })

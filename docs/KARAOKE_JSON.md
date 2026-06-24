@@ -25,6 +25,9 @@ Le MP3 reste externe au JSON. Le fichier JSON décrit le morceau, les métadonn�
     "accentColor": null,
     "backgroundColor": null
   },
+  "sync": {
+    "offsetMs": 0
+  },
   "lines": []
 }
 ```
@@ -39,11 +42,12 @@ Le MP3 reste externe au JSON. Le fichier JSON décrit le morceau, les métadonn�
 - `assets.cover` : pochette optionnelle pour le catalogue
 - `assets.background` : image de fond optionnelle pour le lecteur
 - `display` : préférences visuelles optionnelles propres au morceau
+- `sync.offsetMs` : offset global optionnel appliqué au temps de lecture
 - `lines` : contenu synchronisé lu par le lecteur
 
 ## Lignes
 
-Une ligne de paroles utilise `kind: "lyrics"`.
+Une ligne de paroles utilise `kind: "lyrics"`. Elle pilote l’apparition du texte dans le lecteur.
 
 ```json
 {
@@ -63,6 +67,15 @@ Une ligne de paroles utilise `kind: "lyrics"`.
 }
 ```
 
+Les `segments` pilotent l’animation de highlight à l’intérieur de la ligne.
+
+- Une ligne fraîchement importée démarre avec un seul segment qui couvre toute la ligne
+- Les segments restent dans les limites temporelles de leur ligne
+- Les segments sont ordonnés par `startMs`
+- Les segments ne se chevauchent pas
+- Des blancs sont autorisés entre deux segments pour mettre l’animation en pause
+- Le texte concaténé des segments doit reconstruire exactement `line.text`
+
 Un passage sans paroles utilise uniquement `kind: "interlude"`.
 
 ```json
@@ -76,6 +89,13 @@ Un passage sans paroles utilise uniquement `kind: "interlude"`.
 ```
 
 Les fichiers `.txt` importés dans le générateur sont traités comme du texte brut. Les interludes sont ajoutés dans l’interface de synchronisation, pas via des balises dans le `.txt`.
+
+Le lecteur attend une couverture continue de la piste audio :
+
+- La première ligne commence à `0`
+- Chaque ligne commence exactement à la fin de la ligne précédente
+- La dernière ligne finit exactement à `song.durationMs`
+- Si aucun texte ne doit être affiché, il faut insérer un interlude
 
 ## Extensions prévues
 

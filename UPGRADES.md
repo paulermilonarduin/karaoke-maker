@@ -23,3 +23,9 @@ Cas prioritaires à corriger :
 - compteur du catalogue : `1 titre` / `{count} titres` ;
 - résultats de recherche : par exemple `1 résultat sur 12` / `{count} résultats sur {total}` ;
 - raccourcis : `1 action configurée` / `{count} actions configurées`.
+
+## Générateur V2
+
+Amélioration à prévoir après le refactor des composables :
+
+- Ajouter une preview plus fidèle du rendu karaoké directement dans le générateur.

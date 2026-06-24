@@ -34,7 +34,11 @@ const highlightStyle = computed(() => ({
     class="karaoke-logo"
     :class="[`karaoke-logo--${size}`, { 'karaoke-logo--animated': animated }]"
     :style="logoStyle"
+    :aria-label="text"
+    role="img"
   >
-    <span class="text-highlight" :data-text="text" :style="highlightStyle">{{ text }}</span>
+    <span class="text-highlight" :data-text="text" :style="highlightStyle" aria-hidden="true">
+      {{ text }}
+    </span>
   </span>
 </template>

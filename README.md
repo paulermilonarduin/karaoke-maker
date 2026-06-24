@@ -6,7 +6,7 @@ Karaoke Maker est une interface web permettant de créer et de jouer des karaok�
 
 - Un fichier MP3 contenant la musique
 - Un fichier de paroles
-- Des marqueurs temporels permettant de synchroniser les paroles avec l'audio
+- Un fichier JSON de synchronisation contenant les lignes, interludes et segments temporels
 
 L'objectif est de rendre la création d'un karaoké simple, rapide et accessible, sans obliger l'utilisateur à manipuler directement des formats techniques.
 
@@ -59,14 +59,15 @@ Le traitement audio avancé, comme la séparation entre la voix et l’accompagn
 Une première version fonctionnelle peut rester volontairement simple :
 
 - Importer ou référencer un MP3
-- Synchroniser les lignes puis les mots en deux passes
+- Synchroniser des blocs de lignes sur une timeline
+- Segmenter chaque ligne au curseur pour contrôler précisément le highlight
 - Ajouter des blocs d’interlude pour les passages sans paroles
-- Ajuster les marqueurs directement sur la waveform
+- Ajuster les blocs et segments directement sous la waveform
 - Ralentir ou accélérer la lecture en conservant la tonalité
 - Personnaliser la couleur principale depuis les paramètres
 - Changer la langue de l’interface depuis les paramètres
 - Lire la musique dans un lecteur web
-- Afficher et surligner progressivement les paroles au niveau des mots
+- Afficher et surligner progressivement les paroles au niveau des segments
 
 Cette V1 doit surtout valider le flux principal : créer une synchronisation minimale, la sauvegarder, puis la rejouer correctement.
 
@@ -78,7 +79,7 @@ Karaoke Maker utilise un format JSON interne versionné (`*.karaoke.json`). Il r
 - Une ligne de paroles complète
 - Plusieurs segments temporels à l'intérieur d'une même ligne
 - Des blocs d’interlude (`kind: "interlude"`) pour les passages sans paroles
-- Un début et une fin explicites en millisecondes pour chaque mot ou syllabe
+- Un début et une fin explicites en millisecondes pour chaque segment
 - Les informations audio nécessaires pour valider et rejouer la synchronisation
 
 Les fichiers de paroles bruts sont traités comme du texte simple. Les éventuelles balises présentes dans un `.txt` doivent être nettoyées par l'utilisateur avant la synchronisation.
@@ -91,10 +92,11 @@ La priorité est de construire un POC utilisable avant d'optimiser le format fin
 
 L'approche retenue consiste à :
 
-1. synchroniser d'abord le début des lignes ;
-2. effectuer une seconde passe pour synchroniser les mots ;
-3. générer un fichier JSON utilisé directement par le lecteur ;
-4. conserver les timestamps sous forme d'entiers en millisecondes.
+1. répartir les lignes sur une timeline continue ;
+2. ajuster les durées des lignes et interludes sous la waveform ;
+3. découper les lignes en segments indépendants au curseur ;
+4. générer un fichier JSON utilisé directement par le lecteur ;
+5. conserver les timestamps sous forme d'entiers en millisecondes.
 
 ## Stack technique
 
@@ -127,13 +129,13 @@ Les détails de lancement et de debug sont disponibles dans `DEVELOPMENT.md`.
 
 ## Édition audio
 
-La partie génération utilise `wavesurfer.js` pour afficher la forme d'onde du MP3, naviguer précisément dans la musique et placer des marqueurs temporels.
+La partie génération utilise `wavesurfer.js` pour afficher la forme d'onde du MP3, naviguer précisément dans la musique et caler les blocs temporels.
 
 La librairie est surtout utile pour l'édition :
 
 - Affichage de la waveform
 - Timeline avec repères de temps
-- Création et déplacement de zones ou marqueurs
+- Création et déplacement de blocs et segments
 - Relecture de passages courts pour ajuster la synchronisation
 
 Les commandes du générateur passent par un registre d'actions central. Les raccourcis peuvent être modifiés directement dans l'interface, les conflits sont détectés et les préférences sont conservées localement dans le navigateur.
@@ -175,6 +177,9 @@ Le format détaillé est documenté dans `docs/KARAOKE_JSON.md`.
   "display": {
     "accentColor": null,
     "backgroundColor": null
+  },
+  "sync": {
+    "offsetMs": 0
   },
   "lines": [
     {

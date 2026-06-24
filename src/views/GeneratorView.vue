@@ -1,30 +1,22 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import AudioWaveform from '../components/AudioWaveform.vue'
 import FileDropField from '../components/FileDropField.vue'
 import ShortcutEditor from '../components/ShortcutEditor.vue'
 import {
   buildSyncedLines,
-  createKaraokeFile,
-  findActiveLine,
   formatTimestamp,
   isInterludeLine,
-  parsePlainLyrics,
-  serializeKaraokeFile,
-  type DraftLyricLine,
   type KaraokeProject,
 } from '../domain/lyrics'
 import {
   useGeneratorShortcutSettings,
   useGeneratorShortcuts,
 } from '../generator/shortcuts'
-import type { WaveformRegionChange, WaveformRegionModel } from '../generator/timeline'
+import { useGeneratorFiles } from '../generator/useGeneratorFiles'
+import { useTimelineEditor } from '../generator/useTimelineEditor'
+import { useTimelineUndo } from '../generator/useTimelineUndo'
 import { useI18n } from '../i18n'
-
-type SegmentPosition = {
-  lineIndex: number
-  segmentIndex: number
-}
 
 defineProps<{
   accentColor: string
@@ -36,13 +28,17 @@ const project = ref<KaraokeProject>({
   draftLines: [],
 })
 const manualInterludeCount = ref(0)
-
 const audioUrl = ref<string>()
 const currentTimeMs = ref(0)
 const audioDurationMs = ref<number>()
+const selectedLineId = ref<string>()
+const selectedSegmentId = ref<string>()
+const splitTextInput = ref<HTMLTextAreaElement>()
 const syncError = ref<string>()
 const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
+const timelineScrollRef = ref<HTMLElement>()
 const isCapturingShortcut = ref(false)
+
 const {
   actions: shortcutActions,
   hasCustomShortcuts,
@@ -51,500 +47,131 @@ const {
 } = useGeneratorShortcutSettings()
 const { t } = useI18n()
 
+const {
+  canUndo,
+  canRedo,
+  pushUndoSnapshot,
+  clearUndoStack,
+  undoLastChange,
+  redoLastChange,
+} = useTimelineUndo({
+  project,
+  manualInterludeCount,
+  selectedLineId,
+  selectedSegmentId,
+  syncError,
+})
+
 const syncedLines = computed(() =>
   buildSyncedLines(project.value.draftLines, audioDurationMs.value),
 )
-const syncedLineCount = computed(
-  () => project.value.draftLines.filter((line) => line.startMs !== undefined).length,
-)
-const totalSegmentCount = computed(() =>
-  project.value.draftLines.reduce((total, line) => total + line.segments.length, 0),
-)
-const syncedSegmentCount = computed(() =>
-  project.value.draftLines.reduce(
-    (total, line) =>
-      total + line.segments.filter((segment) => segment.startMs !== undefined).length,
-    0,
-  ),
-)
-const nextDraftLineIndex = computed(() =>
-  project.value.draftLines.findIndex((line) => line.startMs === undefined),
-)
-const nextDraftLine = computed(() => project.value.draftLines[nextDraftLineIndex.value])
-const nextSegmentPosition = computed<SegmentPosition | undefined>(() => {
-  if (nextDraftLine.value) {
-    return undefined
-  }
 
-  for (let lineIndex = 0; lineIndex < project.value.draftLines.length; lineIndex += 1) {
-    const segmentIndex = project.value.draftLines[lineIndex].segments.findIndex(
-      (segment) => segment.startMs === undefined,
-    )
-
-    if (segmentIndex !== -1) {
-      return { lineIndex, segmentIndex }
-    }
-  }
-
-  return undefined
-})
-const nextSegmentLine = computed(() =>
-  nextSegmentPosition.value
-    ? project.value.draftLines[nextSegmentPosition.value.lineIndex]
-    : undefined,
-)
-const nextSegment = computed(() =>
-  nextSegmentPosition.value
-    ? nextSegmentLine.value?.segments[nextSegmentPosition.value.segmentIndex]
-    : undefined,
-)
-
-const editingLineIndex = computed(() => {
-  if (nextSegmentPosition.value) {
-    return nextSegmentPosition.value.lineIndex
-  }
-
-  const activeLineId = activeLine.value?.id
-  const activeIndex = project.value.draftLines.findIndex((line) => line.id === activeLineId)
-
-  return activeIndex === -1 ? 0 : activeIndex
+const {
+  timelineZoomPxPerSecond,
+  timelineValidationIssues,
+  timelineWidthPx,
+  hasTimeline,
+  selectedLine,
+  selectedSegment,
+  timelineZoomLabel,
+  syncOffsetLabel,
+  timelinePlayheadStyle,
+  canMergeWithPreviousSegment,
+  canMergeWithNextSegment,
+  hasTiming,
+  getLineStyle,
+  canMoveLine,
+  getSegmentStyle,
+  getSegmentGaps,
+  zoomTimeline,
+  centerTimelineOnCurrentTime,
+  onTimelineZoomInput,
+  onTimelineWheel,
+  initializeTimelineIfPossible,
+  stopTimelineDrag,
+  startTimelineDrag,
+  selectLine,
+  splitSegmentAtCursor,
+  mergeSelectedSegmentWithPrevious,
+  mergeSelectedSegmentWithNext,
+  deleteSelectedSegmentSplit,
+  addInterludeBlock,
+  nudgeSelectedLine,
+  setGlobalOffset,
+  adjustGlobalOffset,
+  onGlobalOffsetInput,
+} = useTimelineEditor({
+  project,
+  audioDurationMs,
+  currentTimeMs,
+  manualInterludeCount,
+  selectedLineId,
+  selectedSegmentId,
+  splitTextInput,
+  syncError,
+  timelineScrollRef,
+  pushUndoSnapshot,
+  setWaveformZoom: (zoom) => waveformRef.value?.setZoom(zoom),
+  t,
 })
 
-const timelineRegions = computed<WaveformRegionModel[]>(() => {
-  const regions: WaveformRegionModel[] = []
-  const allLinesStarted = nextDraftLine.value === undefined
-
-  project.value.draftLines.forEach((line, lineIndex) => {
-    if (line.startMs === undefined) {
-      return
-    }
-
-    const lineEndMs =
-      line.endMs ??
-      project.value.draftLines[lineIndex + 1]?.startMs ??
-      (allLinesStarted ? audioDurationMs.value : undefined)
-
-    regions.push({
-      id: `line/${line.id}`,
-      kind: 'line',
-      label: isInterludeLine(line) ? `I${lineIndex + 1}` : `L${lineIndex + 1}`,
-      startMs: line.startMs,
-      endMs: lineEndMs !== undefined && lineEndMs > line.startMs ? lineEndMs : undefined,
-      editable: true,
-    })
-
-    if (
-      isInterludeLine(line) ||
-      lineEndMs === undefined ||
-      syncPhase.value === 'lines' ||
-      lineIndex !== editingLineIndex.value
-    ) {
-      return
-    }
-
-    line.segments.forEach((segment, segmentIndex) => {
-      if (segment.startMs === undefined) {
-        return
-      }
-
-      const segmentEndMs =
-        segment.endMs ?? line.segments[segmentIndex + 1]?.startMs ?? lineEndMs
-
-      if (segmentEndMs <= segment.startMs) {
-        return
-      }
-
-      regions.push({
-        id: `segment/${segment.id}`,
-        kind: 'segment',
-        label: segment.text.trim(),
-        startMs: segment.startMs,
-        endMs: segmentEndMs,
-        editable: true,
-      })
-    })
-  })
-
-  return regions
-})
-const syncPhase = computed<'lines' | 'segments'>(() =>
-  project.value.draftLines.length === 0 || nextDraftLine.value ? 'lines' : 'segments',
-)
-const syncProgress = computed(() =>
-  syncPhase.value === 'lines'
-    ? t('generator.progressBlocks', {
-        current: syncedLineCount.value,
-        total: project.value.draftLines.length,
-      })
-    : t('generator.progressWords', {
-        current: syncedSegmentCount.value,
-        total: totalSegmentCount.value,
-      }),
+const timelineSummary = computed(() =>
+  t('generator.timelineSummary', {
+    count: project.value.draftLines.length,
+    duration: audioDurationMs.value ? formatTimestamp(audioDurationMs.value) : '00:00.000',
+  }),
 )
 const canExport = computed(
   () =>
-    project.value.draftLines.length > 0 &&
-    nextDraftLine.value === undefined &&
-    nextSegmentPosition.value === undefined &&
-    audioDurationMs.value !== undefined &&
-    syncedLines.value.length === project.value.draftLines.length,
+    hasTimeline.value &&
+    timelineValidationIssues.value.length === 0 &&
+    syncedLines.value.length === project.value.draftLines.length &&
+    syncedLines.value.every((line) => line.endMs !== undefined),
 )
 
-const activeLine = computed(() => findActiveLine(syncedLines.value, currentTimeMs.value))
+const {
+  revokeAudioUrl,
+  onAudioFile,
+  onLyricsFile,
+  onKaraokeFile,
+  onDurationChange,
+  downloadKaraokeFile,
+} = useGeneratorFiles({
+  project,
+  audioUrl,
+  currentTimeMs,
+  audioDurationMs,
+  selectedLineId,
+  selectedSegmentId,
+  syncError,
+  syncedLines,
+  clearUndoStack,
+  initializeTimelineIfPossible,
+  t,
+})
 
-const nextDraftLineLabel = computed(() => getDraftLineLabel(nextDraftLine.value))
+watch(
+  () => project.value.draftLines.map((line) => `${line.id}:${line.startMs}:${line.endMs}`).join('|'),
+  () => {
+    const selected = selectedLine.value
 
-function getDraftLineLabel(line?: DraftLyricLine): string | undefined {
-  if (!line) {
-    return undefined
-  }
-
-  return isInterludeLine(line) ? t('generator.interludeBlock') : line.text
-}
-
-function onAudioFile(file: File) {
-  if (audioUrl.value) {
-    URL.revokeObjectURL(audioUrl.value)
-  }
-
-  audioUrl.value = URL.createObjectURL(file)
-  currentTimeMs.value = 0
-  audioDurationMs.value = undefined
-  syncError.value = undefined
-  project.value.audioFileName = file.name
-  project.value.title = file.name.replace(/\.[^.]+$/, '')
-}
-
-async function onLyricsFile(file: File) {
-  const content = await file.text()
-
-  project.value.lyricsFileName = file.name
-  project.value.draftLines = parsePlainLyrics(content)
-  syncError.value = undefined
-}
-
-function markNextLine() {
-  const index = nextDraftLineIndex.value
-
-  if (index === -1) {
-    return
-  }
-
-  const previousStartMs = project.value.draftLines[index - 1]?.startMs
-
-  if (previousStartMs !== undefined && currentTimeMs.value <= previousStartMs) {
-    syncError.value = t('generator.error.lineOrder')
-    return
-  }
-
-  const line = project.value.draftLines[index]
-  const previousLine = project.value.draftLines[index - 1]
-
-  if (previousLine) {
-    previousLine.endMs = currentTimeMs.value
-
-    const previousLastSegment = previousLine.segments[previousLine.segments.length - 1]
-
-    if (previousLastSegment?.startMs !== undefined) {
-      previousLastSegment.endMs = currentTimeMs.value
+    if (selected && !isInterludeLine(selected) && !selectedSegment.value) {
+      selectedSegmentId.value = selected.segments[0]?.id
     }
-  }
-
-  line.startMs = currentTimeMs.value
-  line.endMs = undefined
-
-  if (!isInterludeLine(line)) {
-    line.segments[0].startMs = currentTimeMs.value
-    line.segments[0].endMs = undefined
-  }
-
-  syncError.value = undefined
-}
-
-function addInterludeBlock() {
-  if (syncPhase.value !== 'lines') {
-    return
-  }
-
-  if (!audioUrl.value) {
-    syncError.value = t('generator.error.missingAudio')
-    return
-  }
-
-  const insertIndex =
-    nextDraftLineIndex.value === -1 ? project.value.draftLines.length : nextDraftLineIndex.value
-  const previousLine = project.value.draftLines[insertIndex - 1]
-
-  if (previousLine?.startMs !== undefined && currentTimeMs.value <= previousLine.startMs) {
-    syncError.value = t('generator.error.lineOrder')
-    return
-  }
-
-  if (previousLine?.startMs !== undefined) {
-    previousLine.endMs = currentTimeMs.value
-
-    const previousLastSegment = previousLine.segments[previousLine.segments.length - 1]
-
-    if (previousLastSegment?.startMs !== undefined) {
-      previousLastSegment.endMs = currentTimeMs.value
-    }
-  }
-
-  manualInterludeCount.value += 1
-  project.value.draftLines.splice(insertIndex, 0, {
-    id: `interlude:manual:${Date.now()}:${manualInterludeCount.value}`,
-    kind: 'interlude',
-    text: '',
-    startMs: currentTimeMs.value,
-    endMs: undefined,
-    segments: [],
-  })
-  syncError.value = undefined
-}
-
-function markNextSegment() {
-  const position = nextSegmentPosition.value
-
-  if (!position) {
-    return
-  }
-
-  const line = project.value.draftLines[position.lineIndex]
-  const segment = line.segments[position.segmentIndex]
-  const previousSegment = line.segments[position.segmentIndex - 1]
-  const lineEndMs =
-    project.value.draftLines[position.lineIndex + 1]?.startMs ?? audioDurationMs.value
-
-  if (previousSegment?.startMs !== undefined && currentTimeMs.value <= previousSegment.startMs) {
-    syncError.value = t('generator.error.wordOrder')
-    return
-  }
-
-  if (lineEndMs !== undefined && currentTimeMs.value >= lineEndMs) {
-    syncError.value = t('generator.error.lineBounds')
-    return
-  }
-
-  if (previousSegment) {
-    previousSegment.endMs = currentTimeMs.value
-  }
-
-  segment.startMs = currentTimeMs.value
-  segment.endMs = undefined
-  syncError.value = undefined
-}
-
-function markNextMarker() {
-  if (!audioUrl.value) {
-    syncError.value = t('generator.error.missingAudio')
-    return
-  }
-
-  if (syncPhase.value === 'lines') {
-    markNextLine()
-  } else {
-    markNextSegment()
-  }
-}
-
-function undoLastMarker() {
-  for (let lineIndex = project.value.draftLines.length - 1; lineIndex >= 0; lineIndex -= 1) {
-    const line = project.value.draftLines[lineIndex]
-
-    for (let segmentIndex = line.segments.length - 1; segmentIndex >= 1; segmentIndex -= 1) {
-      if (line.segments[segmentIndex].startMs !== undefined) {
-        line.segments[segmentIndex - 1].endMs = undefined
-        line.segments[segmentIndex].startMs = undefined
-        line.segments[segmentIndex].endMs = undefined
-        syncError.value = undefined
-        return
-      }
-    }
-  }
-
-  for (let lineIndex = project.value.draftLines.length - 1; lineIndex >= 0; lineIndex -= 1) {
-    const line = project.value.draftLines[lineIndex]
-
-    if (line.startMs !== undefined) {
-      const previousLine = project.value.draftLines[lineIndex - 1]
-
-      if (previousLine) {
-        previousLine.endMs = undefined
-
-        const previousLastSegment = previousLine.segments[previousLine.segments.length - 1]
-
-        if (previousLastSegment) {
-          previousLastSegment.endMs = undefined
-        }
-      }
-
-      line.startMs = undefined
-      line.endMs = undefined
-
-      const firstSegment = line.segments[0]
-
-      if (firstSegment) {
-        firstSegment.startMs = undefined
-        firstSegment.endMs = undefined
-      }
-
-      syncError.value = undefined
-      return
-    }
-  }
-}
-
-function clamp(value: number, minimum: number, maximum: number): number {
-  return Math.min(maximum, Math.max(minimum, value))
-}
-
-function onRegionChange(change: WaveformRegionChange) {
-  if (change.kind === 'line') {
-    const lineId = change.id.replace(/^line\//, '')
-    const lineIndex = project.value.draftLines.findIndex((line) => line.id === lineId)
-    const line = project.value.draftLines[lineIndex]
-
-    if (!line || line.startMs === undefined) {
-      return
-    }
-
-    const oldRegion = timelineRegions.value.find((region) => region.id === change.id)
-
-    if (oldRegion?.endMs === undefined) {
-      const previousLine = project.value.draftLines[lineIndex - 1]
-      const nextLine = project.value.draftLines[lineIndex + 1]
-      const minimumStart = previousLine?.endMs ?? previousLine?.startMs ?? 0
-      const maximumStart = Math.max(
-        minimumStart,
-        (nextLine?.startMs ?? audioDurationMs.value ?? change.startMs + 1) - 1,
-      )
-      const startMs = clamp(change.startMs, minimumStart, maximumStart)
-      const delta = startMs - line.startMs
-
-      line.startMs = startMs
-      line.segments.forEach((segment) => {
-        if (segment.startMs !== undefined) segment.startMs += delta
-        if (segment.endMs !== undefined) segment.endMs += delta
-      })
-      syncError.value = undefined
-      return
-    }
-
-    const previousLine = project.value.draftLines[lineIndex - 1]
-    const nextLine = project.value.draftLines[lineIndex + 1]
-    const minimumStart = previousLine?.endMs ?? 0
-    const maximumEnd = nextLine?.startMs ?? audioDurationMs.value ?? change.endMs
-    const oldStartMs = line.startMs
-    const oldEndMs = line.endMs ?? oldRegion.endMs
-    const rawStartDelta = change.startMs - oldStartMs
-    const rawEndDelta = change.endMs - oldEndMs
-    const movedAsBlock = Math.abs(rawStartDelta - rawEndDelta) <= 1
-    const oldLengthMs = oldEndMs - oldStartMs
-    const startMs = movedAsBlock
-      ? clamp(change.startMs, minimumStart, maximumEnd - oldLengthMs)
-      : clamp(change.startMs, minimumStart, maximumEnd - 1)
-    const endMs = movedAsBlock
-      ? startMs + oldLengthMs
-      : clamp(change.endMs, startMs + 1, maximumEnd)
-    const startDelta = startMs - oldStartMs
-
-    line.startMs = startMs
-    line.endMs = endMs
-
-    if (movedAsBlock) {
-      line.segments.forEach((segment) => {
-        if (segment.startMs !== undefined) segment.startMs += startDelta
-        if (segment.endMs !== undefined) segment.endMs += startDelta
-      })
-    } else {
-      const firstSegment = line.segments[0]
-      const lastSegment = line.segments[line.segments.length - 1]
-
-      if (firstSegment?.startMs === oldStartMs) firstSegment.startMs = startMs
-      if (lastSegment?.endMs === oldEndMs) lastSegment.endMs = endMs
-    }
-
-    syncError.value = undefined
-    return
-  }
-
-  const segmentId = change.id.replace(/^segment\//, '')
-
-  for (const line of project.value.draftLines) {
-    const segmentIndex = line.segments.findIndex((segment) => segment.id === segmentId)
-
-    if (segmentIndex === -1 || line.startMs === undefined) {
-      continue
-    }
-
-    const segment = line.segments[segmentIndex]
-    const previousSegment = line.segments[segmentIndex - 1]
-    const nextSegment = line.segments[segmentIndex + 1]
-    const oldRegion = timelineRegions.value.find((region) => region.id === change.id)
-    const lineEndMs =
-      line.endMs ??
-      project.value.draftLines[project.value.draftLines.indexOf(line) + 1]?.startMs ??
-      audioDurationMs.value ??
-      change.endMs
-    const minimumStart = previousSegment?.endMs ?? line.startMs
-    const maximumEnd = nextSegment?.startMs ?? lineEndMs
-    const oldStartMs = segment.startMs ?? oldRegion?.startMs ?? change.startMs
-    const oldEndMs = segment.endMs ?? oldRegion?.endMs ?? change.endMs
-    const rawStartDelta = change.startMs - oldStartMs
-    const rawEndDelta = change.endMs - oldEndMs
-    const movedAsBlock = Math.abs(rawStartDelta - rawEndDelta) <= 1
-    const oldLengthMs = oldEndMs - oldStartMs
-    const startMs = movedAsBlock
-      ? clamp(change.startMs, minimumStart, maximumEnd - oldLengthMs)
-      : clamp(change.startMs, minimumStart, maximumEnd - 1)
-    const endMs = movedAsBlock
-      ? startMs + oldLengthMs
-      : clamp(change.endMs, startMs + 1, maximumEnd)
-
-    segment.startMs = startMs
-    segment.endMs = endMs
-    syncError.value = undefined
-    return
-  }
-}
-
-function downloadKaraokeFile() {
-  if (audioDurationMs.value === undefined) {
-    return
-  }
-
-  try {
-    const karaokeFile = createKaraokeFile(
-      project.value,
-      syncedLines.value,
-      audioDurationMs.value,
-    )
-    const content = serializeKaraokeFile(karaokeFile)
-    const fileName = `${project.value.title || 'karaoke'}.karaoke.json`
-    const blob = new Blob([content], { type: 'application/json;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-
-    link.href = url
-    link.download = fileName
-    link.click()
-    URL.revokeObjectURL(url)
-    syncError.value = undefined
-  } catch (error) {
-    syncError.value = error instanceof Error ? error.message : t('generator.error.export')
-  }
-}
+  },
+)
 
 useGeneratorShortcuts(
   {
     'player.toggle': () => void waveformRef.value?.togglePlayback(),
-    'marker.create': markNextMarker,
-    'marker.interlude': addInterludeBlock,
-    'marker.undo': undoLastMarker,
+    'timeline.splitSegment': splitSegmentAtCursor,
+    'timeline.addInterlude': addInterludeBlock,
+    'timeline.undo': undoLastChange,
+    'timeline.redo': redoLastChange,
     'player.seekBackward': () => waveformRef.value?.seekBy(-100),
     'player.seekForward': () => waveformRef.value?.seekBy(100),
-    'marker.nudgeBackward': () => waveformRef.value?.nudgeSelectedRegion(-10),
-    'marker.nudgeForward': () => waveformRef.value?.nudgeSelectedRegion(10),
+    'timeline.nudgeBackward': () => nudgeSelectedLine(-100),
+    'timeline.nudgeForward': () => nudgeSelectedLine(100),
     'player.slower': () => waveformRef.value?.adjustPlaybackRate(-1),
     'player.faster': () => waveformRef.value?.adjustPlaybackRate(1),
   },
@@ -553,9 +180,8 @@ useGeneratorShortcuts(
 )
 
 onBeforeUnmount(() => {
-  if (audioUrl.value) {
-    URL.revokeObjectURL(audioUrl.value)
-  }
+  stopTimelineDrag()
+  revokeAudioUrl()
 })
 </script>
 
@@ -567,7 +193,7 @@ onBeforeUnmount(() => {
           <p class="eyebrow">{{ t('nav.generator') }}</p>
           <h2>{{ project.title || t('generator.newProjectTitle') }}</h2>
         </div>
-        <p class="line-count">{{ syncProgress }}</p>
+        <p class="line-count">{{ timelineSummary }}</p>
       </div>
 
       <div class="file-grid">
@@ -583,79 +209,249 @@ onBeforeUnmount(() => {
           :value="project.lyricsFileName"
           @change="onLyricsFile"
         />
+        <FileDropField
+          accept=".json,application/json"
+          :label="t('generator.karaokeJsonLabel')"
+          :value="project.karaokeFileName"
+          @change="onKaraokeFile"
+        />
       </div>
 
       <AudioWaveform
         ref="waveformRef"
         :accent-color="accentColor"
         :audio-url="audioUrl"
-        :regions="timelineRegions"
         @timeupdate="currentTimeMs = $event"
-        @durationchange="audioDurationMs = $event"
-        @regionchange="onRegionChange"
+        @durationchange="onDurationChange"
+        @zoomchange="timelineZoomPxPerSecond = $event"
       />
 
-      <div class="generator-tools">
-        <div class="sync-panel">
+      <section class="timeline-editor" :aria-label="t('generator.timelineTitle')">
+        <div class="timeline-editor__header">
           <div>
-            <p class="eyebrow">
-              {{ syncPhase === 'lines' ? t('generator.phaseLines') : t('generator.phaseWords') }}
-            </p>
-            <p class="sync-panel__time">{{ formatTimestamp(currentTimeMs) }}</p>
+            <p class="eyebrow">{{ t('generator.timelineTitle') }}</p>
+            <p class="timeline-editor__help">{{ t('generator.timelineHelp') }}</p>
           </div>
-
-          <p class="sync-panel__line">
-            {{
-              nextDraftLineLabel ||
-              nextSegmentLine?.text ||
-              t('generator.complete')
-            }}
-          </p>
-          <p v-if="nextSegment" class="sync-panel__hint">
-            {{ t('generator.nextWord') }} <strong>{{ nextSegment.text.trim() }}</strong>
-          </p>
-          <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
-
-          <div class="action-row">
+          <div class="timeline-editor__actions">
+            <button class="button" type="button" :disabled="!hasTimeline" @click="addInterludeBlock">
+              {{ t('generator.addInterlude') }}
+            </button>
+            <button class="button" type="button" :disabled="!canUndo" @click="undoLastChange">
+              {{ t('generator.undo') }}
+            </button>
+            <button class="button" type="button" :disabled="!canRedo" @click="redoLastChange">
+              {{ t('generator.redo') }}
+            </button>
             <button
               class="button button--primary"
               type="button"
-              :disabled="!audioUrl || (!nextDraftLine && !nextSegment)"
-              @click="markNextMarker"
+              :disabled="!canExport"
+              @click="downloadKaraokeFile"
             >
-              {{ t('generator.mark') }}
-            </button>
-            <button
-              v-if="syncPhase === 'lines'"
-              class="button"
-              type="button"
-              :disabled="!audioUrl"
-              @click="addInterludeBlock"
-            >
-              {{ t('generator.addInterlude') }}
-            </button>
-            <button
-              class="button"
-              type="button"
-              :disabled="syncedLineCount === 0"
-              @click="undoLastMarker"
-            >
-              {{ t('generator.undo') }}
-            </button>
-            <button class="button" type="button" :disabled="!canExport" @click="downloadKaraokeFile">
               {{ t('generator.exportJson') }}
             </button>
           </div>
         </div>
 
-        <ShortcutEditor
-          :actions="shortcutActions"
-          :has-custom-shortcuts="hasCustomShortcuts"
-          @capturechange="isCapturingShortcut = $event"
-          @reset="resetShortcuts"
-          @update="setShortcut"
-        />
-      </div>
+        <div class="timeline-editor__tools">
+          <button class="button" type="button" :disabled="!hasTimeline" @click="zoomTimeline(-20)">
+            {{ t('generator.zoomOut') }}
+          </button>
+          <label class="timeline-editor__zoom">
+            {{ t('generator.timelineZoom') }}
+            <input
+              type="range"
+              min="20"
+              max="480"
+              step="10"
+              :value="timelineZoomPxPerSecond"
+              :disabled="!hasTimeline"
+              @input="onTimelineZoomInput"
+            />
+            <span>{{ timelineZoomLabel }}</span>
+          </label>
+          <button class="button" type="button" :disabled="!hasTimeline" @click="zoomTimeline(20)">
+            {{ t('generator.zoomIn') }}
+          </button>
+          <button class="button" type="button" :disabled="!hasTimeline" @click="centerTimelineOnCurrentTime">
+            {{ t('generator.centerPlayhead') }}
+          </button>
+        </div>
+
+        <div class="timeline-offset">
+          <div>
+            <p class="timeline-offset__title">{{ t('generator.offsetTitle') }}</p>
+            <p class="timeline-offset__help">{{ t('generator.offsetHelp') }}</p>
+          </div>
+          <button class="button" type="button" @click="adjustGlobalOffset(-100)">−100 ms</button>
+          <label class="timeline-offset__input">
+            {{ t('generator.offsetMs') }}
+            <input
+              type="number"
+              step="10"
+              :value="project.syncOffsetMs ?? 0"
+              @change="onGlobalOffsetInput"
+            />
+          </label>
+          <button class="button" type="button" @click="adjustGlobalOffset(100)">+100 ms</button>
+          <button class="button" type="button" :disabled="(project.syncOffsetMs ?? 0) === 0" @click="setGlobalOffset(0, true)">
+            {{ t('generator.offsetReset') }}
+          </button>
+          <span class="timeline-offset__value">
+            {{ (project.syncOffsetMs ?? 0) < 0 ? '−' : '+' }}{{ syncOffsetLabel }}
+          </span>
+        </div>
+
+        <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
+
+        <div
+          v-if="hasTimeline"
+          ref="timelineScrollRef"
+          class="timeline-editor__scroll"
+          @wheel="onTimelineWheel"
+        >
+          <div class="timeline-editor__track" :style="{ width: `${timelineWidthPx}px` }">
+            <span
+              class="timeline-playhead"
+              :style="timelinePlayheadStyle"
+              :aria-label="t('generator.playhead')"
+            >
+              <span class="timeline-playhead__label">{{ formatTimestamp(currentTimeMs) }}</span>
+            </span>
+            <div
+              v-for="(line, lineIndex) in project.draftLines"
+              :key="line.id"
+              class="timeline-block"
+              :class="{
+                'timeline-block--active': selectedLineId === line.id,
+                'timeline-block--interlude': isInterludeLine(line),
+                'timeline-block--movable': canMoveLine(lineIndex),
+              }"
+              :style="getLineStyle(line)"
+              role="button"
+              tabindex="0"
+              @click="selectLine(line)"
+              @mousedown="startTimelineDrag($event, 'move-line', lineIndex)"
+            >
+              <span
+                v-if="lineIndex > 0"
+                class="timeline-block__handle timeline-block__handle--left"
+                @mousedown.stop="startTimelineDrag($event, 'resize-line-start', lineIndex)"
+              ></span>
+              <span class="timeline-block__label">
+                {{ isInterludeLine(line) ? t('generator.interludeBlock') : line.text }}
+              </span>
+              <span v-if="!isInterludeLine(line)" class="timeline-block__segments">
+                <span
+                  v-for="gap in getSegmentGaps(line)"
+                  :key="gap.id"
+                  class="timeline-gap"
+                  :style="gap.style"
+                  :title="t('generator.segmentGap', { duration: formatTimestamp(gap.durationMs) })"
+                  aria-hidden="true"
+                ></span>
+                <span
+                  v-for="(segment, segmentIndex) in line.segments"
+                  :key="segment.id"
+                  class="timeline-segment"
+                  :class="{ 'timeline-segment--active': selectedSegmentId === segment.id }"
+                  :style="getSegmentStyle(line, segment)"
+                  @click.stop="selectLine(line, segmentIndex)"
+                  @mousedown.stop="startTimelineDrag($event, 'move-segment', lineIndex, segmentIndex)"
+                >
+                  <span
+                    class="timeline-segment__handle timeline-segment__handle--left"
+                    @mousedown.stop="
+                      startTimelineDrag($event, 'resize-segment-start', lineIndex, segmentIndex)
+                    "
+                  ></span>
+                  <span class="timeline-segment__label">{{ segment.text }}</span>
+                  <span
+                    class="timeline-segment__handle timeline-segment__handle--right"
+                    @mousedown.stop="
+                      startTimelineDrag($event, 'resize-segment-end', lineIndex, segmentIndex)
+                    "
+                  ></span>
+                </span>
+              </span>
+              <span
+                v-if="lineIndex < project.draftLines.length - 1"
+                class="timeline-block__handle timeline-block__handle--right"
+                @mousedown.stop="startTimelineDrag($event, 'resize-line-end', lineIndex)"
+              ></span>
+            </div>
+          </div>
+        </div>
+
+        <p v-else class="timeline-editor__empty">{{ t('generator.timelineEmpty') }}</p>
+
+        <div v-if="selectedLine" class="timeline-inspector">
+          <div>
+            <p class="eyebrow">{{ t('generator.selectedBlock') }}</p>
+            <p class="timeline-inspector__title">
+              {{
+                isInterludeLine(selectedLine)
+                  ? t('generator.interludeBlock')
+                  : selectedLine.text
+              }}
+            </p>
+            <p v-if="hasTiming(selectedLine)" class="timeline-inspector__meta">
+              {{ formatTimestamp(selectedLine.startMs) }} → {{ formatTimestamp(selectedLine.endMs) }}
+            </p>
+          </div>
+
+          <div v-if="!isInterludeLine(selectedLine)" class="timeline-inspector__split">
+            <label class="sr-only" for="timeline-split-text">
+              {{ t('generator.timelineSplitText') }}
+            </label>
+            <textarea
+              id="timeline-split-text"
+              ref="splitTextInput"
+              class="timeline-inspector__textarea"
+              :value="selectedLine.text"
+              readonly
+              rows="2"
+            ></textarea>
+            <button class="button" type="button" @click="splitSegmentAtCursor">
+              {{ t('generator.splitSegment') }}
+            </button>
+            <div class="timeline-inspector__segment-actions">
+              <button
+                class="button"
+                type="button"
+                :disabled="!canMergeWithPreviousSegment"
+                @click="mergeSelectedSegmentWithPrevious"
+              >
+                {{ t('generator.mergePreviousSegment') }}
+              </button>
+              <button
+                class="button"
+                type="button"
+                :disabled="!canMergeWithNextSegment"
+                @click="mergeSelectedSegmentWithNext"
+              >
+                {{ t('generator.mergeNextSegment') }}
+              </button>
+              <button
+                class="button"
+                type="button"
+                :disabled="!canMergeWithPreviousSegment && !canMergeWithNextSegment"
+                @click="deleteSelectedSegmentSplit"
+              >
+                {{ t('generator.deleteSegmentSplit') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <ShortcutEditor
+        :actions="shortcutActions"
+        :has-custom-shortcuts="hasCustomShortcuts"
+        @capturechange="isCapturingShortcut = $event"
+        @reset="resetShortcuts"
+        @update="setShortcut"
+      />
     </div>
   </section>
 </template>

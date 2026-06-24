@@ -270,7 +270,7 @@ p {
 
 .file-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -537,6 +537,363 @@ p {
 .sync-panel__error {
   color: var(--color-danger);
   font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.timeline-editor {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface-soft);
+}
+
+.timeline-editor__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.timeline-editor__help,
+.timeline-editor__empty,
+.timeline-inspector__meta {
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+.timeline-editor__actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.timeline-editor__actions .button {
+  min-height: 38px;
+  padding: 0 12px;
+}
+
+.timeline-editor__tools {
+  display: grid;
+  grid-template-columns: auto minmax(220px, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeline-editor__tools .button {
+  min-height: 36px;
+  padding: 0 10px;
+}
+
+.timeline-editor__zoom {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.timeline-editor__zoom span {
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-offset {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto minmax(120px, 0.35fr) auto auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 7px;
+  background: var(--color-bg);
+}
+
+.timeline-offset .button {
+  min-height: 36px;
+  padding: 0 10px;
+}
+
+.timeline-offset__title {
+  color: var(--color-text);
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.timeline-offset__help {
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+}
+
+.timeline-offset__input {
+  display: grid;
+  gap: 3px;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.timeline-offset__input input {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 6px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  font-weight: 850;
+}
+
+.timeline-offset__value {
+  color: var(--color-warning);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.timeline-editor__scroll {
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0 10px;
+  scrollbar-color: var(--color-accent) transparent;
+  scrollbar-width: thin;
+}
+
+.timeline-editor__track {
+  position: relative;
+  height: 132px;
+  min-width: 100%;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 8px;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-accent) 10%, transparent) 1px,
+      transparent 1px
+    ),
+    var(--color-bg);
+  background-size: 80px 100%;
+}
+
+.timeline-playhead {
+  position: absolute;
+  z-index: 7;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-warning);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-warning) 42%, transparent);
+  pointer-events: none;
+}
+
+.timeline-playhead__label {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  padding: 2px 5px;
+  border: 1px solid color-mix(in srgb, var(--color-warning) 52%, transparent);
+  border-radius: 5px;
+  color: var(--color-warning);
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.timeline-block {
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  min-width: 18px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 58%, transparent);
+  border-radius: 8px;
+  color: var(--color-text);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-accent) 18%, transparent),
+      color-mix(in srgb, var(--color-accent) 7%, transparent)
+    ),
+    var(--color-surface);
+}
+
+.timeline-block--movable {
+  cursor: grab;
+}
+
+.timeline-block--movable:active {
+  cursor: grabbing;
+}
+
+.timeline-block--active {
+  border-color: var(--color-accent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-accent) 36%, transparent),
+    0 0 16px color-mix(in srgb, var(--color-accent) 14%, transparent);
+}
+
+.timeline-block--interlude {
+  border-color: color-mix(in srgb, var(--color-text-muted) 55%, transparent);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-text-muted) 18%, transparent),
+      color-mix(in srgb, var(--color-text-muted) 7%, transparent)
+    ),
+    var(--color-surface);
+}
+
+.timeline-block__label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  left: 10px;
+  overflow: hidden;
+  font-size: 0.78rem;
+  font-weight: 850;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.timeline-block__segments {
+  position: absolute;
+  right: 8px;
+  bottom: 10px;
+  left: 8px;
+  height: 48px;
+}
+
+.timeline-segment {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 10px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 48%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  cursor: grab;
+}
+
+.timeline-gap {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  min-width: 3px;
+  border: 1px dashed color-mix(in srgb, var(--color-warning) 56%, transparent);
+  border-radius: 5px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--color-warning) 18%, transparent) 0 4px,
+      transparent 4px 8px
+    );
+  pointer-events: auto;
+}
+
+.timeline-segment--active {
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+.timeline-segment__label {
+  display: block;
+  overflow: hidden;
+  padding: 14px 8px 0;
+  color: var(--color-text);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.timeline-block__handle,
+.timeline-segment__handle {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.timeline-block__handle {
+  background: color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
+.timeline-segment__handle {
+  width: 6px;
+  background: color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+.timeline-block__handle--left,
+.timeline-segment__handle--left {
+  left: 0;
+}
+
+.timeline-block__handle--right,
+.timeline-segment__handle--right {
+  right: 0;
+}
+
+.timeline-inspector {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(280px, 1.1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 8px;
+  background: var(--color-bg);
+}
+
+.timeline-inspector__title {
+  overflow: hidden;
+  color: var(--color-text);
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timeline-inspector__split {
+  display: grid;
+  gap: 8px;
+}
+
+.timeline-inspector__segment-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.timeline-inspector__segment-actions .button {
+  min-height: 36px;
+  padding: 0 8px;
+  font-size: 0.78rem;
+}
+
+.timeline-inspector__textarea {
+  width: 100%;
+  min-height: 64px;
+  resize: vertical;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 6px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  font: inherit;
   font-weight: 750;
 }
 
@@ -1373,6 +1730,30 @@ input[type='range'] {
   .shortcut-panel__header {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .timeline-editor__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .timeline-editor__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .timeline-editor__tools,
+  .timeline-editor__zoom,
+  .timeline-offset {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-inspector {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-inspector__segment-actions {
+    grid-template-columns: 1fr;
   }
 
   .shortcut-panel__reset {
