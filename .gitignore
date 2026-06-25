@@ -35,3 +35,9 @@ pnpm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Catalog audio — kept on disk and loaded at runtime by the disk-backed catalog,
+# not committed (large/copyrighted). Exception: the bundled demo track that
+# tracks.ts imports at build time.
+*.mp3
+!src/assets/catalog/minecraft/Short_Minecraft.mp3
