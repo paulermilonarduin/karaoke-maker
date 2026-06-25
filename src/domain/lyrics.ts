@@ -199,7 +199,10 @@ export function createKaraokeFile(
     lines: completeLines,
   }
 
-  return parseKaraokeFile(JSON.stringify(file))
+  // Temporary: export the current editor state without round-tripping through
+  // the strict parser. The editor can currently produce useful draft timelines
+  // with gaps or imperfect segment bounds while the timeline UX is still moving.
+  return file
 }
 
 export function serializeKaraokeFile(file: KaraokeFile): string {

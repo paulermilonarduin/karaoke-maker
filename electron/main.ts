@@ -49,6 +49,20 @@ function extractJson(stdout: string): unknown | undefined {
   }
 }
 
+function extractAlignmentError(stderr: string, code: number | null): string {
+  const lines = stderr
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+  const errorLine = [...lines].reverse().find((line) => line.startsWith('ERROR:'))
+
+  if (errorLine) {
+    return errorLine.replace(/^ERROR:\s*/, '')
+  }
+
+  return stderr.trim() || `Alignment process exited with code ${code}.`
+}
+
 function resolvePythonPath(): string {
   if (process.env.KARAOKE_PYTHON) {
     return process.env.KARAOKE_PYTHON
@@ -97,7 +111,14 @@ async function runAlignment(
   }
 
   return new Promise<AlignResponse>((resolve) => {
-    const child = spawn(python, args, { cwd: app.getAppPath() })
+    const child = spawn(python, args, {
+      cwd: app.getAppPath(),
+      env: {
+        ...process.env,
+        PYTHONIOENCODING: 'utf-8',
+        PYTHONUTF8: '1',
+      },
+    })
     let stdout = ''
     let stderrTail = ''
 
@@ -133,7 +154,7 @@ async function runAlignment(
       if (code !== 0) {
         resolve({
           ok: false,
-          error: stderrTail.trim() || `Alignment process exited with code ${code}.`,
+          error: extractAlignmentError(stderrTail, code),
         })
         return
       }

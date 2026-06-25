@@ -17,6 +17,7 @@
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "vitest run tests/unit",
     "test:e2e": "playwright test",
+    "test:e2e:serve": "npm run build && vite preview --host 127.0.0.1 --port 5175 --strictPort",
     "preview": "vite preview",
     "electron:preview": "npm run build:desktop && electron .",
     "package:win": "npm run build:desktop && electron-builder --win",

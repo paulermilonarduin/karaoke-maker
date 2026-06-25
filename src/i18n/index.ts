@@ -24,6 +24,20 @@ const frMessages = {
   'audioWaveform.seekForward': '+1 s',
   'audioWaveform.zoom': 'Zoom',
 
+  'align.progress.aligningWords': 'Alignement des mots…',
+  'align.progress.asrSegments': '{count} segments repérés par transcription.',
+  'align.progress.done': 'Synchronisation terminée.',
+  'align.progress.loadingAlignmentModel': 'Chargement du modèle d’alignement ({model})…',
+  'align.progress.loadingAudio': 'Chargement de l’audio…',
+  'align.progress.loadingDefaultAlignmentModel':
+    'Chargement du modèle d’alignement par défaut ({language})…',
+  'align.progress.separatingVocals': 'Séparation des voix avec Demucs ({model})…',
+  'align.progress.transcribing': 'Analyse vocale pour créer des repères ({model}, {device})…',
+  'align.progress.vocalsIsolated': 'Voix isolées.',
+  'align.progress.wordCountMismatch':
+    'Nombre de mots différent ({expected} attendus, {aligned} alignés), recalage par similarité.',
+  'align.progress.wrote': 'Résultat écrit dans {path}.',
+
   'catalog.availableTracks': 'Titres disponibles',
   'catalog.count': '{count} titre(s)',
   'catalog.emptySearch': 'Aucun titre ne correspond à cette recherche.',
@@ -40,28 +54,62 @@ const frMessages = {
 
   'generator.audioLabel': 'Musique MP3',
   'generator.addInterlude': 'Interlude',
+  'generator.addInterludeAfter': 'Interlude après',
+  'generator.addInterludeBefore': 'Interlude avant',
   'generator.addToCatalog': 'Ajouter au catalogue',
-  'generator.autoApplied': 'Calage automatique appliqué — ajustez ou exportez.',
-  'generator.autoError': 'Le calage automatique a échoué : {message}',
-  'generator.autoFailed': 'Le calage automatique a échoué.',
+  'generator.autoApplied': 'Synchronisation assistée appliquée — ajustez ou exportez.',
+  'generator.autoError': 'La synchronisation assistée a échoué : {message}',
+  'generator.autoFailed': 'La synchronisation assistée a échoué.',
   'generator.autoHide': 'Terminé',
   'generator.autoHint': 'Vous pourrez ajuster le résultat sur la timeline avant l’export.',
   'generator.autoLanguage': 'Langue des paroles',
-  'generator.autoLead': 'Avance du surlignage',
   'generator.autoNo': 'Non, à la main',
-  'generator.autoNoWords': 'Chargez des paroles avant de lancer le calage automatique.',
-  'generator.autoQuestion': 'Deviner le calage automatiquement à partir de l’audio ?',
-  'generator.autoRedo': 'Refaire le calage',
+  'generator.autoNoWords': 'Chargez des paroles avant de lancer la synchronisation assistée.',
+  'generator.autoQuestion': 'Synchroniser les paroles automatiquement à partir de l’audio ?',
+  'generator.autoRedo': 'Relancer la synchronisation',
   'generator.autoRetry': 'Réessayer',
-  'generator.autoStarting': 'Préparation du calage automatique…',
-  'generator.autoTitle': 'Calage automatique',
-  'generator.autoYes': 'Oui, deviner',
+  'generator.autoStarting': 'Préparation de la synchronisation assistée…',
+  'generator.autoTitle': 'Synchronisation assistée',
+  'generator.autoYes': 'Oui, synchroniser',
   'generator.centerPlayhead': 'Centrer lecture',
   'generator.deleteSegmentSplit': 'Supprimer la découpe',
   'generator.interludeBlock': 'Interlude',
   'generator.error.export': 'Impossible de générer le fichier.',
   'generator.error.importJson': 'Impossible de charger le fichier karaoké.',
   'generator.error.missingAudio': 'Chargez une piste audio avant de modifier la timeline.',
+  'generator.exportBlockedFirstLineStart':
+    'Ajoutez une interlude au début ou replacez le premier bloc à 00:00.000.',
+  'generator.exportBlockedIncompleteTiming':
+    'Certains blocs ne sont pas entièrement synchronisés.',
+  'generator.exportBlockedLastLineEnd':
+    'Le dernier bloc doit aller jusqu’à la fin du morceau.',
+  'generator.exportBlockedLineGap':
+    'Il y a un trou entre deux blocs. Ajoutez une interlude ou rapprochez les blocs.',
+  'generator.exportBlockedLineOutOfDuration':
+    'Un bloc dépasse les limites du morceau.',
+  'generator.exportBlockedMissingAudio':
+    'Chargez un MP3 pour connaître la durée du morceau.',
+  'generator.exportBlockedNoTimeline':
+    'Chargez des paroles ou un JSON pour créer la timeline.',
+  'generator.exportBlockedSegmentOutOfLine':
+    'Un segment dépasse les limites de sa ligne.',
+  'generator.exportBlockedSegmentOverlap':
+    'Deux segments se chevauchent dans une ligne.',
+  'generator.exportBlockedSegmentTextMismatch':
+    'Les segments ne reconstituent pas exactement le texte de la ligne.',
+  'generator.exportBlockedSummary': 'Export impossible : {count} élément(s) à corriger.',
+  'generator.exportIssueFirstLineStart': 'Le premier bloc {line} ne commence pas à 00:00.000.',
+  'generator.exportIssueLastLineEnd': 'Le dernier bloc {line} ne va pas jusqu’à la fin du morceau.',
+  'generator.exportIssueLineGap': 'Il y a un trou avant le bloc {line}.',
+  'generator.exportIssueLineOutOfDuration': 'Le bloc {line} est incomplet ou hors durée.',
+  'generator.exportIssueSegmentOutOfLine':
+    'Le segment {segment} de la ligne {line} dépasse les limites de sa ligne.',
+  'generator.exportIssueSegmentOverlap':
+    'Le segment {segment} chevauche le segment précédent dans la ligne {line}.',
+  'generator.exportIssueSegmentTextMismatch':
+    'Les segments de la ligne {line} ne reconstituent pas exactement son texte.',
+  'generator.exportIssueUnknownBlock': 'Bloc inconnu',
+  'generator.exportIssueUnknownSegment': 'Segment inconnu',
   'generator.exportJson': 'Exporter',
   'generator.exportedToCatalog': 'Ajouté au catalogue : {id}',
   'generator.lyricsLabel': 'Paroles brutes',
@@ -112,7 +160,7 @@ const frMessages = {
   'settings.accentDescription':
     'Utilisée pour le highlight, les contours, les contrôles actifs et la waveform.',
   'settings.accentTitle': 'Couleur principale',
-  'settings.appearance': 'Apparence',
+  'settings.appearance': 'Préférences',
   'settings.chooseColor': 'Choisir la couleur {color}',
   'settings.chooseLanguage': 'Choisir {language} ({country})',
   'settings.eyebrow': 'Paramètres',
@@ -125,7 +173,7 @@ const frMessages = {
     'Le changement est appliqué immédiatement dans toute l’application.',
   'settings.presetsAria': 'Couleurs suggérées',
   'settings.resetColor': 'Restaurer la couleur par défaut',
-  'settings.summary': 'Une couleur pilote toute l’interface.',
+  'settings.summary': 'Couleurs, langue et raccourcis de l’application.',
   'settings.theme': 'Thème',
 
   'shortcut.action.playerFaster': 'Accélérer',
@@ -180,6 +228,19 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'audioWaveform.seekForward': '+1 s',
   'audioWaveform.zoom': 'Zoom',
 
+  'align.progress.aligningWords': 'Aligning words…',
+  'align.progress.asrSegments': '{count} segments detected by transcription.',
+  'align.progress.done': 'Synchronization complete.',
+  'align.progress.loadingAlignmentModel': 'Loading alignment model ({model})…',
+  'align.progress.loadingAudio': 'Loading audio…',
+  'align.progress.loadingDefaultAlignmentModel': 'Loading default alignment model ({language})…',
+  'align.progress.separatingVocals': 'Separating vocals with Demucs ({model})…',
+  'align.progress.transcribing': 'Analyzing vocals for timing anchors ({model}, {device})…',
+  'align.progress.vocalsIsolated': 'Vocals isolated.',
+  'align.progress.wordCountMismatch':
+    'Word count mismatch ({expected} expected, {aligned} aligned), matching by similarity.',
+  'align.progress.wrote': 'Result written to {path}.',
+
   'catalog.availableTracks': 'Available tracks',
   'catalog.count': '{count} track(s)',
   'catalog.emptySearch': 'No track matches this search.',
@@ -196,28 +257,61 @@ const enMessages: Record<keyof typeof frMessages, string> = {
 
   'generator.audioLabel': 'MP3 music',
   'generator.addInterlude': 'Interlude',
+  'generator.addInterludeAfter': 'Interlude after',
+  'generator.addInterludeBefore': 'Interlude before',
   'generator.addToCatalog': 'Add to catalog',
-  'generator.autoApplied': 'Automatic timing applied — adjust or export.',
-  'generator.autoError': 'Automatic alignment failed: {message}',
-  'generator.autoFailed': 'Automatic alignment failed.',
+  'generator.autoApplied': 'Assisted sync applied — adjust or export.',
+  'generator.autoError': 'Assisted sync failed: {message}',
+  'generator.autoFailed': 'Assisted sync failed.',
   'generator.autoHide': 'Done',
   'generator.autoHint': 'You can fine-tune the result on the timeline before exporting.',
   'generator.autoLanguage': 'Lyrics language',
-  'generator.autoLead': 'Highlight lead',
   'generator.autoNo': 'No, do it manually',
-  'generator.autoNoWords': 'Load lyrics before running automatic alignment.',
-  'generator.autoQuestion': 'Guess the timing automatically from the audio?',
-  'generator.autoRedo': 'Redo alignment',
+  'generator.autoNoWords': 'Load lyrics before running assisted sync.',
+  'generator.autoQuestion': 'Synchronize lyrics automatically from the audio?',
+  'generator.autoRedo': 'Run sync again',
   'generator.autoRetry': 'Try again',
-  'generator.autoStarting': 'Preparing automatic alignment…',
-  'generator.autoTitle': 'Automatic alignment',
-  'generator.autoYes': 'Yes, guess it',
+  'generator.autoStarting': 'Preparing assisted sync…',
+  'generator.autoTitle': 'Assisted sync',
+  'generator.autoYes': 'Yes, synchronize',
   'generator.centerPlayhead': 'Center playback',
   'generator.deleteSegmentSplit': 'Remove split',
   'generator.interludeBlock': 'Interlude',
   'generator.error.export': 'Unable to generate the file.',
   'generator.error.importJson': 'Unable to load the karaoke file.',
   'generator.error.missingAudio': 'Load an audio track before editing the timeline.',
+  'generator.exportBlockedFirstLineStart':
+    'Add an interlude at the beginning or move the first block back to 00:00.000.',
+  'generator.exportBlockedIncompleteTiming':
+    'Some blocks are not fully synchronized.',
+  'generator.exportBlockedLastLineEnd':
+    'The last block must reach the end of the track.',
+  'generator.exportBlockedLineGap':
+    'There is a gap between two blocks. Add an interlude or close the gap.',
+  'generator.exportBlockedLineOutOfDuration':
+    'A block is outside the track duration.',
+  'generator.exportBlockedMissingAudio':
+    'Load an MP3 so the track duration is known.',
+  'generator.exportBlockedNoTimeline':
+    'Load lyrics or a JSON file to create the timeline.',
+  'generator.exportBlockedSegmentOutOfLine':
+    'A segment is outside its line.',
+  'generator.exportBlockedSegmentOverlap':
+    'Two segments overlap inside a line.',
+  'generator.exportBlockedSegmentTextMismatch':
+    'The segments do not rebuild the line text exactly.',
+  'generator.exportBlockedSummary': 'Export unavailable: {count} item(s) to fix.',
+  'generator.exportIssueFirstLineStart': 'The first block {line} does not start at 00:00.000.',
+  'generator.exportIssueLastLineEnd': 'The last block {line} does not reach the end of the track.',
+  'generator.exportIssueLineGap': 'There is a gap before block {line}.',
+  'generator.exportIssueLineOutOfDuration': 'Block {line} is incomplete or outside the track duration.',
+  'generator.exportIssueSegmentOutOfLine': 'Segment {segment} from line {line} is outside its line.',
+  'generator.exportIssueSegmentOverlap':
+    'Segment {segment} overlaps the previous segment in line {line}.',
+  'generator.exportIssueSegmentTextMismatch':
+    'The segments from line {line} do not rebuild its text exactly.',
+  'generator.exportIssueUnknownBlock': 'Unknown block',
+  'generator.exportIssueUnknownSegment': 'Unknown segment',
   'generator.exportJson': 'Export',
   'generator.exportedToCatalog': 'Added to the catalog: {id}',
   'generator.lyricsLabel': 'Raw lyrics',
@@ -268,7 +362,7 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'settings.accentDescription':
     'Used for highlight, borders, active controls, and the waveform.',
   'settings.accentTitle': 'Primary color',
-  'settings.appearance': 'Appearance',
+  'settings.appearance': 'Preferences',
   'settings.chooseColor': 'Choose color {color}',
   'settings.chooseLanguage': 'Choose {language} ({country})',
   'settings.eyebrow': 'Settings',
@@ -280,7 +374,7 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'settings.previewDescription': 'Changes are applied immediately across the app.',
   'settings.presetsAria': 'Suggested colors',
   'settings.resetColor': 'Restore default color',
-  'settings.summary': 'One color drives the whole interface.',
+  'settings.summary': 'Application colors, language, and shortcuts.',
   'settings.theme': 'Theme',
 
   'shortcut.action.playerFaster': 'Speed up',

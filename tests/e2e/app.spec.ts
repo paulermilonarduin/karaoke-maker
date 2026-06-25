@@ -11,7 +11,7 @@ const sampleKaraokePath = path.join(
 )
 
 test('catalog search and demo playback state', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
   await page.getByRole('button', { name: 'Catalogue' }).click()
 
   await expect(page.locator('.line-count')).toHaveText('12 titre(s)')
@@ -28,13 +28,15 @@ test('catalog search and demo playback state', async ({ page }) => {
 })
 
 test('settings language and color update the app state', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
   await page.getByRole('button', { name: 'Ouvrir les paramètres' }).click()
 
-  await expect(page.getByRole('heading', { name: 'Apparence' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Préférences' })).toBeVisible()
+  await expect(page.getByText('Raccourcis', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Choisir English (États-Unis)' }).click()
 
-  await expect(page.getByRole('heading', { name: 'Appearance' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Preferences' })).toBeVisible()
+  await expect(page.getByText('Shortcuts', { exact: true })).toBeVisible()
   await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
 
   await page.getByRole('button', { name: 'Choose Français (France)' }).click()
@@ -46,7 +48,7 @@ test('settings language and color update the app state', async ({ page }) => {
 })
 
 test('generator imports an existing karaoke JSON for editing', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
   await page.locator('input[type="file"]').nth(2).setInputFiles(sampleKaraokePath)
 
   await expect(page.getByRole('heading', { name: 'Minecraft UDSS' })).toBeVisible()

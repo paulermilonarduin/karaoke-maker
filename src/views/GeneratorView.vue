@@ -2,7 +2,6 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import AudioWaveform from '../components/AudioWaveform.vue'
 import FileDropField from '../components/FileDropField.vue'
-import ShortcutEditor from '../components/ShortcutEditor.vue'
 import {
   buildSyncedLines,
   formatTimestamp,
@@ -42,14 +41,8 @@ const syncError = ref<string>()
 const exportMessage = ref<string>()
 const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
 const timelineScrollRef = ref<HTMLElement>()
-const isCapturingShortcut = ref(false)
 
-const {
-  actions: shortcutActions,
-  hasCustomShortcuts,
-  resetShortcuts,
-  setShortcut,
-} = useGeneratorShortcutSettings()
+const { actions: shortcutActions } = useGeneratorShortcutSettings()
 const { t, locale, localeOptions } = useI18n()
 
 const {
@@ -78,7 +71,6 @@ const {
   hasTimeline,
   selectedLine,
   selectedSegment,
-  timelineZoomLabel,
   syncOffsetLabel,
   timelinePlayheadStyle,
   canMergeWithPreviousSegment,
@@ -88,9 +80,7 @@ const {
   canMoveLine,
   getSegmentStyle,
   getSegmentGaps,
-  zoomTimeline,
   centerTimelineOnCurrentTime,
-  onTimelineZoomInput,
   onTimelineWheel,
   initializeTimelineIfPossible,
   stopTimelineDrag,
@@ -116,7 +106,6 @@ const {
   syncError,
   timelineScrollRef,
   pushUndoSnapshot,
-  setWaveformZoom: (zoom) => waveformRef.value?.setZoom(zoom),
   t,
 })
 
@@ -126,13 +115,90 @@ const timelineSummary = computed(() =>
     duration: audioDurationMs.value ? formatTimestamp(audioDurationMs.value) : '00:00.000',
   }),
 )
-const canExport = computed(
-  () =>
-    hasTimeline.value &&
-    timelineValidationIssues.value.length === 0 &&
-    syncedLines.value.length === project.value.draftLines.length &&
-    syncedLines.value.every((line) => line.endMs !== undefined),
-)
+
+function truncateExportLabel(value: string): string {
+  const normalized = value.trim()
+
+  return normalized.length > 48 ? `${normalized.slice(0, 45)}...` : normalized
+}
+
+function findIssueLine(lineId?: string) {
+  return project.value.draftLines.find((line) => line.id === lineId)
+}
+
+function getIssueLineLabel(lineId?: string): string {
+  const line = findIssueLine(lineId)
+
+  if (!line) {
+    return t('generator.exportIssueUnknownBlock')
+  }
+
+  const lineIndex = project.value.draftLines.findIndex((candidate) => candidate.id === line.id) + 1
+
+  return isInterludeLine(line)
+    ? `${t('generator.interludeBlock')} ${lineIndex}`
+    : `« ${truncateExportLabel(line.text)} »`
+}
+
+function getIssueSegmentLabel(segmentId?: string): string {
+  const segment = project.value.draftLines
+    .flatMap((line) => line.segments)
+    .find((candidate) => candidate.id === segmentId)
+
+  return segment ? `« ${truncateExportLabel(segment.text)} »` : t('generator.exportIssueUnknownSegment')
+}
+
+function getTimelineValidationMessage(issue: (typeof timelineValidationIssues.value)[number]): string {
+  const line = getIssueLineLabel(issue.lineId)
+  const segment = getIssueSegmentLabel(issue.segmentId)
+
+  switch (issue.issue) {
+    case 'empty':
+      return t('generator.exportBlockedNoTimeline')
+    case 'first-line-start':
+      return t('generator.exportIssueFirstLineStart', { line })
+    case 'line-gap':
+      return t('generator.exportIssueLineGap', { line })
+    case 'line-out-of-duration':
+      return t('generator.exportIssueLineOutOfDuration', { line })
+    case 'last-line-end':
+      return t('generator.exportIssueLastLineEnd', { line })
+    case 'segment-out-of-line':
+      return t('generator.exportIssueSegmentOutOfLine', { line, segment })
+    case 'segment-overlap':
+      return t('generator.exportIssueSegmentOverlap', { line, segment })
+    case 'segment-text-mismatch':
+      return t('generator.exportIssueSegmentTextMismatch', { line })
+  }
+}
+
+const exportBlockMessages = computed(() => {
+  if (audioDurationMs.value === undefined) {
+    return [t('generator.exportBlockedMissingAudio')]
+  }
+
+  if (project.value.draftLines.length === 0) {
+    return [t('generator.exportBlockedNoTimeline')]
+  }
+
+  if (!hasTimeline.value) {
+    return [t('generator.exportBlockedIncompleteTiming')]
+  }
+
+  if (timelineValidationIssues.value.length > 0) {
+    return Array.from(new Set(timelineValidationIssues.value.map(getTimelineValidationMessage)))
+  }
+
+  if (
+    syncedLines.value.length !== project.value.draftLines.length ||
+    syncedLines.value.some((line) => line.endMs === undefined)
+  ) {
+    return [t('generator.exportBlockedIncompleteTiming')]
+  }
+
+  return []
+})
+const canExport = computed(() => exportBlockMessages.value.length === 0)
 const exportLabel = computed(() =>
   isCatalogAvailable() && audioFile.value ? t('generator.addToCatalog') : t('generator.exportJson'),
 )
@@ -141,7 +207,6 @@ const {
   autoAlignState,
   autoAlignProgress,
   autoAlignError,
-  leadMs,
   songLanguage,
   showAutoAlign,
   resetAutoAlign,
@@ -227,9 +292,25 @@ useGeneratorShortcuts(
     'player.slower': () => waveformRef.value?.adjustPlaybackRate(-1),
     'player.faster': () => waveformRef.value?.adjustPlaybackRate(1),
   },
-  () => !isCapturingShortcut.value,
+  () => true,
   () => shortcutActions.value,
 )
+
+function syncWaveformScrollFromTimeline() {
+  const scrollElement = timelineScrollRef.value
+  const zoom = timelineZoomPxPerSecond.value
+
+  if (!scrollElement || zoom <= 0) {
+    return
+  }
+
+  waveformRef.value?.setScrollTime(scrollElement.scrollLeft / zoom)
+}
+
+function centerTimelineAndWaveform() {
+  centerTimelineOnCurrentTime()
+  requestAnimationFrame(syncWaveformScrollFromTimeline)
+}
 
 onBeforeUnmount(() => {
   stopTimelineDrag()
@@ -310,15 +391,6 @@ onBeforeUnmount(() => {
         </p>
       </div>
 
-      <AudioWaveform
-        ref="waveformRef"
-        :accent-color="accentColor"
-        :audio-url="audioUrl"
-        @timeupdate="currentTimeMs = $event"
-        @durationchange="onDurationChange"
-        @zoomchange="timelineZoomPxPerSecond = $event"
-      />
-
       <div v-if="showAutoAlign" class="auto-align">
         <p class="eyebrow">{{ t('generator.autoTitle') }}</p>
 
@@ -331,19 +403,6 @@ onBeforeUnmount(() => {
 
         <template v-else-if="autoAlignState === 'done'">
           <p class="auto-align__title">✓ {{ t('generator.autoApplied') }}</p>
-
-          <label class="auto-align__lead">
-            <span class="auto-align__hint">{{ t('generator.autoLead') }} : {{ leadMs }} ms</span>
-            <input
-              v-model.number="leadMs"
-              class="auto-align__lead-range"
-              type="range"
-              min="0"
-              max="400"
-              step="10"
-              :aria-label="t('generator.autoLead')"
-            />
-          </label>
 
           <div class="action-row">
             <button class="button" type="button" @click="runAutoAlignment">
@@ -379,19 +438,6 @@ onBeforeUnmount(() => {
             </div>
           </div>
 
-          <label class="auto-align__lead">
-            <span class="auto-align__hint">{{ t('generator.autoLead') }} : {{ leadMs }} ms</span>
-            <input
-              v-model.number="leadMs"
-              class="auto-align__lead-range"
-              type="range"
-              min="0"
-              max="400"
-              step="10"
-              :aria-label="t('generator.autoLead')"
-            />
-          </label>
-
           <div class="action-row">
             <button class="button button--primary" type="button" @click="runAutoAlignment">
               {{ autoAlignState === 'error' ? t('generator.autoRetry') : t('generator.autoYes') }}
@@ -410,8 +456,11 @@ onBeforeUnmount(() => {
             <p class="timeline-editor__help">{{ t('generator.timelineHelp') }}</p>
           </div>
           <div class="timeline-editor__actions">
-            <button class="button" type="button" :disabled="!hasTimeline" @click="addInterludeBlock">
-              {{ t('generator.addInterlude') }}
+            <button class="button" type="button" :disabled="!hasTimeline" @click="addInterludeBlock('before')">
+              {{ t('generator.addInterludeBefore') }}
+            </button>
+            <button class="button" type="button" :disabled="!hasTimeline" @click="addInterludeBlock('after')">
+              {{ t('generator.addInterludeAfter') }}
             </button>
             <button class="button" type="button" :disabled="!canUndo" @click="undoLastChange">
               {{ t('generator.undo') }}
@@ -431,61 +480,35 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="timeline-editor__tools">
-          <button class="button" type="button" :disabled="!hasTimeline" @click="zoomTimeline(-20)">
-            {{ t('generator.zoomOut') }}
-          </button>
-          <label class="timeline-editor__zoom">
-            {{ t('generator.timelineZoom') }}
-            <input
-              type="range"
-              min="20"
-              max="480"
-              step="10"
-              :value="timelineZoomPxPerSecond"
-              :disabled="!hasTimeline"
-              @input="onTimelineZoomInput"
-            />
-            <span>{{ timelineZoomLabel }}</span>
-          </label>
-          <button class="button" type="button" :disabled="!hasTimeline" @click="zoomTimeline(20)">
-            {{ t('generator.zoomIn') }}
-          </button>
-          <button class="button" type="button" :disabled="!hasTimeline" @click="centerTimelineOnCurrentTime">
+          <button class="button" type="button" :disabled="!hasTimeline" @click="centerTimelineAndWaveform">
             {{ t('generator.centerPlayhead') }}
           </button>
         </div>
 
-        <div class="timeline-offset">
-          <div>
-            <p class="timeline-offset__title">{{ t('generator.offsetTitle') }}</p>
-            <p class="timeline-offset__help">{{ t('generator.offsetHelp') }}</p>
-          </div>
-          <button class="button" type="button" @click="adjustGlobalOffset(-100)">−100 ms</button>
-          <label class="timeline-offset__input">
-            {{ t('generator.offsetMs') }}
-            <input
-              type="number"
-              step="10"
-              :value="project.syncOffsetMs ?? 0"
-              @change="onGlobalOffsetInput"
-            />
-          </label>
-          <button class="button" type="button" @click="adjustGlobalOffset(100)">+100 ms</button>
-          <button class="button" type="button" :disabled="(project.syncOffsetMs ?? 0) === 0" @click="setGlobalOffset(0, true)">
-            {{ t('generator.offsetReset') }}
-          </button>
-          <span class="timeline-offset__value">
-            {{ (project.syncOffsetMs ?? 0) < 0 ? '−' : '+' }}{{ syncOffsetLabel }}
-          </span>
-        </div>
+        <AudioWaveform
+          ref="waveformRef"
+          class="timeline-editor__waveform"
+          :accent-color="accentColor"
+          :audio-url="audioUrl"
+          @timeupdate="currentTimeMs = $event"
+          @durationchange="onDurationChange"
+          @zoomchange="timelineZoomPxPerSecond = $event"
+        />
 
         <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
         <p v-if="exportMessage" class="sync-panel__success" role="status">{{ exportMessage }}</p>
+        <div v-if="exportBlockMessages.length" class="sync-panel__export-blocker" role="status">
+          <p>{{ t('generator.exportBlockedSummary', { count: exportBlockMessages.length }) }}</p>
+          <ul>
+            <li v-for="message in exportBlockMessages" :key="message">{{ message }}</li>
+          </ul>
+        </div>
 
         <div
           v-if="hasTimeline"
           ref="timelineScrollRef"
           class="timeline-editor__scroll"
+          @scroll="syncWaveformScrollFromTimeline"
           @wheel="onTimelineWheel"
         >
           <div class="timeline-editor__track" :style="{ width: `${timelineWidthPx}px` }">
@@ -621,15 +644,32 @@ onBeforeUnmount(() => {
             </div>
           </div>
         </div>
+
+        <div class="timeline-offset">
+          <div>
+            <p class="timeline-offset__title">{{ t('generator.offsetTitle') }}</p>
+            <p class="timeline-offset__help">{{ t('generator.offsetHelp') }}</p>
+          </div>
+          <button class="button" type="button" @click="adjustGlobalOffset(-100)">−100 ms</button>
+          <label class="timeline-offset__input">
+            {{ t('generator.offsetMs') }}
+            <input
+              type="number"
+              step="10"
+              :value="project.syncOffsetMs ?? 0"
+              @change="onGlobalOffsetInput"
+            />
+          </label>
+          <button class="button" type="button" @click="adjustGlobalOffset(100)">+100 ms</button>
+          <button class="button" type="button" :disabled="(project.syncOffsetMs ?? 0) === 0" @click="setGlobalOffset(0, true)">
+            {{ t('generator.offsetReset') }}
+          </button>
+          <span class="timeline-offset__value">
+            {{ (project.syncOffsetMs ?? 0) < 0 ? '−' : '+' }}{{ syncOffsetLabel }}
+          </span>
+        </div>
       </section>
 
-      <ShortcutEditor
-        :actions="shortcutActions"
-        :has-custom-shortcuts="hasCustomShortcuts"
-        @capturechange="isCapturingShortcut = $event"
-        @reset="resetShortcuts"
-        @update="setShortcut"
-      />
     </div>
   </section>
 </template>

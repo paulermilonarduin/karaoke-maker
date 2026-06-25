@@ -38,7 +38,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -65,9 +67,67 @@ WORD_PATTERN = re.compile(r"\S+")
 NORMALIZE_PATTERN = re.compile(r"[^0-9a-zàâäçéèêëîïôöùûüÿœæ]+", re.IGNORECASE)
 
 
+def configure_stdio() -> None:
+    """Force UTF-8 logs when Python is launched from Electron on Windows."""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
+configure_stdio()
+
+
 def log(message: str) -> None:
     """Write a progress line to stderr (stdout is reserved for the JSON result)."""
     print(message, file=sys.stderr, flush=True)
+
+
+def progress(key: str, **params: object) -> None:
+    log(f"PROGRESS: {json.dumps({'key': key, 'params': params}, ensure_ascii=False)}")
+
+
+def find_ffmpeg() -> str | None:
+    ffmpeg = shutil.which("ffmpeg")
+
+    if ffmpeg:
+        return ffmpeg
+
+    if sys.platform != "win32":
+        return None
+
+    local_appdata = os.environ.get("LOCALAPPDATA")
+
+    if not local_appdata:
+        return None
+
+    winget_packages = Path(local_appdata) / "Microsoft" / "WinGet" / "Packages"
+
+    if not winget_packages.exists():
+        return None
+
+    candidates = sorted(winget_packages.glob("Gyan.FFmpeg_*/*/bin/ffmpeg.exe"), reverse=True)
+
+    if not candidates:
+        return None
+
+    ffmpeg_path = candidates[0]
+    os.environ["PATH"] = f"{ffmpeg_path.parent}{os.pathsep}{os.environ.get('PATH', '')}"
+    return str(ffmpeg_path)
+
+
+def require_ffmpeg() -> None:
+    if find_ffmpeg():
+        return
+
+    if sys.platform == "win32":
+        raise RuntimeError(
+            "FFmpeg is missing from PATH. Install it with "
+            "`winget install Gyan.FFmpeg`, then restart your terminal."
+        )
+
+    raise RuntimeError("FFmpeg is missing from PATH. Install FFmpeg, then rerun the alignment.")
 
 
 @dataclass
@@ -117,7 +177,7 @@ def read_input_words(args: argparse.Namespace) -> list[str]:
 
 def separate_vocals(audio_path: Path, model: str, device: str, work_dir: Path) -> Path:
     """Run Demucs to isolate the vocal stem and return the path to ``vocals.wav``."""
-    log(f"PROGRESS: separating vocals with Demucs ({model})…")
+    progress("align.progress.separatingVocals", model=model)
 
     command = [
         sys.executable,
@@ -148,7 +208,7 @@ def separate_vocals(audio_path: Path, model: str, device: str, work_dir: Path) -
     if not candidates:
         raise RuntimeError("Demucs did not produce a vocals stem.")
 
-    log("PROGRESS: vocals isolated.")
+    progress("align.progress.vocalsIsolated")
 
     return candidates[0]
 
@@ -194,11 +254,7 @@ def map_aligned_words(
             for index, item in enumerate(aligned)
         ]
 
-    log(
-        "PROGRESS: word count mismatch "
-        f"(expected {len(expected)}, aligned {len(aligned)}); "
-        "falling back to sequence matching."
-    )
+    progress("align.progress.wordCountMismatch", expected=len(expected), aligned=len(aligned))
 
     timings = [WordTiming(index=i, start_ms=None, end_ms=None, score=None) for i in range(len(expected))]
     expected_norm = [normalize_token(word) for word in expected]
@@ -249,7 +305,7 @@ def transcribe_segments(audio, language: str, device: str, asr_model: str) -> li
     asr_device = device if device == "cuda" else "cpu"
     compute_type = "float16" if asr_device == "cuda" else "int8"
 
-    log(f"PROGRESS: transcribing for time anchors ('{asr_model}', {asr_device})…")
+    progress("align.progress.transcribing", model=asr_model, device=asr_device)
     # silero VAD avoids the gated pyannote model (no Hugging Face token needed).
     model = whisperx.load_model(
         asr_model,
@@ -260,7 +316,7 @@ def transcribe_segments(audio, language: str, device: str, asr_model: str) -> li
     )
     result = model.transcribe(audio, language=language, batch_size=16)
     segments = result.get("segments", [])
-    log(f"PROGRESS: ASR produced {len(segments)} segments.")
+    progress("align.progress.asrSegments", count=len(segments))
 
     return segments
 
@@ -276,19 +332,19 @@ def align(
 ) -> tuple[int, list[WordTiming]]:
     import whisperx  # imported lazily so --help works without the heavy deps
 
-    log("PROGRESS: loading audio…")
+    progress("align.progress.loadingAudio")
     audio = whisperx.load_audio(str(audio_path))
     duration_ms = round(len(audio) / SAMPLE_RATE * 1000)
 
     resolved_model = model_name or LIGHT_ALIGN_MODELS.get(language)
 
     if resolved_model:
-        log(f"PROGRESS: loading alignment model '{resolved_model}'…")
+        progress("align.progress.loadingAlignmentModel", model=resolved_model)
         align_model, metadata = whisperx.load_align_model(
             language_code=language, device=device, model_name=resolved_model
         )
     else:
-        log(f"PROGRESS: loading default alignment model for '{language}'…")
+        progress("align.progress.loadingDefaultAlignmentModel", language=language)
         align_model, metadata = whisperx.load_align_model(language_code=language, device=device)
 
     if use_asr:
@@ -303,7 +359,7 @@ def align(
         # clearly-sung tracks; drifts on long or dense ones.
         segments = [{"start": 0.0, "end": duration_ms / 1000, "text": " ".join(words)}]
 
-    log("PROGRESS: aligning words…")
+    progress("align.progress.aligningWords")
     result = whisperx.align(
         segments,
         align_model,
@@ -402,6 +458,8 @@ def main() -> int:
         if not audio_path.is_file():
             raise FileNotFoundError(f"Audio file not found: {audio_path}")
 
+        require_ffmpeg()
+
         with tempfile.TemporaryDirectory(prefix="karaoke-align-") as work_dir:
             alignment_audio = audio_path
 
@@ -450,11 +508,11 @@ def main() -> int:
 
     if args.out:
         Path(args.out).write_text(output + "\n", encoding="utf-8")
-        log(f"PROGRESS: wrote {args.out}")
+        progress("align.progress.wrote", path=args.out)
     else:
         print(output)
 
-    log("PROGRESS: done.")
+    progress("align.progress.done")
     return 0
 
 

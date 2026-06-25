@@ -20,7 +20,9 @@ of truth for the karaoke format.
 
 - Python 3.10 to 3.13. Python 3.14 is not supported yet by the pinned
   WhisperX / torch stack.
-- `ffmpeg` on your `PATH` (`brew install ffmpeg` on macOS)
+- `ffmpeg` on your `PATH` (`winget install Gyan.FFmpeg` on Windows,
+  `brew install ffmpeg` on macOS). Restart the terminal if `ffmpeg` is still
+  missing after install.
 - A virtualenv with the packages in `requirements.txt`
 
 ## Setup (optional, opt-in)

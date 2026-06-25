@@ -127,7 +127,7 @@ npm run package:win
 
 Les détails de lancement et de debug sont disponibles dans `DEVELOPMENT.md`.
 
-## Calage automatique (optionnel)
+## Synchronisation assistée (optionnelle)
 
 Le générateur peut deviner la synchronisation à partir de l'audio et des paroles
 (forced alignment), au lieu de tout caler à la main. Cette fonctionnalité repose
@@ -141,20 +141,21 @@ Prérequis : Python 3.10 à 3.13 et `ffmpeg` sur le `PATH`.
 Python 3.14 n'est pas encore compatible avec la pile WhisperX / torch verrouillée ici.
 
 - Windows Python : `winget install Python.Python.3.13`.
-- Windows : `winget install Gyan.FFmpeg` ou installation manuelle de FFmpeg.
+- Windows FFmpeg : `winget install Gyan.FFmpeg` ou installation manuelle de FFmpeg.
+  Si `ffmpeg` reste introuvable après l'installation, fermer puis rouvrir le terminal.
 - macOS : `brew install ffmpeg`.
 
 ```powershell
 # 1. Installation, une seule fois (crée tools/align/.venv, plusieurs Go de dépendances)
 npm run align:setup
 
-# 2. Lancer l'app desktop avec le calage automatique déverrouillé
+# 2. Lancer l'app desktop avec la synchronisation assistée déverrouillée
 npm run electron:dev:align
 ```
 
-> Le calage automatique n'apparaît **que** lancé via `electron:dev:align` (qui
+> La synchronisation assistée n'apparaît **que** lancée via `electron:dev:align` (qui
 > pose `KARAOKE_ALIGN=1`). Avec `npm run dev` ou `npm run electron:dev`, l'app
-> tourne normalement et seul le calage manuel est proposé. C'est une capacité
+> tourne normalement et seule la synchronisation manuelle est proposée. C'est une capacité
 > **desktop uniquement** : le navigateur ne peut pas exécuter l'outil Python.
 
 Détails et options (langue, modèle, `--asr`, lead) dans `tools/align/README.md`.
