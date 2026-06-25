@@ -137,8 +137,10 @@ qu'elle n'est pas explicitement déverrouillée, pour ne pas alourdir le quotidi
 
 ### Lancer la feature en développement
 
-Prérequis : Python 3.10+ et `ffmpeg` sur le `PATH`.
+Prérequis : Python 3.10 à 3.13 et `ffmpeg` sur le `PATH`.
+Python 3.14 n'est pas encore compatible avec la pile WhisperX / torch verrouillée ici.
 
+- Windows Python : `winget install Python.Python.3.13`.
 - Windows : `winget install Gyan.FFmpeg` ou installation manuelle de FFmpeg.
 - macOS : `brew install ffmpeg`.
 

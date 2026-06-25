@@ -18,7 +18,8 @@ of truth for the karaoke format.
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.10 to 3.13. Python 3.14 is not supported yet by the pinned
+  WhisperX / torch stack.
 - `ffmpeg` on your `PATH` (`brew install ffmpeg` on macOS)
 - A virtualenv with the packages in `requirements.txt`
 
@@ -47,18 +48,19 @@ The first alignment run downloads the alignment model and the Demucs model.
 <details>
 <summary>Manual venv setup</summary>
 
-```bash
+```powershell
 cd tools/align
-python3 -m venv .venv
-source .venv/bin/activate
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 </details>
 
-> The Electron app looks for the interpreter at `tools/align/.venv/bin/python`
-> by default. Override it with the `KARAOKE_PYTHON` environment variable if your
-> venv lives elsewhere.
+> The Electron app looks for the interpreter at `tools/align/.venv/Scripts/python.exe`
+> on Windows and `tools/align/.venv/bin/python` on macOS/Linux by default.
+> Override it with the `KARAOKE_PYTHON` environment variable if your venv lives
+> elsewhere.
 
 ## Standalone usage
 
