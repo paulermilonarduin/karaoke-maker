@@ -1,18 +1,42 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { catalogTracks, type CatalogTrack } from '../catalog/tracks'
 import AudioPlayer from '../components/AudioPlayer.vue'
 import LyricsDisplay from '../components/LyricsDisplay.vue'
+import {
+  isCatalogAvailable,
+  listCatalog,
+  readCatalogAudioUrl,
+  type CatalogEntry,
+} from '../desktop/bridge'
 import { findActiveLine, parseKaraokeFile, type LyricLine } from '../domain/lyrics'
 import { useI18n } from '../i18n'
 
-const selectedTrack = ref<CatalogTrack>(catalogTracks[0])
+type PlayableTrack = CatalogTrack | {
+  id: string
+  title: string
+  artist: string
+  durationMs: number
+  karaokeContent: string
+  audioFileName: string
+}
+
+const instrumentalInterludeThresholdMs = 2500
+
+const tracks = ref<PlayableTrack[]>(catalogTracks)
+const selectedTrack = ref<PlayableTrack | undefined>(catalogTracks[0])
+const resolvedAudioUrl = ref<string | undefined>(catalogTracks[0]?.audioUrl)
 const currentTimeMs = ref(0)
 const audioDurationMs = ref<number>()
 const trackSearchQuery = ref('')
-const karaokeFile = computed(() => parseKaraokeFile(selectedTrack.value.karaokeContent))
-const lyrics = computed(() => karaokeFile.value.lines)
-const syncOffsetMs = computed(() => karaokeFile.value.sync?.offsetMs ?? 0)
+const loadError = ref<string>()
+const karaokeFile = computed(() => {
+  const content = selectedTrack.value?.karaokeContent
+
+  return content ? parseKaraokeFile(content) : undefined
+})
+const lyrics = computed(() => karaokeFile.value?.lines ?? [])
+const syncOffsetMs = computed(() => karaokeFile.value?.sync?.offsetMs ?? 0)
 const displayTimeMs = computed(() => currentTimeMs.value + syncOffsetMs.value)
 const activeLine = computed(() =>
   findActiveLine(lyrics.value, currentTimeMs.value, syncOffsetMs.value),
@@ -23,35 +47,74 @@ const filteredTracks = computed(() => {
   const query = normalizedTrackSearchQuery.value
 
   if (!query) {
-    return catalogTracks
+    return tracks.value
   }
 
-  return catalogTracks.filter((track) =>
+  return tracks.value.filter((track) =>
     normalizeTrackSearch(`${track.title} ${track.artist}`).includes(query),
   )
 })
-const previousLine = computed<LyricLine | undefined>(() => {
-  const line = activeLine.value
+const playback = computed<{
+  display?: LyricLine
+  previous?: LyricLine
+  next?: LyricLine
+}>(() => {
+  const active = activeLine.value
 
-  if (!line) {
-    return undefined
+  if (active) {
+    const index = lyrics.value.findIndex((candidate) => candidate.id === active.id)
+
+    return {
+      display: active,
+      previous: lyrics.value[index - 1],
+      next: lyrics.value[index + 1],
+    }
   }
 
-  const index = lyrics.value.findIndex((candidate) => candidate.id === line.id)
+  let lingeringIndex = -1
 
-  return lyrics.value[index - 1]
-})
-const nextLine = computed<LyricLine | undefined>(() => {
-  const line = activeLine.value
-
-  if (!line) {
-    return lyrics.value[0]
+  for (let index = 0; index < lyrics.value.length; index += 1) {
+    if (lyrics.value[index].startMs <= displayTimeMs.value) {
+      lingeringIndex = index
+    } else {
+      break
+    }
   }
 
-  const index = lyrics.value.findIndex((candidate) => candidate.id === line.id)
+  const lingering = lyrics.value[lingeringIndex]
+  const upcoming = lyrics.value[lingeringIndex + 1]
 
-  return lyrics.value[index + 1]
+  if (upcoming) {
+    const gapStartMs = lingering?.endMs ?? 0
+
+    if (upcoming.startMs - gapStartMs >= instrumentalInterludeThresholdMs) {
+      return {
+        display: {
+          id: `interlude:gap:${lingeringIndex}`,
+          kind: 'interlude',
+          startMs: gapStartMs,
+          endMs: upcoming.startMs,
+          text: '',
+        },
+        previous: lingering,
+        next: upcoming,
+      }
+    }
+  }
+
+  return {
+    display: lingering,
+    previous: lyrics.value[lingeringIndex - 1],
+    next: upcoming,
+  }
 })
+const displayLine = computed(() => playback.value.display)
+const previousLine = computed(() => playback.value.previous)
+const nextLine = computed(() => playback.value.next)
+
+function isBundledTrack(track: PlayableTrack): track is CatalogTrack {
+  return 'audioUrl' in track
+}
 
 function normalizeTrackSearch(value: string): string {
   return value
@@ -61,10 +124,47 @@ function normalizeTrackSearch(value: string): string {
     .trim()
 }
 
-function selectTrack(track: CatalogTrack) {
+function createDiskTrack(entry: CatalogEntry): PlayableTrack | undefined {
+  try {
+    const file = parseKaraokeFile(entry.karaokeContent)
+
+    return {
+      id: entry.id,
+      title: file.song.title,
+      artist: file.song.artist,
+      durationMs: file.song.durationMs,
+      karaokeContent: entry.karaokeContent,
+      audioFileName: entry.audioFileName,
+    }
+  } catch {
+    return undefined
+  }
+}
+
+function revokeResolvedAudioUrl() {
+  if (resolvedAudioUrl.value?.startsWith('blob:')) {
+    URL.revokeObjectURL(resolvedAudioUrl.value)
+  }
+}
+
+async function selectTrack(track: PlayableTrack) {
   selectedTrack.value = track
   currentTimeMs.value = 0
   audioDurationMs.value = undefined
+  loadError.value = undefined
+  revokeResolvedAudioUrl()
+  resolvedAudioUrl.value = undefined
+
+  if (isBundledTrack(track)) {
+    resolvedAudioUrl.value = track.audioUrl
+    return
+  }
+
+  try {
+    resolvedAudioUrl.value = await readCatalogAudioUrl(track.id, track.audioFileName)
+  } catch (error) {
+    loadError.value = error instanceof Error ? error.message : String(error)
+  }
 }
 
 function formatCatalogDuration(durationMs: number): string {
@@ -74,6 +174,29 @@ function formatCatalogDuration(durationMs: number): string {
 
   return `${minutes}:${seconds.toString().padStart(2, '0')}`
 }
+
+onMounted(async () => {
+  if (isCatalogAvailable()) {
+    try {
+      const entries = await listCatalog()
+      const diskTracks = entries
+        .map((entry) => createDiskTrack(entry))
+        .filter((track): track is PlayableTrack => track !== undefined)
+
+      if (diskTracks.length > 0) {
+        tracks.value = diskTracks
+      }
+    } catch (error) {
+      loadError.value = error instanceof Error ? error.message : String(error)
+    }
+  }
+
+  if (tracks.value[0]) {
+    await selectTrack(tracks.value[0])
+  }
+})
+
+onBeforeUnmount(revokeResolvedAudioUrl)
 </script>
 
 <template>
@@ -81,7 +204,7 @@ function formatCatalogDuration(durationMs: number): string {
     <div class="catalog-view__header">
       <div>
         <p class="eyebrow">{{ t('catalog.eyebrow') }}</p>
-        <p class="line-count">{{ t('catalog.count', { count: catalogTracks.length }) }}</p>
+        <p class="line-count">{{ t('catalog.count', { count: tracks.length }) }}</p>
       </div>
     </div>
 
@@ -106,7 +229,7 @@ function formatCatalogDuration(durationMs: number): string {
           {{
             t('catalog.searchResults', {
               count: filteredTracks.length,
-              total: catalogTracks.length,
+              total: tracks.length,
             })
           }}
         </p>
@@ -116,7 +239,7 @@ function formatCatalogDuration(durationMs: number): string {
             v-for="track in filteredTracks"
             :key="track.id"
             class="catalog-track"
-            :class="{ 'catalog-track--active': selectedTrack.id === track.id }"
+            :class="{ 'catalog-track--active': selectedTrack?.id === track.id }"
             type="button"
             role="listitem"
             @click="selectTrack(track)"
@@ -138,17 +261,18 @@ function formatCatalogDuration(durationMs: number): string {
         <LyricsDisplay
           :current-time-ms="displayTimeMs"
           :fallback-end-time-ms="audioDurationMs"
-          :active-line="activeLine"
+          :active-line="displayLine"
           :previous-line="previousLine"
           :next-line="nextLine"
           :placeholder="t('catalog.placeholder')"
-          :title="selectedTrack.title"
-          :artist="selectedTrack.artist"
+          :title="selectedTrack?.title"
+          :artist="selectedTrack?.artist"
         >
           <template #footer>
+            <p v-if="loadError" class="sync-panel__error" role="alert">{{ loadError }}</p>
             <AudioPlayer
-              :key="selectedTrack.id"
-              :audio-url="selectedTrack.audioUrl"
+              :key="selectedTrack?.id"
+              :audio-url="resolvedAudioUrl"
               @timeupdate="currentTimeMs = $event"
               @durationchange="audioDurationMs = $event"
             />

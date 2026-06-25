@@ -1,0 +1,4 @@
+# Python virtualenv and caches for the alignment tool
+.venv/
+__pycache__/
+*.pyc

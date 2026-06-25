@@ -127,6 +127,36 @@ npm run package:win
 
 Les détails de lancement et de debug sont disponibles dans `DEVELOPMENT.md`.
 
+## Calage automatique (optionnel)
+
+Le générateur peut deviner la synchronisation à partir de l'audio et des paroles
+(forced alignment), au lieu de tout caler à la main. Cette fonctionnalité repose
+sur un outil Python (WhisperX + Demucs) volontairement **désactivé par défaut** :
+elle n'est ni installée par `npm install`, ni visible dans l'application tant
+qu'elle n'est pas explicitement déverrouillée, pour ne pas alourdir le quotidien.
+
+### Lancer la feature en développement
+
+Prérequis : Python 3.10+ et `ffmpeg` sur le `PATH`.
+
+- Windows : `winget install Gyan.FFmpeg` ou installation manuelle de FFmpeg.
+- macOS : `brew install ffmpeg`.
+
+```powershell
+# 1. Installation, une seule fois (crée tools/align/.venv, plusieurs Go de dépendances)
+npm run align:setup
+
+# 2. Lancer l'app desktop avec le calage automatique déverrouillé
+npm run electron:dev:align
+```
+
+> Le calage automatique n'apparaît **que** lancé via `electron:dev:align` (qui
+> pose `KARAOKE_ALIGN=1`). Avec `npm run dev` ou `npm run electron:dev`, l'app
+> tourne normalement et seul le calage manuel est proposé. C'est une capacité
+> **desktop uniquement** : le navigateur ne peut pas exécuter l'outil Python.
+
+Détails et options (langue, modèle, `--asr`, lead) dans `tools/align/README.md`.
+
 ## Édition audio
 
 La partie génération utilise `wavesurfer.js` pour afficher la forme d'onde du MP3, naviguer précisément dans la musique et caler les blocs temporels.
