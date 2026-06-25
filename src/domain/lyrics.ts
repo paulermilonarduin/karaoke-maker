@@ -443,6 +443,222 @@ export function parseKaraokeFile(content: string): KaraokeFile {
   }
 }
 
+export type AlignedWord = {
+  index: number
+  startMs: number | null
+  endMs: number | null
+  score: number | null
+}
+
+export type AlignmentResult = {
+  durationMs: number
+  words: AlignedWord[]
+}
+
+const minimumAlignmentDurationMs = 1
+
+function splitTextIntoAlignmentSegments(text: string, lineId: string): DraftLyricSegment[] {
+  const parts = text.match(/\S+\s*/g) ?? [text]
+
+  return parts.map((part, index) => ({
+    id: `${lineId}:segment:${index}`,
+    text: part,
+  }))
+}
+
+export function collectLyricWords(draftLines: DraftLyricLine[]): string[] {
+  const words: string[] = []
+
+  draftLines.forEach((line) => {
+    if (isInterludeLine(line)) {
+      return
+    }
+
+    splitTextIntoAlignmentSegments(line.text, line.id).forEach((segment) => {
+      const word = segment.text.trim()
+
+      if (word) {
+        words.push(word)
+      }
+    })
+  })
+
+  return words
+}
+
+function cloneDraftLine(line: DraftLyricLine): DraftLyricLine {
+  return {
+    ...line,
+    segments: line.segments.map((segment) => ({ ...segment })),
+  }
+}
+
+function clamp(value: number, minimum: number, maximum: number): number {
+  return Math.min(Math.max(value, minimum), Math.max(minimum, maximum))
+}
+
+function interpolateStarts(values: (number | null)[], minimum: number, maximum: number): number[] {
+  const result = values.slice()
+  const anchors = result
+    .map((value, index) => ({ value, index }))
+    .filter((entry): entry is { value: number; index: number } => entry.value !== null)
+
+  if (anchors.length === 0) {
+    return result.map((_, index) =>
+      Math.round(minimum + ((maximum - minimum) * index) / Math.max(1, result.length)),
+    )
+  }
+
+  const first = anchors[0]
+
+  for (let index = 0; index < first.index; index += 1) {
+    result[index] = Math.round(minimum + ((first.value - minimum) * index) / first.index)
+  }
+
+  for (let anchorIndex = 0; anchorIndex < anchors.length - 1; anchorIndex += 1) {
+    const left = anchors[anchorIndex]
+    const right = anchors[anchorIndex + 1]
+    const span = right.index - left.index
+
+    for (let index = left.index + 1; index < right.index; index += 1) {
+      const ratio = (index - left.index) / span
+
+      result[index] = Math.round(left.value + (right.value - left.value) * ratio)
+    }
+  }
+
+  const last = anchors[anchors.length - 1]
+  const trailing = result.length - last.index - 1
+
+  for (let offset = 1; offset <= trailing; offset += 1) {
+    result[last.index + offset] = Math.round(
+      last.value + ((maximum - last.value) * offset) / (trailing + 1),
+    )
+  }
+
+  return result as number[]
+}
+
+export function applyWordAlignment(
+  draftLines: DraftLyricLine[],
+  words: AlignedWord[],
+  durationMs: number,
+  leadMs = 0,
+): DraftLyricLine[] {
+  const lines = draftLines.map(cloneDraftLine)
+  const lead = Math.max(0, Math.round(leadMs))
+  const shift = (value: number | null | undefined): number | null =>
+    value === null || value === undefined ? null : Math.max(0, value - lead)
+  const refs: { line: DraftLyricLine; segment: DraftLyricSegment }[] = []
+
+  lines.forEach((line) => {
+    if (isInterludeLine(line)) {
+      return
+    }
+
+    line.segments = splitTextIntoAlignmentSegments(line.text, line.id)
+    line.segments.forEach((segment) => refs.push({ line, segment }))
+  })
+
+  const rawStarts = refs.map((_, index) => shift(words[index]?.startMs))
+  const rawEnds = refs.map((_, index) => shift(words[index]?.endMs))
+  const starts = interpolateStarts(rawStarts, 0, durationMs)
+
+  for (let index = 0; index < starts.length; index += 1) {
+    const floor = index === 0 ? 0 : starts[index - 1] + minimumAlignmentDurationMs
+
+    starts[index] = clamp(starts[index], floor, durationMs - minimumAlignmentDurationMs)
+  }
+
+  const ends = starts.map((start, index) => {
+    const cap = index + 1 < starts.length ? starts[index + 1] : durationMs
+    const aligned = rawEnds[index]
+    const candidate = aligned ?? cap
+
+    return clamp(
+      candidate,
+      start + minimumAlignmentDurationMs,
+      Math.max(start + minimumAlignmentDurationMs, cap),
+    )
+  })
+
+  refs.forEach((ref, index) => {
+    ref.segment.startMs = starts[index]
+    ref.segment.endMs = ends[index]
+  })
+
+  lines.forEach((line) => {
+    if (isInterludeLine(line) || line.segments.length === 0) {
+      return
+    }
+
+    line.startMs = line.segments[0].startMs
+    line.endMs = line.segments[line.segments.length - 1].endMs
+  })
+
+  const nextLyricStart: number[] = new Array(lines.length)
+  let following = durationMs
+
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    nextLyricStart[index] = following
+
+    if (!isInterludeLine(lines[index]) && lines[index].startMs !== undefined) {
+      following = lines[index].startMs as number
+    }
+  }
+
+  let cursor = 0
+
+  lines.forEach((line, index) => {
+    if (isInterludeLine(line)) {
+      const start = clamp(cursor, 0, durationMs - minimumAlignmentDurationMs)
+      const end = clamp(nextLyricStart[index], start + minimumAlignmentDurationMs, durationMs)
+
+      line.startMs = start
+      line.endMs = end
+      cursor = end
+      return
+    }
+
+    const oldStart = line.startMs ?? cursor
+    const start = Math.max(oldStart, cursor)
+    const delta = start - oldStart
+
+    if (delta > 0) {
+      line.segments.forEach((segment) => {
+        if (segment.startMs !== undefined) segment.startMs += delta
+        if (segment.endMs !== undefined) segment.endMs += delta
+      })
+    }
+
+    const end = clamp(
+      (line.endMs ?? start) + delta,
+      start + minimumAlignmentDurationMs,
+      durationMs,
+    )
+    let segmentCursor = start
+
+    line.segments.forEach((segment) => {
+      const segmentStart = clamp(
+        segment.startMs ?? segmentCursor,
+        segmentCursor,
+        end - minimumAlignmentDurationMs,
+      )
+      const segmentEnd = clamp(segment.endMs ?? end, segmentStart + minimumAlignmentDurationMs, end)
+
+      segment.startMs = segmentStart
+      segment.endMs = segmentEnd
+      segmentCursor = segmentEnd
+    })
+
+    line.startMs = start
+    line.endMs = end
+    cursor = end
+  })
+
+  return lines
+}
+
 export function findActiveLine(
   lines: LyricLine[],
   currentTimeMs: number,

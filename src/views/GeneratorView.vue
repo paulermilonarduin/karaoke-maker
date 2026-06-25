@@ -9,11 +9,14 @@ import {
   isInterludeLine,
   type KaraokeProject,
 } from '../domain/lyrics'
+import { isCatalogAvailable } from '../desktop/bridge'
 import {
   useGeneratorShortcutSettings,
   useGeneratorShortcuts,
 } from '../generator/shortcuts'
+import { useAutoAlignment } from '../generator/useAutoAlignment'
 import { useGeneratorFiles } from '../generator/useGeneratorFiles'
+import { useLyricsSearch } from '../generator/useLyricsSearch'
 import { useTimelineEditor } from '../generator/useTimelineEditor'
 import { useTimelineUndo } from '../generator/useTimelineUndo'
 import { useI18n } from '../i18n'
@@ -29,12 +32,14 @@ const project = ref<KaraokeProject>({
 })
 const manualInterludeCount = ref(0)
 const audioUrl = ref<string>()
+const audioFile = ref<File>()
 const currentTimeMs = ref(0)
 const audioDurationMs = ref<number>()
 const selectedLineId = ref<string>()
 const selectedSegmentId = ref<string>()
 const splitTextInput = ref<HTMLTextAreaElement>()
 const syncError = ref<string>()
+const exportMessage = ref<string>()
 const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
 const timelineScrollRef = ref<HTMLElement>()
 const isCapturingShortcut = ref(false)
@@ -45,7 +50,7 @@ const {
   resetShortcuts,
   setShortcut,
 } = useGeneratorShortcutSettings()
-const { t } = useI18n()
+const { t, locale, localeOptions } = useI18n()
 
 const {
   canUndo,
@@ -128,6 +133,50 @@ const canExport = computed(
     syncedLines.value.length === project.value.draftLines.length &&
     syncedLines.value.every((line) => line.endMs !== undefined),
 )
+const exportLabel = computed(() =>
+  isCatalogAvailable() && audioFile.value ? t('generator.addToCatalog') : t('generator.exportJson'),
+)
+
+const {
+  autoAlignState,
+  autoAlignProgress,
+  autoAlignError,
+  leadMs,
+  songLanguage,
+  showAutoAlign,
+  resetAutoAlign,
+  runAutoAlignment,
+  dismissAutoAlign,
+} = useAutoAlignment({
+  project,
+  audioFile,
+  audioDurationMs,
+  selectedLineId,
+  selectedSegmentId,
+  syncError,
+  defaultLanguage: locale.value,
+  pushUndoSnapshot,
+  t,
+})
+
+const {
+  lyricsQuery,
+  lyricsResults,
+  lyricsSearchState,
+  lyricsSearchError,
+  formatSeconds,
+  searchOnlineLyrics,
+  loadSearchedLyrics,
+} = useLyricsSearch({
+  project,
+  selectedLineId,
+  selectedSegmentId,
+  syncError,
+  clearUndoStack,
+  initializeTimelineIfPossible,
+  onProjectInput: resetAutoAlign,
+  t,
+})
 
 const {
   revokeAudioUrl,
@@ -139,14 +188,17 @@ const {
 } = useGeneratorFiles({
   project,
   audioUrl,
+  audioFile,
   currentTimeMs,
   audioDurationMs,
   selectedLineId,
   selectedSegmentId,
   syncError,
+  exportMessage,
   syncedLines,
   clearUndoStack,
   initializeTimelineIfPossible,
+  onProjectInput: resetAutoAlign,
   t,
 })
 
@@ -217,6 +269,47 @@ onBeforeUnmount(() => {
         />
       </div>
 
+      <div class="lyrics-search">
+        <p class="eyebrow">{{ t('generator.lyricsSearchLabel') }}</p>
+        <div class="lyrics-search__row">
+          <input
+            v-model="lyricsQuery"
+            class="lyrics-search__input"
+            type="search"
+            :placeholder="t('generator.lyricsSearchPlaceholder')"
+            :aria-label="t('generator.lyricsSearchLabel')"
+            @keyup.enter="searchOnlineLyrics"
+          />
+          <button
+            class="button"
+            type="button"
+            :disabled="lyricsSearchState === 'loading' || !lyricsQuery.trim()"
+            @click="searchOnlineLyrics"
+          >
+            {{
+              lyricsSearchState === 'loading'
+                ? t('generator.lyricsSearching')
+                : t('generator.lyricsSearchButton')
+            }}
+          </button>
+        </div>
+        <select
+          v-if="lyricsResults.length"
+          class="lyrics-search__select"
+          :aria-label="t('generator.lyricsSearchLabel')"
+          @change="loadSearchedLyrics"
+        >
+          <option value="">{{ t('generator.lyricsSearchChoose') }}</option>
+          <option v-for="result in lyricsResults" :key="result.id" :value="result.id">
+            {{ result.artistName }} — {{ result.trackName
+            }}{{ result.duration ? ` (${formatSeconds(result.duration)})` : '' }}
+          </option>
+        </select>
+        <p v-if="lyricsSearchError" class="lyrics-search__error" role="alert">
+          {{ lyricsSearchError }}
+        </p>
+      </div>
+
       <AudioWaveform
         ref="waveformRef"
         :accent-color="accentColor"
@@ -225,6 +318,90 @@ onBeforeUnmount(() => {
         @durationchange="onDurationChange"
         @zoomchange="timelineZoomPxPerSecond = $event"
       />
+
+      <div v-if="showAutoAlign" class="auto-align">
+        <p class="eyebrow">{{ t('generator.autoTitle') }}</p>
+
+        <template v-if="autoAlignState === 'running'">
+          <p class="auto-align__progress">
+            <span class="auto-align__spinner" aria-hidden="true"></span>
+            {{ autoAlignProgress || t('generator.autoStarting') }}
+          </p>
+        </template>
+
+        <template v-else-if="autoAlignState === 'done'">
+          <p class="auto-align__title">✓ {{ t('generator.autoApplied') }}</p>
+
+          <label class="auto-align__lead">
+            <span class="auto-align__hint">{{ t('generator.autoLead') }} : {{ leadMs }} ms</span>
+            <input
+              v-model.number="leadMs"
+              class="auto-align__lead-range"
+              type="range"
+              min="0"
+              max="400"
+              step="10"
+              :aria-label="t('generator.autoLead')"
+            />
+          </label>
+
+          <div class="action-row">
+            <button class="button" type="button" @click="runAutoAlignment">
+              {{ t('generator.autoRedo') }}
+            </button>
+            <button class="button" type="button" @click="dismissAutoAlign">
+              {{ t('generator.autoHide') }}
+            </button>
+          </div>
+        </template>
+
+        <template v-else>
+          <p class="auto-align__title">{{ t('generator.autoQuestion') }}</p>
+          <p class="auto-align__hint">{{ t('generator.autoHint') }}</p>
+          <p v-if="autoAlignState === 'error'" class="auto-align__error" role="alert">
+            {{ t('generator.autoError', { message: autoAlignError }) }}
+          </p>
+
+          <div class="auto-align__language" role="group" :aria-label="t('generator.autoLanguage')">
+            <span class="auto-align__hint">{{ t('generator.autoLanguage') }}</span>
+            <div class="auto-align__lang-options">
+              <button
+                v-for="option in localeOptions"
+                :key="option.value"
+                class="button auto-align__lang"
+                :class="{ 'auto-align__lang--active': songLanguage === option.value }"
+                type="button"
+                :aria-pressed="songLanguage === option.value"
+                @click="songLanguage = option.value"
+              >
+                <span v-if="songLanguage === option.value" class="auto-align__lang-check" aria-hidden="true">✓ </span>{{ option.flag }} {{ option.label }}
+              </button>
+            </div>
+          </div>
+
+          <label class="auto-align__lead">
+            <span class="auto-align__hint">{{ t('generator.autoLead') }} : {{ leadMs }} ms</span>
+            <input
+              v-model.number="leadMs"
+              class="auto-align__lead-range"
+              type="range"
+              min="0"
+              max="400"
+              step="10"
+              :aria-label="t('generator.autoLead')"
+            />
+          </label>
+
+          <div class="action-row">
+            <button class="button button--primary" type="button" @click="runAutoAlignment">
+              {{ autoAlignState === 'error' ? t('generator.autoRetry') : t('generator.autoYes') }}
+            </button>
+            <button class="button" type="button" @click="dismissAutoAlign">
+              {{ t('generator.autoNo') }}
+            </button>
+          </div>
+        </template>
+      </div>
 
       <section class="timeline-editor" :aria-label="t('generator.timelineTitle')">
         <div class="timeline-editor__header">
@@ -248,7 +425,7 @@ onBeforeUnmount(() => {
               :disabled="!canExport"
               @click="downloadKaraokeFile"
             >
-              {{ t('generator.exportJson') }}
+              {{ exportLabel }}
             </button>
           </div>
         </div>
@@ -303,6 +480,7 @@ onBeforeUnmount(() => {
         </div>
 
         <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
+        <p v-if="exportMessage" class="sync-panel__success" role="status">{{ exportMessage }}</p>
 
         <div
           v-if="hasTimeline"
