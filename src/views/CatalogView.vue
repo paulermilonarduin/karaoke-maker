@@ -225,15 +225,6 @@ onBeforeUnmount(revokeResolvedAudioUrl)
           />
         </label>
 
-        <p class="catalog-search__meta">
-          {{
-            t('catalog.searchResults', {
-              count: filteredTracks.length,
-              total: tracks.length,
-            })
-          }}
-        </p>
-
         <div class="catalog-list" role="list">
           <button
             v-for="track in filteredTracks"
