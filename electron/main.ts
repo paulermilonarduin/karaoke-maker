@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, nativeImage, shell } from 'electron'
 import type { IpcMainInvokeEvent } from 'electron'
 import { spawn } from 'node:child_process'
 import { existsSync } from 'node:fs'
@@ -9,6 +9,8 @@ import { fileURLToPath } from 'node:url'
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url))
 const devServerUrl = process.env.VITE_DEV_SERVER_URL
+const appBackgroundColor = '#101413'
+const appId = 'com.paulermilonarduin.karaokemaker'
 
 type AlignRequest = {
   audioBytes: ArrayBuffer
@@ -307,21 +309,51 @@ function registerCatalogHandlers() {
   ipcMain.handle('catalog:save', (_event, request: CatalogSaveRequest) => saveToCatalog(request))
 }
 
+function resolveWindowIcon() {
+  const candidates = [
+    join(app.getAppPath(), 'public', 'favicon.png'),
+    join(app.getAppPath(), 'dist', 'favicon.png'),
+    join(currentDirectory, '../dist/favicon.png'),
+  ]
+  const iconPath = candidates.find((candidate) => existsSync(candidate))
+
+  if (!iconPath) {
+    return undefined
+  }
+
+  const icon = nativeImage.createFromPath(iconPath)
+
+  return icon.isEmpty() ? undefined : icon
+}
+
 function createMainWindow() {
+  const windowIcon = resolveWindowIcon()
   const mainWindow = new BrowserWindow({
     width: 1280,
     height: 860,
     minWidth: 960,
     minHeight: 640,
     title: 'Karaoke Maker',
-    backgroundColor: '#f4f2ec',
+    backgroundColor: appBackgroundColor,
     autoHideMenuBar: true,
+    show: false,
+    ...(windowIcon ? { icon: windowIcon } : {}),
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
       preload: join(currentDirectory, 'preload.js'),
       sandbox: false,
     },
+  })
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+  })
+
+  mainWindow.webContents.once('did-fail-load', () => {
+    if (!mainWindow.isVisible()) {
+      mainWindow.show()
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -339,6 +371,7 @@ function createMainWindow() {
 }
 
 app.whenReady().then(() => {
+  app.setAppUserModelId(appId)
   registerAlignmentHandler()
   registerCatalogHandlers()
   createMainWindow()

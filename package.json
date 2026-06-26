@@ -47,6 +47,7 @@
   "build": {
     "appId": "com.paulermilonarduin.karaokemaker",
     "productName": "Karaoke Maker",
+    "icon": "build/icon.ico",
     "directories": {
       "output": "release"
     },

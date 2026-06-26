@@ -24,6 +24,7 @@ const emit = defineEmits<{
   timeupdate: [timeMs: number]
   durationchange: [durationMs: number]
   zoomchange: [pxPerSecond: number]
+  scrollchange: [scrollLeftPx: number]
   regionchange: [change: WaveformRegionChange]
   error: [message: string]
 }>()
@@ -204,6 +205,10 @@ async function setupWaveSurfer(audioUrl?: string) {
   wavesurfer.on('timeupdate', (time) => {
     currentTimeMs.value = Math.round(time * 1000)
     emit('timeupdate', currentTimeMs.value)
+  })
+
+  wavesurfer.on('scroll', (_visibleStartTime, _visibleEndTime, scrollLeft) => {
+    emit('scrollchange', scrollLeft)
   })
 
   wavesurfer.on('play', () => {

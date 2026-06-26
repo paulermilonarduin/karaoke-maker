@@ -41,6 +41,7 @@ const syncError = ref<string>()
 const exportMessage = ref<string>()
 const waveformRef = ref<InstanceType<typeof AudioWaveform>>()
 const timelineScrollRef = ref<HTMLElement>()
+let isSyncingTimelineFromWaveform = false
 
 const { actions: shortcutActions } = useGeneratorShortcutSettings()
 const { t, locale, localeOptions } = useI18n()
@@ -300,11 +301,25 @@ function syncWaveformScrollFromTimeline() {
   const scrollElement = timelineScrollRef.value
   const zoom = timelineZoomPxPerSecond.value
 
-  if (!scrollElement || zoom <= 0) {
+  if (!scrollElement || zoom <= 0 || isSyncingTimelineFromWaveform) {
     return
   }
 
   waveformRef.value?.setScrollTime(scrollElement.scrollLeft / zoom)
+}
+
+function syncTimelineScrollFromWaveform(scrollLeftPx: number) {
+  const scrollElement = timelineScrollRef.value
+
+  if (!scrollElement || Math.abs(scrollElement.scrollLeft - scrollLeftPx) < 1) {
+    return
+  }
+
+  isSyncingTimelineFromWaveform = true
+  scrollElement.scrollLeft = scrollLeftPx
+  requestAnimationFrame(() => {
+    isSyncingTimelineFromWaveform = false
+  })
 }
 
 function centerTimelineAndWaveform() {
@@ -493,6 +508,7 @@ onBeforeUnmount(() => {
           @timeupdate="currentTimeMs = $event"
           @durationchange="onDurationChange"
           @zoomchange="timelineZoomPxPerSecond = $event"
+          @scrollchange="syncTimelineScrollFromWaveform"
         />
 
         <p v-if="syncError" class="sync-panel__error" role="alert">{{ syncError }}</p>
@@ -652,10 +668,10 @@ onBeforeUnmount(() => {
           </div>
           <button class="button" type="button" @click="adjustGlobalOffset(-100)">−100 ms</button>
           <label class="timeline-offset__input">
-            {{ t('generator.offsetMs') }}
             <input
               type="number"
               step="10"
+              :aria-label="t('generator.offsetMs')"
               :value="project.syncOffsetMs ?? 0"
               @change="onGlobalOffsetInput"
             />

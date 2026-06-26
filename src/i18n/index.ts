@@ -137,7 +137,7 @@ const frMessages = {
   'generator.splitSegment': 'Segmenter au curseur',
   'generator.timelineEmpty': 'Chargez un MP3 et des paroles pour générer la timeline.',
   'generator.timelineHelp':
-    'Cliquez un bloc pour le focus, déplacez-le ou redimensionnez ses bords. Les segments se découpent au curseur.',
+    'Cliquez un bloc pour le focus, déplacez-le ou redimensionnez ses bords. Maintenez Alt pendant le redimensionnement pour ajuster le bloc voisin.',
   'generator.timelineNoLineSelected': 'Sélectionnez une ligne avant de segmenter.',
   'generator.timelineSplitBoundary': 'Placez le curseur à l’intérieur d’un segment.',
   'generator.timelineSplitText': 'Texte de la ligne sélectionnée',
@@ -339,7 +339,7 @@ const enMessages: Record<keyof typeof frMessages, string> = {
   'generator.splitSegment': 'Split at cursor',
   'generator.timelineEmpty': 'Load an MP3 and lyrics to generate the timeline.',
   'generator.timelineHelp':
-    'Click a block to focus it, then move it or resize its edges. Split segments at the cursor.',
+    'Click a block to focus it, then move it or resize its edges. Hold Alt while resizing to adjust the adjacent block.',
   'generator.timelineNoLineSelected': 'Select a line before splitting.',
   'generator.timelineSplitBoundary': 'Place the cursor inside a segment.',
   'generator.timelineSplitText': 'Selected line text',
