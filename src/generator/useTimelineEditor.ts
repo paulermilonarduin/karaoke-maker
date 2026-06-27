@@ -52,7 +52,6 @@ type UseTimelineEditorOptions = {
   syncError: Ref<string | undefined>
   timelineScrollRef: Ref<HTMLElement | undefined>
   pushUndoSnapshot: () => void
-  setWaveformZoom: (zoom: number) => void
   t: TimelineTranslate
 }
 
@@ -90,17 +89,26 @@ export function useTimelineEditor({
   syncError,
   timelineScrollRef,
   pushUndoSnapshot,
-  setWaveformZoom,
   t,
 }: UseTimelineEditorOptions) {
   const timelineZoomPxPerSecond = ref(defaultTimelineZoomPxPerSecond)
   const timelineDrag = ref<TimelineDrag>()
 
-  const timelineValidationIssues = computed(() =>
-    validateDraftTimeline(project.value.draftLines, audioDurationMs.value),
+  // Temporary: keep the validator available, but do not block editing/export
+  // while the generator timeline UX is still being adjusted.
+  const timelineValidationIssues = computed<ReturnType<typeof validateDraftTimeline>>(() => {
+    void validateDraftTimeline(project.value.draftLines, audioDurationMs.value)
+
+    return []
+  })
+  const timelineDurationMs = computed(() =>
+    Math.max(
+      audioDurationMs.value ?? 0,
+      ...project.value.draftLines.map((line) => line.endMs ?? 0),
+    ),
   )
   const timelineWidthPx = computed(() => {
-    const durationMs = audioDurationMs.value ?? 0
+    const durationMs = timelineDurationMs.value
 
     return Math.max(900, Math.ceil((durationMs / 1000) * timelineZoomPxPerSecond.value))
   })
@@ -128,10 +136,9 @@ export function useTimelineEditor({
       ? undefined
       : selectedLine.value?.segments[selectedSegmentIndex.value],
   )
-  const timelineZoomLabel = computed(() => `${timelineZoomPxPerSecond.value} px/s`)
   const syncOffsetLabel = computed(() => formatTimestamp(Math.abs(project.value.syncOffsetMs ?? 0)))
   const timelinePlayheadStyle = computed(() => {
-    const durationMs = audioDurationMs.value ?? 1
+    const durationMs = timelineDurationMs.value || 1
 
     return {
       left: `${(currentTimeMs.value / durationMs) * 100}%`,
@@ -186,7 +193,7 @@ export function useTimelineEditor({
   }
 
   function getLineStyle(line: DraftLyricLine) {
-    const durationMs = audioDurationMs.value ?? 1
+    const durationMs = timelineDurationMs.value || 1
     const startMs = line.startMs ?? 0
     const widthMs = getLineDuration(line)
 
@@ -197,7 +204,9 @@ export function useTimelineEditor({
   }
 
   function canMoveLine(lineIndex: number): boolean {
-    return lineIndex > 0 && lineIndex < project.value.draftLines.length - 1
+    const line = project.value.draftLines[lineIndex]
+
+    return !!line && hasTiming(line) && project.value.draftLines.length > 1
   }
 
   function canApplyTimelineDrag(drag: TimelineDrag): boolean {
@@ -269,21 +278,9 @@ export function useTimelineEditor({
     })
   }
 
-  function setTimelineZoom(value: number) {
-    const nextZoom = clamp(Math.round(value), 20, 480)
-
-    timelineZoomPxPerSecond.value = nextZoom
-    setWaveformZoom(nextZoom)
-  }
-
-  function zoomTimeline(delta: number) {
-    setTimelineZoom(timelineZoomPxPerSecond.value + delta)
-    requestAnimationFrame(() => centerTimelineOnCurrentTime())
-  }
-
   function centerTimelineOnCurrentTime() {
     const scrollElement = timelineScrollRef.value
-    const durationMs = audioDurationMs.value
+    const durationMs = timelineDurationMs.value
 
     if (!scrollElement || !durationMs) {
       return
@@ -294,20 +291,10 @@ export function useTimelineEditor({
     scrollElement.scrollLeft = Math.max(0, playheadLeftPx - scrollElement.clientWidth / 2)
   }
 
-  function onTimelineZoomInput(event: Event) {
-    setTimelineZoom(Number((event.target as HTMLInputElement).value))
-  }
-
   function onTimelineWheel(event: WheelEvent) {
     const scrollElement = timelineScrollRef.value
 
     if (!scrollElement || !hasTimeline.value) {
-      return
-    }
-
-    if (event.ctrlKey) {
-      event.preventDefault()
-      zoomTimeline(event.deltaY > 0 ? -20 : 20)
       return
     }
 
@@ -400,7 +387,7 @@ export function useTimelineEditor({
   }
 
   function getPointerDeltaMs(clientX: number): number {
-    const durationMs = audioDurationMs.value ?? 0
+    const durationMs = timelineDurationMs.value
     const drag = timelineDrag.value
 
     if (!drag || durationMs <= 0) {
@@ -447,19 +434,29 @@ export function useTimelineEditor({
     })
   }
 
-  function moveLine(lineIndex: number, deltaMs: number) {
-    const previousLine = project.value.draftLines[lineIndex - 1]
-    const line = project.value.draftLines[lineIndex]
-    const nextLine = project.value.draftLines[lineIndex + 1]
-
-    if (!hasTiming(previousLine) || !hasTiming(line) || !hasTiming(nextLine)) {
+  function shiftLineTiming(line: DraftLyricLine, deltaMs: number) {
+    if (!hasTiming(line) || deltaMs === 0) {
       return
     }
 
-    const duration = line.endMs - line.startMs
+    line.startMs += deltaMs
+    line.endMs += deltaMs
+    shiftLineSegments(line, deltaMs)
+  }
+
+  function resizeLineStartAndShiftPrevious(lineIndex: number, deltaMs: number) {
+    const lines = project.value.draftLines
+    const firstLine = lines[0]
+    const line = lines[lineIndex]
+    const previousLine = lines[lineIndex - 1]
+
+    if (!hasTiming(firstLine) || !hasTiming(previousLine) || !hasTiming(line)) {
+      return
+    }
+
     const lineMinimumDurationMs = getLineMinimumDuration()
-    const minimumStart = previousLine.startMs + lineMinimumDurationMs
-    const maximumStart = nextLine.endMs - lineMinimumDurationMs - duration
+    const minimumStart = line.startMs - firstLine.startMs
+    const maximumStart = line.endMs - lineMinimumDurationMs
 
     if (maximumStart < minimumStart) {
       return
@@ -472,14 +469,112 @@ export function useTimelineEditor({
       return
     }
 
-    previousLine.endMs = nextStart
+    for (let index = 0; index < lineIndex; index += 1) {
+      shiftLineTiming(lines[index], appliedDelta)
+    }
+
     line.startMs = nextStart
-    line.endMs = nextStart + duration
-    nextLine.startMs = line.endMs
-    shiftLineSegments(line, appliedDelta)
-    constrainSegments(previousLine)
     constrainSegments(line)
+  }
+
+  function resizeLineEndAndShiftFollowing(lineIndex: number, deltaMs: number) {
+    const lines = project.value.draftLines
+    const line = lines[lineIndex]
+    const nextLine = lines[lineIndex + 1]
+
+    if (!hasTiming(line) || !hasTiming(nextLine)) {
+      return
+    }
+
+    const lineMinimumDurationMs = getLineMinimumDuration()
+    const minimumEnd = line.startMs + lineMinimumDurationMs
+    const nextEnd = Math.max(minimumEnd, line.endMs + deltaMs)
+    const appliedDelta = nextEnd - line.endMs
+
+    if (appliedDelta === 0) {
+      return
+    }
+
+    line.endMs = nextEnd
+    constrainSegments(line)
+
+    for (let index = lineIndex + 1; index < lines.length; index += 1) {
+      shiftLineTiming(lines[index], appliedDelta)
+    }
+  }
+
+  function createInterlude(startMs: number, endMs: number): DraftLyricLine {
+    manualInterludeCount.value += 1
+
+    return {
+      id: `interlude:manual:${Date.now()}:${manualInterludeCount.value}`,
+      kind: 'interlude',
+      text: '',
+      startMs,
+      endMs,
+      segments: [],
+    }
+  }
+
+  function moveLineRight(lineIndex: number, deltaMs: number) {
+    if (lineIndex <= 0) {
+      return
+    }
+
+    const lines = project.value.draftLines
+    const previousLine = lines[lineIndex - 1]
+    const line = lines[lineIndex]
+
+    if (!hasTiming(previousLine) || !hasTiming(line)) {
+      return
+    }
+
+    previousLine.endMs += deltaMs
+    constrainSegments(previousLine)
+
+    for (let index = lineIndex; index < lines.length; index += 1) {
+      shiftLineTiming(lines[index], deltaMs)
+    }
+  }
+
+  function moveLineLeft(lineIndex: number, deltaMs: number) {
+    const lines = project.value.draftLines
+
+    if (lineIndex >= lines.length - 1) {
+      return
+    }
+
+    const firstLine = lines[0]
+    const line = lines[lineIndex]
+    const nextLine = lines[lineIndex + 1]
+
+    if (!hasTiming(firstLine) || !hasTiming(line) || !hasTiming(nextLine)) {
+      return
+    }
+
+    const appliedDelta = -Math.min(Math.abs(deltaMs), firstLine.startMs)
+
+    if (appliedDelta === 0) {
+      return
+    }
+
+    for (let index = 0; index <= lineIndex; index += 1) {
+      shiftLineTiming(lines[index], appliedDelta)
+    }
+
+    nextLine.startMs += appliedDelta
     constrainSegments(nextLine)
+  }
+
+  function moveLine(lineIndex: number, deltaMs: number) {
+    if (deltaMs > 0) {
+      moveLineRight(lineIndex, deltaMs)
+      return
+    }
+
+    if (deltaMs < 0) {
+      moveLineLeft(lineIndex, deltaMs)
+    }
   }
 
   function moveSegment(line: DraftLyricLine, segmentIndex: number, deltaMs: number) {
@@ -534,7 +629,7 @@ export function useTimelineEditor({
     )
   }
 
-  function applyDrag(deltaMs: number) {
+  function applyDrag(deltaMs: number, resizeAdjacentLine: boolean) {
     const drag = timelineDrag.value
 
     if (!drag || deltaMs === 0) {
@@ -553,9 +648,17 @@ export function useTimelineEditor({
     }
 
     if (drag.mode === 'resize-line-start') {
-      if (drag.lineIndex > 0) setBoundaryAfter(drag.lineIndex - 1, (line.startMs ?? 0) + deltaMs)
+      if (resizeAdjacentLine) {
+        if (drag.lineIndex > 0) setBoundaryAfter(drag.lineIndex - 1, (line.startMs ?? 0) + deltaMs)
+      } else {
+        resizeLineStartAndShiftPrevious(drag.lineIndex, deltaMs)
+      }
     } else if (drag.mode === 'resize-line-end') {
-      setBoundaryAfter(drag.lineIndex, (line.endMs ?? 0) + deltaMs)
+      if (resizeAdjacentLine) {
+        setBoundaryAfter(drag.lineIndex, (line.endMs ?? 0) + deltaMs)
+      } else {
+        resizeLineEndAndShiftFollowing(drag.lineIndex, deltaMs)
+      }
     } else if (drag.mode === 'move-line') {
       moveLine(drag.lineIndex, deltaMs)
     } else if (drag.segmentIndex !== undefined && !isInterludeLine(line)) {
@@ -575,7 +678,7 @@ export function useTimelineEditor({
     const deltaMs = getPointerDeltaMs(event.clientX)
 
     if (deltaMs !== 0) {
-      applyDrag(deltaMs)
+      applyDrag(deltaMs, event.altKey)
       drag.lastClientX = event.clientX
     }
   }
@@ -789,7 +892,7 @@ export function useTimelineEditor({
     })
   }
 
-  function addInterludeBlock() {
+  function addInterludeBlock(position: 'before' | 'after' = 'after') {
     if (!audioDurationMs.value || project.value.draftLines.length === 0) {
       syncError.value = t('generator.error.missingAudio')
       return
@@ -804,19 +907,26 @@ export function useTimelineEditor({
     }
 
     pushUndoSnapshot()
-    manualInterludeCount.value += 1
-    const interlude = {
-      id: `interlude:manual:${Date.now()}:${manualInterludeCount.value}`,
-      kind: 'interlude' as const,
-      text: '',
-      startMs: baseLine.endMs,
-      endMs: baseLine.endMs + defaultInterludeDurationMs,
-      segments: [],
+
+    if (position === 'before' && baseIndex === 0 && baseLine.startMs > 0) {
+      const interlude = createInterlude(0, baseLine.startMs)
+
+      project.value.draftLines.splice(0, 0, interlude)
+      selectLine(interlude)
+      syncError.value = undefined
+      return
     }
 
-    project.value.draftLines.splice(baseIndex + 1, 0, interlude)
+    const insertIndex = position === 'before' ? baseIndex : baseIndex + 1
+    const insertStartMs = position === 'before' ? baseLine.startMs : baseLine.endMs
+    const interlude = createInterlude(
+      insertStartMs,
+      insertStartMs + defaultInterludeDurationMs,
+    )
 
-    for (let index = baseIndex + 2; index < project.value.draftLines.length; index += 1) {
+    project.value.draftLines.splice(insertIndex, 0, interlude)
+
+    for (let index = insertIndex + 1; index < project.value.draftLines.length; index += 1) {
       const line = project.value.draftLines[index]
 
       if (hasTiming(line)) {
@@ -834,7 +944,7 @@ export function useTimelineEditor({
   function nudgeSelectedLine(deltaMs: number) {
     const index = selectedLineIndex.value
 
-    if (index <= 0 || index >= project.value.draftLines.length - 1) {
+    if (index === -1 || !canMoveLine(index)) {
       return
     }
 
@@ -873,7 +983,6 @@ export function useTimelineEditor({
     selectedLine,
     selectedSegmentIndex,
     selectedSegment,
-    timelineZoomLabel,
     syncOffsetLabel,
     timelinePlayheadStyle,
     canMergeWithPreviousSegment,
@@ -883,9 +992,7 @@ export function useTimelineEditor({
     canMoveLine,
     getSegmentStyle,
     getSegmentGaps,
-    zoomTimeline,
     centerTimelineOnCurrentTime,
-    onTimelineZoomInput,
     onTimelineWheel,
     distributeSegments,
     constrainSegments,

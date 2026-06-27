@@ -1,4 +1,4 @@
-import { computed, ref, watch, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import {
   applyWordAlignment,
   collectLyricWords,
@@ -10,14 +10,17 @@ import {
   onAlignmentProgress,
   requestAlignment,
 } from '../desktop/bridge'
-import type { Locale } from '../i18n'
+import type { Locale, TranslationKey } from '../i18n'
 
 type AutoAlignmentTranslationKey =
   | 'generator.autoFailed'
   | 'generator.autoNoWords'
   | 'generator.autoStarting'
 
-type AutoAlignmentTranslate = (key: AutoAlignmentTranslationKey) => string
+type AutoAlignmentTranslate = (
+  key: AutoAlignmentTranslationKey | TranslationKey,
+  params?: Record<string, string | number>,
+) => string
 
 type UseAutoAlignmentOptions = {
   project: Ref<KaraokeProject>
@@ -48,7 +51,6 @@ export function useAutoAlignment({
   const autoAlignError = ref('')
   const autoAlignDismissed = ref(false)
   const autoAlignResult = ref<AlignmentResult | null>(null)
-  const leadMs = ref(180)
   const songLanguage = ref<Locale>(defaultLanguage)
 
   const showAutoAlign = computed(
@@ -84,7 +86,6 @@ export function useAutoAlignment({
       project.value.draftLines,
       result.words,
       durationMs,
-      leadMs.value,
     )
     audioDurationMs.value = durationMs
     selectedLineId.value = project.value.draftLines[0]?.id
@@ -110,7 +111,7 @@ export function useAutoAlignment({
     autoAlignError.value = ''
 
     const unsubscribe = onAlignmentProgress((line) => {
-      autoAlignProgress.value = line.replace(/^(PROGRESS|ERROR):\s*/, '')
+      autoAlignProgress.value = formatAlignmentProgress(line, t)
     })
 
     try {
@@ -141,22 +142,40 @@ export function useAutoAlignment({
     autoAlignError.value = ''
   }
 
-  watch(leadMs, () => {
-    if (autoAlignResult.value) {
-      applyAlignmentResult()
-    }
-  })
-
   return {
     autoAlignAvailable,
     autoAlignState,
     autoAlignProgress,
     autoAlignError,
-    leadMs,
     songLanguage,
     showAutoAlign,
     resetAutoAlign,
     runAutoAlignment,
     dismissAutoAlign,
   }
+}
+
+function formatAlignmentProgress(line: string, t: AutoAlignmentTranslate): string {
+  const normalized = line.trim()
+  const payload = normalized.replace(/^(PROGRESS|ERROR):\s*/, '')
+
+  try {
+    const parsed = JSON.parse(payload) as {
+      key?: unknown
+      params?: unknown
+    }
+
+    if (typeof parsed.key === 'string') {
+      const params =
+        parsed.params && typeof parsed.params === 'object' && !Array.isArray(parsed.params)
+          ? (parsed.params as Record<string, string | number>)
+          : undefined
+
+      return t(parsed.key as TranslationKey, params)
+    }
+  } catch {
+    // Fallback for older tool output or dependency logs.
+  }
+
+  return payload
 }

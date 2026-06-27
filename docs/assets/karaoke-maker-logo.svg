@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 180" role="img" aria-labelledby="title desc">
   <title id="title">Karaoke Maker</title>
-  <desc id="desc">Karaoke Maker logo with a dark background, teal outline, tilted text, and a 65 percent highlight.</desc>
+  <desc id="desc">Karaoke Maker Full Logo</desc>
   <defs>
     <filter id="highlight-glow" x="-15%" y="-35%" width="130%" height="170%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="soft-glow" />
@@ -10,7 +10,7 @@
       </feMerge>
     </filter>
     <clipPath id="highlight-progress">
-      <rect x="34" y="18" width="410" height="82" />
+      <rect x="34" y="18" width="379" height="82" />
     </clipPath>
   </defs>
   <g transform="translate(56 36) skewX(-5)">

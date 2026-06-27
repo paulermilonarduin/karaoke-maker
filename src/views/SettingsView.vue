@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import KaraokeLogo from '../components/KaraokeLogo.vue'
+import ShortcutEditor from '../components/ShortcutEditor.vue'
+import { useGeneratorShortcutSettings } from '../generator/shortcuts'
 import { localeOptions, useI18n, type Locale } from '../i18n'
 import { defaultAccentColor } from '../theme/appearance'
 
@@ -15,6 +17,12 @@ const emit = defineEmits<{
 }>()
 
 const presetColors = ['#7bd2bd', '#73a9ff', '#b794f4', '#ff7eb6', '#f0c77c']
+const {
+  actions: shortcutActions,
+  hasCustomShortcuts,
+  resetShortcuts,
+  setShortcut,
+} = useGeneratorShortcutSettings()
 const { t } = useI18n()
 
 function onColorInput(event: Event) {
@@ -116,6 +124,14 @@ function onColorInput(event: Event) {
         <p>{{ t('settings.previewDescription') }}</p>
         <button class="button button--primary" type="button">{{ t('settings.previewButton') }}</button>
       </article>
+
+      <ShortcutEditor
+        class="settings-shortcuts"
+        :actions="shortcutActions"
+        :has-custom-shortcuts="hasCustomShortcuts"
+        @reset="resetShortcuts"
+        @update="setShortcut"
+      />
     </div>
   </section>
 </template>

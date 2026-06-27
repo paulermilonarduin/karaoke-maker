@@ -24,6 +24,7 @@ const emit = defineEmits<{
   timeupdate: [timeMs: number]
   durationchange: [durationMs: number]
   zoomchange: [pxPerSecond: number]
+  scrollchange: [scrollLeftPx: number]
   regionchange: [change: WaveformRegionChange]
   error: [message: string]
 }>()
@@ -206,6 +207,10 @@ async function setupWaveSurfer(audioUrl?: string) {
     emit('timeupdate', currentTimeMs.value)
   })
 
+  wavesurfer.on('scroll', (_visibleStartTime, _visibleEndTime, scrollLeft) => {
+    emit('scrollchange', scrollLeft)
+  })
+
   wavesurfer.on('play', () => {
     isPlaying.value = true
   })
@@ -249,6 +254,10 @@ function setPlaybackRate(rate: number) {
   wavesurfer?.setPlaybackRate(rate, true)
 }
 
+function onPlaybackRateInput(event: Event) {
+  setPlaybackRate(Number((event.target as HTMLSelectElement).value))
+}
+
 function adjustPlaybackRate(direction: -1 | 1) {
   const currentIndex = playbackRates.indexOf(playbackRate.value)
   const safeIndex = currentIndex === -1 ? playbackRates.indexOf(1) : currentIndex
@@ -261,6 +270,10 @@ function setZoom(value: number) {
   zoomPxPerSecond.value = value
   wavesurfer?.zoom(value)
   emit('zoomchange', value)
+}
+
+function setScrollTime(timeSeconds: number) {
+  wavesurfer?.setScrollTime(Math.max(0, timeSeconds))
 }
 
 function onZoomInput(event: Event) {
@@ -318,6 +331,7 @@ defineExpose({
   adjustPlaybackRate,
   nudgeSelectedRegion,
   seekBy,
+  setScrollTime,
   setZoom,
   setPlaybackRate,
   togglePlayback,
@@ -328,9 +342,6 @@ defineExpose({
   <section class="audio-waveform" :aria-label="t('audioWaveform.ariaLabel')">
     <div class="audio-waveform__toolbar">
       <div class="audio-waveform__transport">
-        <button class="button" type="button" :disabled="!audioUrl" @click="seekBy(-1000)">
-          {{ t('audioWaveform.seekBackward') }}
-        </button>
         <button
           class="button button--primary audio-waveform__play"
           type="button"
@@ -339,24 +350,21 @@ defineExpose({
         >
           {{ isPlaying ? t('audioWaveform.pause') : t('audioWaveform.play') }}
         </button>
-        <button class="button" type="button" :disabled="!audioUrl" @click="seekBy(1000)">
-          {{ t('audioWaveform.seekForward') }}
-        </button>
       </div>
 
-      <div class="audio-waveform__rates" :aria-label="t('audioWaveform.playbackRate')">
-        <button
-          v-for="rate in playbackRates"
-          :key="rate"
-          class="audio-waveform__rate"
-          :class="{ 'audio-waveform__rate--active': playbackRate === rate }"
-          type="button"
+      <label class="audio-waveform__rate-control">
+        <span>{{ t('audioWaveform.playbackRate') }}</span>
+        <select
+          class="audio-waveform__rate-select"
+          :value="playbackRate"
           :disabled="!audioUrl"
-          @click="setPlaybackRate(rate)"
+          @change="onPlaybackRateInput"
         >
-          {{ rate.toString().replace('.', ',') }}×
-        </button>
-      </div>
+          <option v-for="rate in playbackRates" :key="rate" :value="rate">
+            {{ rate.toString().replace('.', ',') }}×
+          </option>
+        </select>
+      </label>
     </div>
 
     <div v-if="audioUrl" class="audio-waveform__canvas" :class="{ 'is-loading': isLoading }">
