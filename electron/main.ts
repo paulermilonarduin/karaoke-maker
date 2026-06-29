@@ -25,6 +25,32 @@ type AlignResponse =
   | { ok: true; result: unknown }
   | { ok: false; error: string }
 
+type SavedProjectSummary = {
+  id: string
+  title: string
+  artist: string
+  audioFileName: string
+  updatedAt: string
+}
+
+type ProjectDocument = {
+  version: 1
+  id: string
+  createdAt: string
+  updatedAt: string
+  project: {
+    title: string
+    artist: string
+  }
+  audioFileName: string
+  audioMimeType: string
+}
+
+type ProjectSaveRequest = {
+  document: ProjectDocument
+  audioBytes: ArrayBuffer
+}
+
 function extractJson(stdout: string): unknown | undefined {
   const trimmed = stdout.trim()
 
@@ -309,6 +335,130 @@ function registerCatalogHandlers() {
   ipcMain.handle('catalog:save', (_event, request: CatalogSaveRequest) => saveToCatalog(request))
 }
 
+function projectsDir() {
+  return join(app.getPath('userData'), 'projects')
+}
+
+function isProjectDocument(value: unknown): value is ProjectDocument {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+
+  const candidate = value as Partial<ProjectDocument>
+
+  return (
+    candidate.version === 1 &&
+    typeof candidate.id === 'string' &&
+    typeof candidate.createdAt === 'string' &&
+    typeof candidate.updatedAt === 'string' &&
+    typeof candidate.audioFileName === 'string' &&
+    typeof candidate.audioMimeType === 'string' &&
+    typeof candidate.project === 'object' &&
+    candidate.project !== null &&
+    typeof candidate.project.title === 'string' &&
+    typeof candidate.project.artist === 'string'
+  )
+}
+
+async function listProjects(): Promise<SavedProjectSummary[]> {
+  const directory = projectsDir()
+
+  if (!existsSync(directory)) {
+    return []
+  }
+
+  const folders = await readdir(directory, { withFileTypes: true })
+  const projects: SavedProjectSummary[] = []
+
+  for (const folder of folders) {
+    if (!folder.isDirectory()) {
+      continue
+    }
+
+    try {
+      const content = await readFile(join(directory, folder.name, 'project.json'), 'utf-8')
+      const document: unknown = JSON.parse(content)
+
+      if (!isProjectDocument(document)) {
+        continue
+      }
+
+      projects.push({
+        id: document.id,
+        title: document.project.title,
+        artist: document.project.artist,
+        audioFileName: document.audioFileName,
+        updatedAt: document.updatedAt,
+      })
+    } catch {
+      continue
+    }
+  }
+
+  return projects.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+}
+
+async function loadProject(
+  id: string,
+): Promise<{
+  ok: boolean
+  project?: { document: ProjectDocument; audioBytes: ArrayBuffer }
+  error?: string
+}> {
+  try {
+    const folder = join(projectsDir(), basename(id))
+    const content = await readFile(join(folder, 'project.json'), 'utf-8')
+    const document: unknown = JSON.parse(content)
+
+    if (!isProjectDocument(document) || document.id !== basename(id)) {
+      throw new Error('Invalid project file.')
+    }
+
+    const audio = await readFile(join(folder, basename(document.audioFileName)))
+
+    return {
+      ok: true,
+      project: {
+        document,
+        audioBytes: audio.buffer.slice(audio.byteOffset, audio.byteOffset + audio.byteLength),
+      },
+    }
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : String(error) }
+  }
+}
+
+async function saveProject(
+  request: ProjectSaveRequest,
+): Promise<{ ok: boolean; document?: ProjectDocument; error?: string }> {
+  try {
+    if (!isProjectDocument(request.document)) {
+      throw new Error('Invalid project data.')
+    }
+
+    const document = {
+      ...request.document,
+      id: basename(request.document.id),
+      audioFileName: basename(request.document.audioFileName) || 'audio.mp3',
+    }
+    const folder = join(projectsDir(), document.id)
+
+    await mkdir(folder, { recursive: true })
+    await writeFile(join(folder, document.audioFileName), Buffer.from(request.audioBytes))
+    await writeFile(join(folder, 'project.json'), JSON.stringify(document, null, 2), 'utf-8')
+
+    return { ok: true, document }
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : String(error) }
+  }
+}
+
+function registerProjectHandlers() {
+  ipcMain.handle('project:list', () => listProjects())
+  ipcMain.handle('project:load', (_event, id: string) => loadProject(id))
+  ipcMain.handle('project:save', (_event, request: ProjectSaveRequest) => saveProject(request))
+}
+
 function resolveWindowIcon() {
   const candidates = [
     join(app.getAppPath(), 'public', 'favicon.png'),
@@ -374,6 +524,7 @@ app.whenReady().then(() => {
   app.setAppUserModelId(appId)
   registerAlignmentHandler()
   registerCatalogHandlers()
+  registerProjectHandlers()
   createMainWindow()
 
   app.on('activate', () => {

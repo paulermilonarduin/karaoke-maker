@@ -23,6 +23,19 @@ type CatalogSaveRequest = {
   audioFileName: string
 }
 
+type SavedProjectSummary = {
+  id: string
+  title: string
+  artist: string
+  audioFileName: string
+  updatedAt: string
+}
+
+type ProjectSaveRequest = {
+  document: unknown
+  audioBytes: ArrayBuffer
+}
+
 type DesktopApi = {
   isDesktop: boolean
   platform: string
@@ -31,6 +44,17 @@ type DesktopApi = {
   saveToCatalog: (
     request: CatalogSaveRequest,
   ) => Promise<{ ok: boolean; id?: string; error?: string }>
+  listProjects: () => Promise<SavedProjectSummary[]>
+  loadProject: (
+    id: string,
+  ) => Promise<{
+    ok: boolean
+    project?: { document: unknown; audioBytes: ArrayBuffer }
+    error?: string
+  }>
+  saveProject: (
+    request: ProjectSaveRequest,
+  ) => Promise<{ ok: boolean; document?: unknown; error?: string }>
   alignKaraoke?: (request: AlignRequest) => Promise<AlignResponse>
   onAlignProgress?: (callback: (line: string) => void) => () => void
 }
@@ -41,6 +65,9 @@ const api: DesktopApi = {
   listCatalog: () => ipcRenderer.invoke('catalog:list'),
   readCatalogAudio: (id, fileName) => ipcRenderer.invoke('catalog:readAudio', id, fileName),
   saveToCatalog: (request) => ipcRenderer.invoke('catalog:save', request),
+  listProjects: () => ipcRenderer.invoke('project:list'),
+  loadProject: (id) => ipcRenderer.invoke('project:load', id),
+  saveProject: (request) => ipcRenderer.invoke('project:save', request),
 }
 
 // The alignment feature (Python + WhisperX + Demucs) stays locked unless the

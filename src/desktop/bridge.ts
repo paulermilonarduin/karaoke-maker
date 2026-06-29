@@ -25,6 +25,24 @@ export type CatalogSaveRequest = {
   audioFileName: string
 }
 
+export type SavedProjectSummary = {
+  id: string
+  title: string
+  artist: string
+  audioFileName: string
+  updatedAt: string
+}
+
+export type ProjectSaveRequest = {
+  document: unknown
+  audioBytes: ArrayBuffer
+}
+
+export type ProjectLoadResponse = {
+  document: unknown
+  audioBytes: ArrayBuffer
+}
+
 type DesktopBridge = {
   isDesktop: boolean
   platform: string
@@ -34,6 +52,13 @@ type DesktopBridge = {
   saveToCatalog?: (
     request: CatalogSaveRequest,
   ) => Promise<{ ok: boolean; id?: string; error?: string }>
+  listProjects?: () => Promise<SavedProjectSummary[]>
+  loadProject?: (
+    id: string,
+  ) => Promise<{ ok: boolean; project?: ProjectLoadResponse; error?: string }>
+  saveProject?: (
+    request: ProjectSaveRequest,
+  ) => Promise<{ ok: boolean; document?: unknown; error?: string }>
   // Present only when the app is launched with the alignment feature unlocked.
   alignKaraoke?: (request: AlignmentRequest) => Promise<AlignmentResponse>
   onAlignProgress?: (callback: (line: string) => void) => () => void
@@ -116,6 +141,30 @@ export async function saveToCatalog(request: CatalogSaveRequest): Promise<string
   }
 
   return response.id ?? request.id
+}
+
+export function listSavedProjects(): Promise<SavedProjectSummary[]> {
+  return window.karaokeMaker?.listProjects?.() ?? Promise.resolve([])
+}
+
+export async function loadSavedProject(id: string): Promise<ProjectLoadResponse> {
+  const response = await window.karaokeMaker?.loadProject?.(id)
+
+  if (!response?.ok || !response.project) {
+    throw new Error(response?.error ?? 'Unable to load the project.')
+  }
+
+  return response.project
+}
+
+export async function saveCurrentProject(request: ProjectSaveRequest): Promise<unknown> {
+  const response = await window.karaokeMaker?.saveProject?.(request)
+
+  if (!response?.ok || !response.document) {
+    throw new Error(response?.error ?? 'Unable to save the project.')
+  }
+
+  return response.document
 }
 
 export async function requestAlignment(request: AlignmentRequest): Promise<AlignmentResult> {

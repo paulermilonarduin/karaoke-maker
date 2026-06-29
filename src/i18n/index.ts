@@ -2,10 +2,88 @@ import { ref } from 'vue'
 
 const frMessages = {
   'app.navigation': 'Navigation principale',
+  'app.backHome': 'Retourner à l’accueil',
+  'app.closeSettings': 'Fermer les paramètres',
   'app.openSettings': 'Ouvrir les paramètres',
   'nav.catalog': 'Catalogue',
   'nav.generator': 'Génération',
   'nav.settings': 'Paramètres',
+
+  'home.eyebrow': 'Karaoke Maker',
+  'home.title': 'Que voulez-vous faire ?',
+  'home.description': 'Créez un nouveau karaoké ou lancez un titre de votre catalogue.',
+  'home.createTitle': 'Créer un karaoké',
+  'home.createDescription': 'Importez un morceau, ajoutez les paroles et synchronisez-les.',
+  'home.catalogTitle': 'Ouvrir le catalogue',
+  'home.catalogDescription': 'Retrouvez vos titres préparés et lancez la lecture.',
+
+  'wizard.eyebrow': 'Création',
+  'wizard.startTitle': 'Démarrer un projet',
+  'wizard.startDescription': 'Reprenez un projet sauvegardé ou commencez une nouvelle synchronisation.',
+  'wizard.newProject': 'Nouveau projet',
+  'wizard.newProjectDescription': 'Partir d’un MP3 et de ses paroles.',
+  'wizard.openProject': 'Ouvrir un projet',
+  'wizard.openProjectDescription': 'Continuer un projet sauvegardé précédemment.',
+  'wizard.progress': 'Étapes de création',
+  'wizard.stepProject': 'Projet',
+  'wizard.stepAudio': 'Musique',
+  'wizard.stepLyrics': 'Paroles',
+  'wizard.stepSync': 'Synchronisation',
+  'wizard.stepEditor': 'Édition',
+  'wizard.openTitle': 'Choisissez un projet',
+  'wizard.openDescription': 'Les projets sauvegardés conservent le MP3, les paroles et la timeline.',
+  'wizard.importJsonTitle': 'Importer un ancien fichier',
+  'wizard.importJsonDescription':
+    'Vous pouvez aussi ouvrir un JSON karaoké, puis sélectionner le MP3 correspondant.',
+  'wizard.back': 'Retour',
+  'wizard.audioTitle': 'Sélectionnez la musique',
+  'wizard.audioDescription':
+    'Choisissez le MP3 à synchroniser. Il sera conservé dans la sauvegarde du projet.',
+  'wizard.audioReady': 'Musique prête',
+  'wizard.confirmAndContinue': 'Confirmer et continuer',
+  'wizard.lyricsTitle': 'Ajoutez les paroles',
+  'wizard.lyricsDescription':
+    'Collez les paroles, importez un fichier texte ou utilisez la recherche en ligne.',
+  'wizard.songTitle': 'Titre',
+  'wizard.artist': 'Artiste',
+  'wizard.pasteLyrics': 'Paroles',
+  'wizard.pasteLyricsPlaceholder': 'Une ligne de paroles par ligne…',
+  'wizard.lyricsReady': 'Paroles prêtes',
+  'wizard.lyricsLineCount': '{count} lignes seront ajoutées à la timeline.',
+  'wizard.syncTitle': 'Synchronisez les paroles',
+  'wizard.syncDescription':
+    'Lancez la synchronisation assistée ou continuez directement vers l’édition manuelle.',
+  'wizard.syncDoneDescription':
+    'Le résultat est prêt. Vous pourrez toujours ajuster chaque bloc dans l’éditeur.',
+  'wizard.syncUnavailableTitle': 'Synchronisation assistée indisponible',
+  'wizard.syncUnavailableDescription':
+    'Cette fonctionnalité nécessite l’application Electron lancée avec le module d’alignement. Vous pouvez continuer manuellement.',
+  'wizard.continueManually': 'Continuer manuellement',
+  'wizard.openEditor': 'Ouvrir l’éditeur',
+  'wizard.editSetup': 'Modifier les sources',
+  'wizard.audioRequired': 'Sélectionnez un MP3 avant de continuer.',
+  'wizard.lyricsRequired': 'Ajoutez des paroles avant de continuer.',
+  'wizard.confirmDiscardSetup':
+    'Quitter cette étape ? Les fichiers sélectionnés pour ce nouveau projet seront retirés.',
+  'wizard.confirmReplaceAudio':
+    'Remplacer le MP3 actuel ? La timeline pourra devoir être ajustée à la nouvelle durée.',
+  'wizard.confirmReplaceLyrics':
+    'Remplacer les paroles actuelles ? Les découpes et timings associés seront réinitialisés.',
+  'wizard.confirmBackFromEditor':
+    'Revenir aux paroles ? Les timings restent conservés tant que vous ne modifiez pas le texte.',
+  'wizard.confirmBackToAudioFromEditor':
+    'Revenir au choix du MP3 ? Le projet actuel reste conservé tant que vous ne remplacez pas le fichier.',
+
+  'project.loading': 'Chargement des projets…',
+  'project.empty': 'Aucun projet sauvegardé pour le moment.',
+  'project.save': 'Sauvegarder le projet',
+  'project.saving': 'Sauvegarde…',
+  'project.saved': 'Projet sauvegardé',
+  'project.retrySave': 'Réessayer la sauvegarde',
+  'project.error.list': 'Impossible de charger les projets sauvegardés.',
+  'project.error.open': 'Impossible d’ouvrir ce projet.',
+  'project.error.save': 'Impossible de sauvegarder ce projet.',
+  'project.error.missingAudio': 'Le MP3 est nécessaire pour sauvegarder le projet.',
 
   'audioPlayer.empty': 'Aucun MP3 chargé',
   'audioPlayer.pause': 'Mettre en pause',
@@ -206,10 +284,88 @@ const frMessages = {
 
 const enMessages: Record<keyof typeof frMessages, string> = {
   'app.navigation': 'Primary navigation',
+  'app.backHome': 'Return to home',
+  'app.closeSettings': 'Close settings',
   'app.openSettings': 'Open settings',
   'nav.catalog': 'Catalog',
   'nav.generator': 'Generator',
   'nav.settings': 'Settings',
+
+  'home.eyebrow': 'Karaoke Maker',
+  'home.title': 'What would you like to do?',
+  'home.description': 'Create a new karaoke or play a track from your catalog.',
+  'home.createTitle': 'Create a karaoke',
+  'home.createDescription': 'Import a song, add lyrics, and synchronize them.',
+  'home.catalogTitle': 'Open the catalog',
+  'home.catalogDescription': 'Browse your prepared tracks and start playback.',
+
+  'wizard.eyebrow': 'Creation',
+  'wizard.startTitle': 'Start a project',
+  'wizard.startDescription': 'Resume a saved project or start a new synchronization.',
+  'wizard.newProject': 'New project',
+  'wizard.newProjectDescription': 'Start with an MP3 and its lyrics.',
+  'wizard.openProject': 'Open a project',
+  'wizard.openProjectDescription': 'Continue a previously saved project.',
+  'wizard.progress': 'Creation steps',
+  'wizard.stepProject': 'Project',
+  'wizard.stepAudio': 'Music',
+  'wizard.stepLyrics': 'Lyrics',
+  'wizard.stepSync': 'Synchronization',
+  'wizard.stepEditor': 'Editing',
+  'wizard.openTitle': 'Choose a project',
+  'wizard.openDescription': 'Saved projects keep the MP3, lyrics, and timeline together.',
+  'wizard.importJsonTitle': 'Import a legacy file',
+  'wizard.importJsonDescription':
+    'You can also open a karaoke JSON file, then select its matching MP3.',
+  'wizard.back': 'Back',
+  'wizard.audioTitle': 'Select the music',
+  'wizard.audioDescription':
+    'Choose the MP3 to synchronize. It will be included in the saved project.',
+  'wizard.audioReady': 'Music ready',
+  'wizard.confirmAndContinue': 'Confirm and continue',
+  'wizard.lyricsTitle': 'Add the lyrics',
+  'wizard.lyricsDescription':
+    'Paste the lyrics, import a text file, or use the online search.',
+  'wizard.songTitle': 'Title',
+  'wizard.artist': 'Artist',
+  'wizard.pasteLyrics': 'Lyrics',
+  'wizard.pasteLyricsPlaceholder': 'One lyric line per line…',
+  'wizard.lyricsReady': 'Lyrics ready',
+  'wizard.lyricsLineCount': '{count} lines will be added to the timeline.',
+  'wizard.syncTitle': 'Synchronize the lyrics',
+  'wizard.syncDescription':
+    'Run assisted synchronization or continue directly to manual editing.',
+  'wizard.syncDoneDescription':
+    'The result is ready. You can still fine-tune every block in the editor.',
+  'wizard.syncUnavailableTitle': 'Assisted synchronization unavailable',
+  'wizard.syncUnavailableDescription':
+    'This feature requires the Electron app running with the alignment module. You can continue manually.',
+  'wizard.continueManually': 'Continue manually',
+  'wizard.openEditor': 'Open editor',
+  'wizard.editSetup': 'Edit sources',
+  'wizard.audioRequired': 'Select an MP3 before continuing.',
+  'wizard.lyricsRequired': 'Add lyrics before continuing.',
+  'wizard.confirmDiscardSetup':
+    'Leave this step? Files selected for this new project will be removed.',
+  'wizard.confirmReplaceAudio':
+    'Replace the current MP3? The timeline may need adjustment for the new duration.',
+  'wizard.confirmReplaceLyrics':
+    'Replace the current lyrics? Their splits and timing will be reset.',
+  'wizard.confirmBackFromEditor':
+    'Return to lyrics? Timing stays intact as long as you do not edit the text.',
+  'wizard.confirmBackToAudioFromEditor':
+    'Return to MP3 selection? The current project stays intact unless you replace the file.',
+
+  'project.loading': 'Loading projects…',
+  'project.empty': 'No saved project yet.',
+  'project.save': 'Save project',
+  'project.saving': 'Saving…',
+  'project.saved': 'Project saved',
+  'project.retrySave': 'Retry save',
+  'project.error.list': 'Unable to load saved projects.',
+  'project.error.open': 'Unable to open this project.',
+  'project.error.save': 'Unable to save this project.',
+  'project.error.missingAudio': 'The MP3 is required to save the project.',
 
   'audioPlayer.empty': 'No MP3 loaded',
   'audioPlayer.pause': 'Pause playback',

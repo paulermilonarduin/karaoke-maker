@@ -1,55 +1,113 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import KaraokeLogo from './components/KaraokeLogo.vue'
 import { useI18n } from './i18n'
 import { useAppearanceSettings } from './theme/appearance'
 import CatalogView from './views/CatalogView.vue'
 import GeneratorView from './views/GeneratorView.vue'
+import HomeView from './views/HomeView.vue'
 import SettingsView from './views/SettingsView.vue'
 
-type AppView = 'generator' | 'catalog' | 'settings'
+type AppView = 'home' | 'generator' | 'catalog'
 
-const activeView = ref<AppView>('generator')
+const activeView = ref<AppView>('home')
+const settingsOpen = ref(false)
+const settingsButton = ref<HTMLButtonElement>()
+const settingsCloseButton = ref<HTMLButtonElement>()
+const settingsDialog = ref<HTMLElement>()
+let previousBodyOverflow = ''
 const { accentColor, resetAccentColor, setAccentColor } = useAppearanceSettings()
 const { locale, setLocale, t } = useI18n()
+
+function openSettings() {
+  settingsOpen.value = true
+}
+
+function closeSettings() {
+  settingsOpen.value = false
+  void nextTick(() => settingsButton.value?.focus())
+}
+
+function onWindowKeydown(event: KeyboardEvent) {
+  if (!settingsOpen.value) {
+    return
+  }
+
+  if (event.key === 'Escape') {
+    event.preventDefault()
+    closeSettings()
+    return
+  }
+
+  if (event.key !== 'Tab') {
+    return
+  }
+
+  const focusableElements = Array.from(
+    settingsDialog.value?.querySelectorAll<HTMLElement>(
+      'button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+    ) ?? [],
+  ).filter((element) => !element.hasAttribute('hidden'))
+  const firstElement = focusableElements[0]
+  const lastElement = focusableElements[focusableElements.length - 1]
+
+  if (!firstElement || !lastElement) {
+    event.preventDefault()
+    return
+  }
+
+  if (event.shiftKey && document.activeElement === firstElement) {
+    event.preventDefault()
+    lastElement.focus()
+  } else if (!event.shiftKey && document.activeElement === lastElement) {
+    event.preventDefault()
+    firstElement.focus()
+  }
+}
+
+watch(settingsOpen, async (isOpen) => {
+  if (isOpen) {
+    previousBodyOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    await nextTick()
+    settingsCloseButton.value?.focus()
+    return
+  }
+
+  document.body.style.overflow = previousBodyOverflow
+})
+
+onMounted(() => window.addEventListener('keydown', onWindowKeydown))
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onWindowKeydown)
+  document.body.style.overflow = previousBodyOverflow
+})
 </script>
 
 <template>
   <main class="app-shell" :class="`app-shell--${activeView}`">
     <header class="app-header">
-      <div class="app-brand">
-        <h1 class="app-brand__title">
+      <h1 class="app-brand__title">
+        <button
+          class="app-brand"
+          type="button"
+          :aria-label="t('app.backHome')"
+          @click="activeView = 'home'"
+        >
           <KaraokeLogo size="large" :progress="65" />
-        </h1>
-      </div>
+        </button>
+      </h1>
 
       <div class="app-header__actions">
-        <nav class="view-switcher" :aria-label="t('app.navigation')">
-          <button
-            type="button"
-            :class="{ 'view-switcher__button--active': activeView === 'generator' }"
-            class="view-switcher__button"
-            @click="activeView = 'generator'"
-          >
-            {{ t('nav.generator') }}
-          </button>
-          <button
-            type="button"
-            :class="{ 'view-switcher__button--active': activeView === 'catalog' }"
-            class="view-switcher__button"
-            @click="activeView = 'catalog'"
-          >
-            {{ t('nav.catalog') }}
-          </button>
-        </nav>
-
         <button
+          ref="settingsButton"
           class="settings-button"
-          :class="{ 'settings-button--active': activeView === 'settings' }"
+          :class="{ 'settings-button--active': settingsOpen }"
           type="button"
           :aria-label="t('app.openSettings')"
+          :aria-expanded="settingsOpen"
           :title="t('nav.settings')"
-          @click="activeView = 'settings'"
+          @click="openSettings"
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
@@ -60,15 +118,41 @@ const { locale, setLocale, t } = useI18n()
       </div>
     </header>
 
-    <GeneratorView v-if="activeView === 'generator'" :accent-color="accentColor" />
-    <CatalogView v-else-if="activeView === 'catalog'" />
-    <SettingsView
-      v-else
-      :accent-color="accentColor"
-      :locale="locale"
-      @reset="resetAccentColor"
-      @localeupdate="setLocale"
-      @update="setAccentColor"
+    <HomeView
+      v-if="activeView === 'home'"
+      @open-generator="activeView = 'generator'"
+      @open-catalog="activeView = 'catalog'"
     />
+    <GeneratorView v-show="activeView === 'generator'" :accent-color="accentColor" />
+    <CatalogView v-if="activeView === 'catalog'" />
   </main>
+
+  <Teleport to="body">
+    <div v-if="settingsOpen" class="settings-modal" @mousedown.self="closeSettings">
+      <section
+        ref="settingsDialog"
+        class="settings-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="t('nav.settings')"
+      >
+        <button
+          ref="settingsCloseButton"
+          class="settings-modal__close"
+          type="button"
+          :aria-label="t('app.closeSettings')"
+          @click="closeSettings"
+        >
+          ×
+        </button>
+        <SettingsView
+          :accent-color="accentColor"
+          :locale="locale"
+          @reset="resetAccentColor"
+          @localeupdate="setLocale"
+          @update="setAccentColor"
+        />
+      </section>
+    </div>
+  </Teleport>
 </template>
